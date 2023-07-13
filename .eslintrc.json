@@ -1,0 +1,197 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "globalThis": false
+    , "JSX":"readonly"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts"],
+      "rules": {
+        "max-lines": ["off"]
+      }
+    }
+  ],
+  "rules": {
+    "indent": [
+      "error",
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "max-len": [
+      "warn",
+      {
+        "code": 80,
+        "ignorePattern": "\\s",
+        "ignoreTemplateLiterals": true
+      }
+    ],
+    "comma-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "comma-dangle": [
+      "error",
+      "never"
+    ],
+    "quotes": [
+      "error",
+      "single",
+      {
+        "allowTemplateLiterals": true
+      }
+    ],
+    "linebreak-style": [
+      "warn",
+      "unix"
+    ],
+    "space-before-blocks": [
+      "error",
+      "always"
+    ],
+    "arrow-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true
+      }
+    ],
+    "key-spacing": [
+      "error",
+      {
+        "beforeColon": false,
+        "afterColon": true,
+        "mode": "strict"
+      }
+    ],
+    "space-in-parens": [
+      "error",
+      "always",
+      { "exceptions": [ "empty" ] }
+    ],
+    "array-bracket-spacing": [
+      "error",
+      "always"
+    ],
+    "computed-property-spacing": [
+      "error",
+      "always"
+    ],
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "template-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "brace-style": [
+      "warn",
+      "1tbs",
+      {
+        "allowSingleLine": true
+      }
+    ],
+    "strict": [
+      "warn",
+      "global"
+    ],
+    "space-before-function-paren": [
+      "error",
+      "always"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "eol-last": [
+      "error",
+      "always"
+    ],
+    "semi-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "no-extra-semi": "error",
+    "keyword-spacing": [
+      "error",
+      {
+        "after": true
+      }
+    ],
+    "comma-style": [
+      "error",
+      "first"
+    ],
+    "operator-linebreak": [
+      "error",
+      "before",
+      {
+        "overrides": {
+          "?": "ignore",
+          ":": "ignore"
+        }
+      }
+    ],
+    "space-infix-ops": "error",
+    "no-multi-spaces": "error",
+    "no-trailing-spaces": "error",
+    "block-spacing": [
+      "error",
+      "always"
+    ],
+    "max-lines": [
+      "error", {
+        "max": 750,
+        "skipBlankLines": true,
+        "skipComments": true
+      }
+    ],
+    // using @typescript-eslint version of no-unused-vars instead
+    // "no-unused-vars": "warn",
+    "no-case-declarations": "off",
+    "no-unsafe-finally": "off",
+    "no-unreachable": "warn",
+    "no-undef": "warn",
+    "no-empty-pattern": "warn",
+    "no-multiple-empty-lines": [ "error", { "max": 1, "maxBOF": 0, "maxEOF": 0 } ],
+    "react/prop-types": 0,
+    "react/jsx-curly-spacing": ["error", { "when": "always", "children": true }],
+    "react/jsx-max-props-per-line": ["error", { "maximum": 1, "when": "always" }],
+    // "react/jsx-first-prop-new-line": ["error", "multiprop"],
+    "react/self-closing-comp": ["error", { "component": true, "html": true}],
+    "react/jsx-wrap-multilines": ["error", {
+      "declaration": "parens-new-line",
+      "assignment": "parens-new-line",
+      "return": "parens-new-line",
+      "arrow": "parens-new-line",
+      "condition": "parens-new-line",
+      "logical": "parens-new-line",
+      "prop": "parens-new-line"
+    }],
+    "react/jsx-closing-bracket-location": ["error", "tag-aligned"],
+    "@typescript-eslint/type-annotation-spacing": "error",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "@typescript-eslint/ban-types": "warn",
+    "@typescript-eslint/no-empty-interface": "warn",
+    "@typescript-eslint/no-empty-function": "warn"
+  }
+}
