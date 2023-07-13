@@ -1,10 +1,12 @@
-function App() {
+import Board from './Components/Board/Board';
 
-  return (
-    <div className="min-h-screen flex justify-center items-center">
-      hello
-    </div>
-  )
+function App () {
+
+    return (
+        <div className="flex justify-center items-center min-h-screen border-red-500 border-2">
+            <Board />
+        </div>
+    );
 }
 
-export default App
+export default App;
