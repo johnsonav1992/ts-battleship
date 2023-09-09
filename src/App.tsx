@@ -1,6 +1,7 @@
 import { Card, Sheet, Stack } from '@mui/joy';
 import { pxrem } from './utils/pxrem';
 import { SxProps } from '@mui/joy/styles/types';
+import Cell from './Components/Cell/Cell';
 
 function App () {
 
@@ -30,7 +31,11 @@ function App () {
                 <Card
                     sx={ sharedCardStyles }
                 >
-                    hey
+                    {
+                        Array( 100 ).fill( null ).map( ( _, idx ) => (
+                            <Cell key={ idx }/>
+                        ) )
+                    }
                 </Card>
                 <Card
                     sx={ sharedCardStyles }
