@@ -1,11 +1,7 @@
-import Board from './Components/Board/Board';
-
 function App () {
 
     return (
-        <div className="flex justify-center items-center h-screen border-red-500 border-2">
-            <Board />
-        </div>
+        <div>Heyyy</div>
     );
 }
 
