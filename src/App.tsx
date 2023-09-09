@@ -1,7 +1,9 @@
+import AircraftCarrier from './Components/Ships/AircraftCarrier';
+
 function App () {
 
     return (
-        <div>Heyyy</div>
+        <div><AircraftCarrier /></div>
     );
 }
 
