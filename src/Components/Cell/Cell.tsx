@@ -1,11 +1,17 @@
 import { Box } from '@mui/joy';
 import { pxrem } from '../../utils/pxrem';
+import Image from '../Image/Image';
+import { ShipImg } from '../../types/types';
 
 interface Props {
     cellNum: number;
+    ship?: ShipImg[];
 }
 
-const Cell = ( { cellNum }: Props ) => {
+const Cell = ( {
+    cellNum
+    , ship
+}: Props ) => {
 
     const calcBorderRadius = ( cellNum: number ) => {
         switch ( cellNum ) {
@@ -26,12 +32,28 @@ const Cell = ( { cellNum }: Props ) => {
         <Box
             width='10%'
             bgcolor={ theme => theme.palette.primary[ 300 ] }
+            display='flex'
+            alignItems='center'
             sx={ {
                 border: theme => `${ pxrem( 1 ) } solid ${ theme.palette.primary[ 400 ] }`
                 , aspectRatio: 1
                 , ...calcBorderRadius( cellNum )
+                , '&:hover': {
+                    cursor: 'pointer'
+                    , backgroundColor: theme => theme.palette.primary[ 200 ]
+                }
             } }
-        />
+        >
+            {
+                ship
+                && (
+                    <Image
+                        src={ ship[ cellNum - 1 ].img }
+                        width='100%'
+                        height='auto'
+                    />
+                ) }
+        </Box>
     );
 };
 
