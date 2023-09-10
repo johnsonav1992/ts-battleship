@@ -1,4 +1,4 @@
-import { Card, Sheet, Stack } from '@mui/joy';
+import { Card, Grid, Sheet, Stack } from '@mui/joy';
 import { pxrem } from './utils/pxrem';
 import { SxProps } from '@mui/joy/styles/types';
 import Cell from './Components/Cell/Cell';
@@ -7,9 +7,10 @@ function App () {
 
     const sharedCardStyles: SxProps = {
         width: pxrem( 500 )
-        , height: pxrem( 500 )
+        , aspectRatio: 1
         , border: theme => `${ pxrem( 8 ) } solid ${ theme.palette.neutral[ 400 ] }`
         , bgcolor: theme => theme.palette.primary[ 200 ]
+        , p: pxrem( 8 )
     };
 
     return (
@@ -28,19 +29,29 @@ function App () {
                 height='100%'
                 gap='1rem'
             >
-                <Card
-                    sx={ sharedCardStyles }
-                >
-                    {
-                        Array( 100 ).fill( null ).map( ( _, idx ) => (
-                            <Cell key={ idx }/>
-                        ) )
-                    }
+                <Card sx={ sharedCardStyles }>
+                    <Grid container>
+                        {
+                            Array( 100 ).fill( null ).map( ( _, idx ) => (
+                                <Cell
+                                    key={ idx }
+                                    cellNum={ idx + 1 }
+                                />
+                            ) )
+                        }
+                    </Grid>
                 </Card>
-                <Card
-                    sx={ sharedCardStyles }
-                >
-                    hey
+                <Card sx={ sharedCardStyles }>
+                    <Grid container>
+                        {
+                            Array( 100 ).fill( null ).map( ( _, idx ) => (
+                                <Cell
+                                    key={ idx }
+                                    cellNum={ idx + 1 }
+                                />
+                            ) )
+                        }
+                    </Grid>
                 </Card>
             </Stack>
         </Sheet>
