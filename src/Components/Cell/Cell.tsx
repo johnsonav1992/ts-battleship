@@ -2,14 +2,17 @@ import { Box } from '@mui/joy';
 import { pxrem } from '../../utils/pxrem';
 import Image from '../Image/Image';
 import { ShipImg } from '../../types/types';
+import ShotMarker from '../ShotMarker/ShotMarker';
 
 interface Props {
     cellNum: number;
+    cellStatus: 'hit' | 'miss' | 'none';
     ship?: ShipImg[];
 }
 
 const Cell = ( {
     cellNum
+    , cellStatus
     , ship
 }: Props ) => {
 
@@ -34,8 +37,10 @@ const Cell = ( {
             bgcolor={ theme => theme.palette.primary[ 300 ] }
             display='flex'
             alignItems='center'
+            justifyContent='center'
             sx={ {
                 border: theme => `${ pxrem( 1 ) } solid ${ theme.palette.primary[ 400 ] }`
+                , position: 'relative'
                 , aspectRatio: 1
                 , ...calcBorderRadius( cellNum )
                 , '&:hover': {
@@ -53,6 +58,7 @@ const Cell = ( {
                         height='auto'
                     />
                 ) }
+            { cellStatus !== 'none' && <ShotMarker type={ cellStatus }/> }
         </Box>
     );
 };

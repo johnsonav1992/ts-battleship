@@ -2,7 +2,7 @@ import { Card, Grid, Sheet, Stack } from '@mui/joy';
 import { pxrem } from './utils/pxrem';
 import { SxProps } from '@mui/joy/styles/types';
 import Cell from './Components/Cell/Cell';
-import { ship1, ship2 } from './utils/ships';
+import { ship1, ship5 } from './utils/ships';
 
 function App () {
 
@@ -38,6 +38,7 @@ function App () {
                                     key={ idx }
                                     cellNum={ idx + 1 }
                                     ship={ ( idx + 1 ) <= 2 ? ship1 : undefined }
+                                    cellStatus={ ( idx + 1 ) <= 2 ? 'hit' : 'none' }
                                 />
                             ) )
                         }
@@ -50,7 +51,8 @@ function App () {
                                 <Cell
                                     key={ idx }
                                     cellNum={ idx + 1 }
-                                    ship={ ( idx + 1 ) <= 3 ? ship2 : undefined }
+                                    ship={ ( idx + 1 ) <= 5 ? ship5 : undefined }
+                                    cellStatus={ ( idx + 1 ) <= 5 ? 'hit' : 'none' }
                                 />
                             ) )
                         }
