@@ -4,7 +4,7 @@ export type ShipImg = {
 }
 
 export type BoardCell = {
-    ship: ShipImg[] | null;
+    shipImg: ShipImg | null;
     cellNum: number;
     status: 'none' | 'hit' | 'miss';
 }

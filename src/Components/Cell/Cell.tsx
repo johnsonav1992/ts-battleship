@@ -16,8 +16,6 @@ const Cell = ( {
     , ship
 }: Props ) => {
 
-    console.log( cellNum === 7 && ship );
-
     const calcBorderRadius = ( cellNum: number ) => {
         switch ( cellNum ) {
             case 1:
@@ -51,16 +49,16 @@ const Cell = ( {
                 }
             } }
         >
-            { /* {
+            {
                 ship
                 && (
                     <Image
-                        src={ ship[ cellNum - 1 ].img }
+                        src={ ship?.[ ship.length - 1 ].img }
                         width='100%'
                         height='auto'
                     />
                 )
-            } */ }
+            }
             { cellStatus !== 'none' && <ShotMarker type={ cellStatus }/> }
         </Box>
     );

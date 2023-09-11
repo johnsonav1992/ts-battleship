@@ -18,15 +18,8 @@ function App () {
     const dummyCells: BoardCell[] = Array( 100 ).fill( null ).map( ( _cell, idx ) => {
         const cellNum = idx + 1;
 
-        const ship1Placement = cellNum === 1 || cellNum === 2;
-        const ship2Placement = cellNum === 7 || cellNum === 8 || cellNum === 9;
-
         return {
-            ship: ship1Placement
-                ? ship1
-                : ship2Placement
-                    ? ship2
-                    : null
+            shipImg: null
             , cellNum
             , status: 'none'
         };
@@ -64,7 +57,7 @@ function App () {
                 </Card>
                 <Card sx={ sharedCardStyles }>
                     <Grid container>
-                        { /* {
+                        {
                             dummyCells.map( cell => (
                                 <Cell
                                     key={ cell.cellNum }
@@ -73,7 +66,7 @@ function App () {
                                     cellStatus={ cell.status }
                                 />
                             ) )
-                        } */ }
+                        }
                     </Grid>
                 </Card>
             </Stack>
