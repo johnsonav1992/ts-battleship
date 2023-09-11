@@ -48,7 +48,7 @@ function App () {
                                 <Cell
                                     key={ cell.cellNum }
                                     cellNum={ cell.cellNum }
-                                    ship={ cell.ship }
+                                    shipImg={ cell.shipImg }
                                     cellStatus={ cell.status }
                                 />
                             ) )
@@ -62,7 +62,7 @@ function App () {
                                 <Cell
                                     key={ cell.cellNum }
                                     cellNum={ cell.cellNum }
-                                    ship={ cell.ship }
+                                    shipImg={ cell.shipImg }
                                     cellStatus={ cell.status }
                                 />
                             ) )

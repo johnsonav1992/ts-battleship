@@ -7,13 +7,13 @@ import ShotMarker from '../ShotMarker/ShotMarker';
 interface Props {
     cellNum: number;
     cellStatus: 'hit' | 'miss' | 'none';
-    ship: ShipImg[] | null;
+    shipImg: ShipImg | null;
 }
 
 const Cell = ( {
     cellNum
     , cellStatus
-    , ship
+    , shipImg
 }: Props ) => {
 
     const calcBorderRadius = ( cellNum: number ) => {
@@ -50,14 +50,14 @@ const Cell = ( {
             } }
         >
             {
-                ship
-                && (
-                    <Image
-                        src={ ship?.[ ship.length - 1 ].img }
-                        width='100%'
-                        height='auto'
-                    />
-                )
+                // shipImg
+                // && (
+                //     <Image
+                //         src={ ship?.[ ship.length - 1 ].img }
+                //         width='100%'
+                //         height='auto'
+                //     />
+                // )
             }
             { cellStatus !== 'none' && <ShotMarker type={ cellStatus }/> }
         </Box>
