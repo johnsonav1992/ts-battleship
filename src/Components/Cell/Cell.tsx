@@ -7,7 +7,7 @@ import ShotMarker from '../ShotMarker/ShotMarker';
 interface Props {
     cellNum: number;
     cellStatus: 'hit' | 'miss' | 'none';
-    ship?: ShipImg[];
+    ship: ShipImg[] | null;
 }
 
 const Cell = ( {
@@ -15,6 +15,8 @@ const Cell = ( {
     , cellStatus
     , ship
 }: Props ) => {
+
+    console.log( cellNum === 7 && ship );
 
     const calcBorderRadius = ( cellNum: number ) => {
         switch ( cellNum ) {
@@ -49,7 +51,7 @@ const Cell = ( {
                 }
             } }
         >
-            {
+            { /* {
                 ship
                 && (
                     <Image
@@ -57,7 +59,8 @@ const Cell = ( {
                         width='100%'
                         height='auto'
                     />
-                ) }
+                )
+            } */ }
             { cellStatus !== 'none' && <ShotMarker type={ cellStatus }/> }
         </Box>
     );

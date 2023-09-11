@@ -2,7 +2,8 @@ import { Card, Grid, Sheet, Stack } from '@mui/joy';
 import { pxrem } from './utils/pxrem';
 import { SxProps } from '@mui/joy/styles/types';
 import Cell from './Components/Cell/Cell';
-import { ship1, ship5 } from './utils/ships';
+import { BoardCell } from './types/types';
+import { ship1, ship2 } from './utils/ships';
 
 function App () {
 
@@ -13,6 +14,23 @@ function App () {
         , bgcolor: theme => theme.palette.primary[ 200 ]
         , p: pxrem( 8 )
     };
+
+    const dummyCells: BoardCell[] = Array( 100 ).fill( null ).map( ( _cell, idx ) => {
+        const cellNum = idx + 1;
+
+        const ship1Placement = cellNum === 1 || cellNum === 2;
+        const ship2Placement = cellNum === 7 || cellNum === 8 || cellNum === 9;
+
+        return {
+            ship: ship1Placement
+                ? ship1
+                : ship2Placement
+                    ? ship2
+                    : null
+            , cellNum
+            , status: 'none'
+        };
+    } );
 
     return (
         <Sheet
@@ -33,12 +51,12 @@ function App () {
                 <Card sx={ sharedCardStyles }>
                     <Grid container>
                         {
-                            Array( 100 ).fill( null ).map( ( _, idx ) => (
+                            dummyCells.map( cell => (
                                 <Cell
-                                    key={ idx }
-                                    cellNum={ idx + 1 }
-                                    ship={ ( idx + 1 ) <= 2 ? ship1 : undefined }
-                                    cellStatus={ ( idx + 1 ) <= 2 ? 'hit' : 'none' }
+                                    key={ cell.cellNum }
+                                    cellNum={ cell.cellNum }
+                                    ship={ cell.ship }
+                                    cellStatus={ cell.status }
                                 />
                             ) )
                         }
@@ -46,16 +64,16 @@ function App () {
                 </Card>
                 <Card sx={ sharedCardStyles }>
                     <Grid container>
-                        {
-                            Array( 100 ).fill( null ).map( ( _, idx ) => (
+                        { /* {
+                            dummyCells.map( cell => (
                                 <Cell
-                                    key={ idx }
-                                    cellNum={ idx + 1 }
-                                    ship={ ( idx + 1 ) <= 5 ? ship5 : undefined }
-                                    cellStatus={ ( idx + 1 ) <= 5 ? 'hit' : 'none' }
+                                    key={ cell.cellNum }
+                                    cellNum={ cell.cellNum }
+                                    ship={ cell.ship }
+                                    cellStatus={ cell.status }
                                 />
                             ) )
-                        }
+                        } */ }
                     </Grid>
                 </Card>
             </Stack>
