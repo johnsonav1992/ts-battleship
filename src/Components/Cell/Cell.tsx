@@ -1,21 +1,20 @@
 import { Box } from '@mui/joy';
 import { pxrem } from '../../utils/pxrem';
 import Image from '../Image/Image';
-import { ShipImg } from '../../types/types';
+import { BoardCell } from '../../types/types';
 import ShotMarker from '../ShotMarker/ShotMarker';
 
 interface Props {
-    cellNum: number;
-    cellStatus: 'hit' | 'miss' | 'none';
-    shipImg: ShipImg | null;
+    cell: BoardCell
 }
 
-const Cell = ( {
+const Cell = ( { cell: {
     cellNum
-    , cellStatus
+    , status
     , shipImg
-}: Props ) => {
-
+    , direction
+    , orientation
+} }: Props ) => {
     const calcBorderRadius = ( cellNum: number ) => {
         switch ( cellNum ) {
             case 1:
@@ -50,16 +49,21 @@ const Cell = ( {
             } }
         >
             {
-                // shipImg
-                // && (
-                //     <Image
-                //         src={ ship?.[ ship.length - 1 ].img }
-                //         width='100%'
-                //         height='auto'
-                //     />
-                // )
+                shipImg
+                && (
+                    <Image
+                        src={ shipImg.img }
+                        width='100%'
+                        height='auto'
+                        style={ {
+                            transform: orientation === 'vertical'
+                                ? `rotate(${ direction === 'up' ? -90 : 90 }deg)`
+                                : undefined
+                        } }
+                    />
+                )
             }
-            { cellStatus !== 'none' && <ShotMarker type={ cellStatus }/> }
+            { status !== 'none' && <ShotMarker type={ status }/> }
         </Box>
     );
 };
