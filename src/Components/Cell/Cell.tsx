@@ -58,7 +58,9 @@ const Cell = ( { cell: {
                         style={ {
                             transform: orientation === 'vertical'
                                 ? `rotate(${ direction === 'up' ? -90 : 90 }deg)`
-                                : undefined
+                                : orientation === 'horizontal'
+                                    ? `rotate(${ direction === 'left' ? -180 : 0 }deg)`
+                                    : 'none'
                         } }
                     />
                 )
