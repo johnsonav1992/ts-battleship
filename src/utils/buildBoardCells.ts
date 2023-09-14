@@ -9,8 +9,8 @@ import {
     canPlaceShip
     , shipOverlapping
     , pickRandomBoolean
-    , ships
 } from './shipUtils';
+import { ships } from './ships';
 
 export const buildBoardCells = (): BoardCell[] => {
     const emptyCells: BoardCell[] = Array( 100 ).fill( null ).map( ( _cell, idx ) => {

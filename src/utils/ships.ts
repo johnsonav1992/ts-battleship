@@ -110,3 +110,5 @@ export const ship5: ShipImg[] = [
         , label: 'ship5Front'
     }
 ];
+
+export const ships = [ ship1, ship2, ship3, ship4, ship5 ];

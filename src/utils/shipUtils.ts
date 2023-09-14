@@ -4,18 +4,7 @@ import {
     , CheckOverlapParams
 } from '../types/types';
 
-// Assets
-import {
-    ship1
-    , ship2
-    , ship3
-    , ship4
-    , ship5
-} from './ships';
-
 export const pickRandomBoolean = () => Math.random() > 0.5;
-
-export const ships = [ ship1, ship2, ship3, ship4, ship5 ];
 
 export const canPlaceShip = ( {
     horizontal
