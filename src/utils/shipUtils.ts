@@ -63,5 +63,5 @@ export const shipOverlapping = ( {
             return true;
         }
     }
-    return false; // No overlap
+    return false;
 };
