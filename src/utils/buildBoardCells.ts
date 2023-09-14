@@ -1,11 +1,15 @@
 // Types
-import { BoardCell } from '../types/types';
+import {
+    BoardCell
+    , ShipConfig
+} from '../types/types';
 
 // Utils
 import {
     canPlaceShip
     , checkForShipOverlap
-    , shipConfig
+    , pickRandomBoolean
+    , ships
 } from './shipUtils';
 
 export const buildBoardCells = (): BoardCell[] => {
@@ -21,6 +25,12 @@ export const buildBoardCells = (): BoardCell[] => {
         };
     } );
 
+    const shipConfig: ShipConfig[] = ships.map( ship => ( {
+        ship
+        , horizontal: pickRandomBoolean()
+        , forward: pickRandomBoolean()
+    } ) );
+
     const updatedCells = [ ...emptyCells ];
 
     const MAX_ATTEMPTS = 100;
@@ -31,15 +41,23 @@ export const buildBoardCells = (): BoardCell[] => {
 
         while ( !placed && attemptCount < MAX_ATTEMPTS ) {
             let startingCellIndex: number;
+
             if ( horizontal && !forward ) {
                 startingCellIndex = Math.floor( Math.random() * 10 ) * 10 + ( ship.length - 1 );
             } else {
                 startingCellIndex = Math.floor( Math.random() * 100 );
             }
 
+            const sharedCheckingParams = {
+                cellIndex: startingCellIndex
+                , shipLength: ship.length
+                , horizontal
+                , forward
+            };
+
             if (
-                canPlaceShip( startingCellIndex, ship.length, 10, horizontal, forward )
-                && !checkForShipOverlap( startingCellIndex, ship.length, horizontal, forward, updatedCells )
+                canPlaceShip( { ...sharedCheckingParams, cellsInRow: 10 } )
+                && !checkForShipOverlap( { ...sharedCheckingParams, updatedCells } )
             ) {
                 for ( let i = 0; i < ship.length; i++ ) {
                     const cellIndex = horizontal
@@ -68,6 +86,7 @@ export const buildBoardCells = (): BoardCell[] => {
             }
             attemptCount++;
         }
+
         if ( !placed ) {
             console.error( `Failed to place ship: ${ ship[ 0 ].label }` );
         }

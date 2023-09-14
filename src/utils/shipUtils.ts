@@ -1,23 +1,29 @@
-import { BoardCell, ShipConfig } from '../types/types';
-import { ship1, ship2, ship3, ship4, ship5 } from './ships';
+// Types
+import {
+    CanPlaceParams
+    , CheckOverlapParams
+} from '../types/types';
 
-const pickRandomBoolean = () => Math.random() < 0.5;
+// Assets
+import {
+    ship1
+    , ship2
+    , ship3
+    , ship4
+    , ship5
+} from './ships';
 
-const ships = [ ship1, ship2, ship3, ship4, ship5 ];
+export const pickRandomBoolean = () => Math.random() > 0.5;
 
-export const shipConfig: ShipConfig[] = ships.map( ship => ( {
-    ship
-    , horizontal: pickRandomBoolean()
-    , forward: pickRandomBoolean()
-} ) );
+export const ships = [ ship1, ship2, ship3, ship4, ship5 ];
 
-export const canPlaceShip = (
-    cellIndex: number
-    , shipLength: number
-    , cellsInRow: number
-    , horizontal: boolean
-    , forward: boolean
-): boolean => {
+export const canPlaceShip = ( {
+    horizontal
+    , cellIndex
+    , cellsInRow
+    , shipLength
+    , forward
+}: CanPlaceParams ): boolean => {
     if ( horizontal ) {
         const rowStartIndex = Math.floor( cellIndex / cellsInRow ) * cellsInRow;
         const rowEndIndex = rowStartIndex + cellsInRow - 1;
@@ -33,13 +39,13 @@ export const canPlaceShip = (
     }
 };
 
-export const checkForShipOverlap = (
-    cellIndex: number
-    , shipLength: number
-    , horizontal: boolean
-    , forward: boolean
-    , updatedCells: BoardCell[]
-): boolean => {
+export const checkForShipOverlap = ( {
+    cellIndex
+    , shipLength
+    , horizontal
+    , forward
+    , updatedCells
+}: CheckOverlapParams ): boolean => {
     for ( let i = 0; i < shipLength; i++ ) {
         const currentIndex = horizontal
             ? forward

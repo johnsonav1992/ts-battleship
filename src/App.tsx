@@ -1,9 +1,17 @@
-import { Card, Grid, Sheet, Stack } from '@mui/joy';
-import { pxrem } from './utils/pxrem';
+// MUI
+import {
+    Card
+    , Grid
+    , Sheet
+    , Stack
+} from '@mui/joy';
 import { SxProps } from '@mui/joy/styles/types';
+
+// Components
 import Cell from './Components/Cell/Cell';
-import { BoardCell, ShipImg } from './types/types';
-import { ship1, ship2 } from './utils/ships';
+
+// Utils
+import { pxrem } from './utils/pxrem';
 import { buildBoardCells } from './utils/buildBoardCells';
 
 function App () {
@@ -16,19 +24,8 @@ function App () {
         , p: pxrem( 8 )
     };
 
-    const emptyCells: BoardCell[] = Array( 100 ).fill( null ).map( ( _cell, idx ) => {
-        const cellNum = idx + 1;
-
-        return {
-            shipImg: null
-            , cellNum
-            , status: 'none'
-            , orientation: 'horizontal'
-            , direction: 'right'
-        };
-    } );
-
-    const cells = buildBoardCells();
+    const playerCells = buildBoardCells();
+    const computerCells = buildBoardCells();
 
     return (
         <Sheet
@@ -49,7 +46,7 @@ function App () {
                 <Card sx={ sharedCardStyles }>
                     <Grid container>
                         {
-                            cells.map( cell => (
+                            playerCells.map( cell => (
                                 <Cell
                                     key={ cell.cellNum }
                                     cell={ cell }
@@ -61,7 +58,7 @@ function App () {
                 <Card sx={ sharedCardStyles }>
                     <Grid container>
                         {
-                            emptyCells.map( cell => (
+                            computerCells.map( cell => (
                                 <Cell
                                     key={ cell.cellNum }
                                     cell={ cell }

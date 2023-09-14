@@ -1,8 +1,15 @@
+// MUI
 import { Box } from '@mui/joy';
-import { pxrem } from '../../utils/pxrem';
+
+// Components
 import Image from '../Image/Image';
-import { BoardCell } from '../../types/types';
 import ShotMarker from '../ShotMarker/ShotMarker';
+
+// Types
+import { BoardCell } from '../../types/types';
+
+// Utils
+import { pxrem } from '../../utils/pxrem';
 
 interface Props {
     cell: BoardCell

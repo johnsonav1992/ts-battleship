@@ -23,10 +23,12 @@ export type BoardCell = {
     status: 'none' | 'hit' | 'miss';
 }
 
-export type CanPlaceShipsParams = {
-    cellIndex: number,
-    shipLength: number,
-    cellsInRow: number,
-    horizontal: boolean,
-    forward: boolean
+export type CanPlaceParams = {
+    cellIndex: number
+    , shipLength: number
+    , cellsInRow: number
+    , horizontal: boolean
+    , forward: boolean
 }
+
+export type CheckOverlapParams = Omit<CanPlaceParams, 'cellsInRow'> & { updatedCells: BoardCell[] };
