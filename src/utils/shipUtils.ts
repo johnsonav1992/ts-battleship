@@ -39,7 +39,7 @@ export const canPlaceShip = ( {
     }
 };
 
-export const checkForShipOverlap = ( {
+export const shipOverlapping = ( {
     cellIndex
     , shipLength
     , horizontal

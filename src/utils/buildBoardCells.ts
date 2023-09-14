@@ -7,7 +7,7 @@ import {
 // Utils
 import {
     canPlaceShip
-    , checkForShipOverlap
+    , shipOverlapping
     , pickRandomBoolean
     , ships
 } from './shipUtils';
@@ -57,7 +57,7 @@ export const buildBoardCells = (): BoardCell[] => {
 
             if (
                 canPlaceShip( { ...sharedCheckingParams, cellsInRow: 10 } )
-                && !checkForShipOverlap( { ...sharedCheckingParams, updatedCells } )
+                && !shipOverlapping( { ...sharedCheckingParams, updatedCells } )
             ) {
                 for ( let i = 0; i < ship.length; i++ ) {
                     const cellIndex = horizontal
