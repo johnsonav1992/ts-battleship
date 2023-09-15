@@ -34,3 +34,13 @@ export type CanPlaceParams = {
 }
 
 export type CheckOverlapParams = Omit<CanPlaceParams, 'cellsInRow'> & { updatedCells: BoardCell[] };
+
+// STATE
+export type ReducerState = {
+    playerCells: BoardCell[];
+    enemyCells: BoardCell[];
+}
+
+export type ReducerAction = { type: 'INCREMENT', payload: number };
+
+export type ReducerFn = ( v: ReducerState, a?: ReducerAction | undefined ) => ReducerState
