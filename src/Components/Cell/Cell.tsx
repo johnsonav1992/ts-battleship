@@ -10,18 +10,25 @@ import { BoardCell } from '../../types/types';
 
 // Utils
 import { pxrem } from '../../utils/pxrem';
+import { useBattleShipState } from '../../state/jotai';
 
 interface Props {
-    cell: BoardCell
+    cell: BoardCell;
+    isPlayer?: boolean;
 }
 
-const Cell = ( { cell: {
-    cellNum
-    , status
-    , shipImg
-    , direction
-    , orientation
-} }: Props ) => {
+const Cell = (
+    { cell: {
+        cellNum
+        , status
+        , shipImg
+        , direction
+        , orientation
+    }
+    , isPlayer
+    }: Props ) => {
+    const [ _, dispatch ] = useBattleShipState();
+
     const calcBorderRadius = ( cellNum: number ) => {
         switch ( cellNum ) {
             case 1:
@@ -37,6 +44,10 @@ const Cell = ( { cell: {
         }
     };
 
+    const handleCellClick = () => {
+        dispatch( { type: 'PLAYER_SHOT', payload: cellNum } );
+    };
+
     return (
         <Box
             width='10%'
@@ -50,13 +61,16 @@ const Cell = ( { cell: {
                 , aspectRatio: 1
                 , ...calcBorderRadius( cellNum )
                 , '&:hover': {
-                    cursor: 'pointer'
+                    cursor: isPlayer ? 'none' : 'pointer'
                     , backgroundColor: theme => theme.palette.primary[ 200 ]
                 }
+                , pointerEvents: isPlayer ? 'none' : 'auto'
             } }
+            onClick={ handleCellClick }
         >
             {
                 shipImg
+                && isPlayer
                 && (
                     <Image
                         src={ shipImg.img }

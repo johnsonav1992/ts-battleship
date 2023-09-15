@@ -11,6 +11,14 @@ export type ShipConfig = {
     forward: boolean;
 }
 
+export type DefaultBoardCell = {
+    shipImg: ShipImg | null;
+    cellNum: number;
+    orientation: 'none';
+    direction: 'none';
+    status: 'none';
+}
+
 export type BoardCell = {
     shipImg: ShipImg | null;
     cellNum: number;
@@ -23,7 +31,7 @@ export type BoardCell = {
     orientation: 'horizontal';
     direction: 'left' | 'right';
     status: 'none' | 'hit' | 'miss';
-}
+} | DefaultBoardCell
 
 export type CanPlaceParams = {
     cellIndex: number;
@@ -38,11 +46,11 @@ export type CheckOverlapParams = Omit<CanPlaceParams, 'cellsInRow'> & { updatedC
 // STATE
 export type GameState = {
     playerCells: BoardCell[];
-    enemyCells: BoardCell[];
+    computerCells: BoardCell[];
 }
 
 export type ReducerAction =
     { type: 'SET_PLAYER_CELLS', payload: BoardCell[] }
-    | { type: 'SET_COMPUTER_CELLS', payload: BoardCell[] }
+    | { type: 'PLAYER_SHOT', payload: BoardCell['cellNum'] }
 
-export type ReducerFn = ( v: GameState, a?: ReducerAction | undefined ) => GameState;
+export type ReducerFn = ( v: GameState, a: ReducerAction ) => GameState;

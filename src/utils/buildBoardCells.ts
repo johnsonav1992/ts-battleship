@@ -20,8 +20,8 @@ export const buildBoardCells = (): BoardCell[] => {
             shipImg: null
             , cellNum
             , status: 'none'
-            , orientation: 'horizontal'
-            , direction: 'right'
+            , orientation: 'none'
+            , direction: 'none'
         };
     } );
 

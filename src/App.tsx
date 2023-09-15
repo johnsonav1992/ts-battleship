@@ -12,13 +12,15 @@ import Cell from './Components/Cell/Cell';
 
 // Utils
 import { pxrem } from './utils/pxrem';
-import { buildBoardCells } from './utils/buildBoardCells';
 
 // Jotai
 import { useBattleShipState } from './state/jotai';
 
 function App () {
-    const [ state, dispatch ] = useBattleShipState();
+    const [ {
+        playerCells
+        , computerCells
+    } ] = useBattleShipState();
 
     const sharedCardStyles: SxProps = {
         width: pxrem( 500 )
@@ -27,9 +29,6 @@ function App () {
         , bgcolor: theme => theme.palette.primary[ 200 ]
         , p: pxrem( 8 )
     };
-
-    const playerCells = buildBoardCells();
-    const computerCells = buildBoardCells();
 
     return (
         <Sheet
@@ -54,6 +53,7 @@ function App () {
                                 <Cell
                                     key={ cell.cellNum }
                                     cell={ cell }
+                                    isPlayer
                                 />
                             ) )
                         }

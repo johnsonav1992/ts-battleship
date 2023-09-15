@@ -10,10 +10,11 @@ import {
     ReducerAction
     , GameState
 } from '../types/types';
+import { buildBoardCells } from '../utils/buildBoardCells';
 
 const initState: GameState = {
-    playerCells: []
-    , enemyCells: []
+    playerCells: buildBoardCells()
+    , computerCells: buildBoardCells()
 };
 
 const stateAtom = atom( initState );
