@@ -11,27 +11,19 @@ export type ShipConfig = {
     forward: boolean;
 }
 
-export type DefaultBoardCell = {
-    shipImg: ShipImg | null;
-    cellNum: number;
-    orientation: 'none';
-    direction: 'none';
-    status: 'none';
-}
-
 export type BoardCell = {
     shipImg: ShipImg | null;
     cellNum: number;
-    orientation: 'vertical';
-    direction: 'up' | 'down';
+    orientation: 'vertical' | 'none';
+    direction: 'up' | 'down' | 'none';
     status: 'none' | 'hit' | 'miss';
 } | {
     shipImg: ShipImg | null;
     cellNum: number;
-    orientation: 'horizontal';
-    direction: 'left' | 'right';
+    orientation: 'horizontal' | 'none';
+    direction: 'left' | 'right' | 'none';
     status: 'none' | 'hit' | 'miss';
-} | DefaultBoardCell
+}
 
 export type CanPlaceParams = {
     cellIndex: number;
