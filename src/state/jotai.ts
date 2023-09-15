@@ -8,10 +8,10 @@ import { reducer } from './reducer';
 // Types
 import {
     ReducerAction
-    , ReducerState
+    , GameState
 } from '../types/types';
 
-const initState: ReducerState = {
+const initState: GameState = {
     playerCells: []
     , enemyCells: []
 };
@@ -19,5 +19,5 @@ const initState: ReducerState = {
 const stateAtom = atom( initState );
 
 export const useBattleShipState = () => {
-    return useReducerAtom<ReducerState, ReducerAction>( stateAtom, reducer );
+    return useReducerAtom<GameState, ReducerAction>( stateAtom, reducer );
 };

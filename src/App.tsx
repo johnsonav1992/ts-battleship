@@ -14,7 +14,11 @@ import Cell from './Components/Cell/Cell';
 import { pxrem } from './utils/pxrem';
 import { buildBoardCells } from './utils/buildBoardCells';
 
+// Jotai
+import { useBattleShipState } from './state/jotai';
+
 function App () {
+    const [ state, dispatch ] = useBattleShipState();
 
     const sharedCardStyles: SxProps = {
         width: pxrem( 500 )
