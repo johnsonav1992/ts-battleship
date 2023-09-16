@@ -127,13 +127,13 @@ export const defaultShips: Ship[] = [
         , isSunk: false
     }
     , {
-        id: 'battleship'
+        id: 'cruiser'
         , length: 3
         , hits: 0
         , isSunk: false
     }
     , {
-        id: 'cruiser'
+        id: 'battleship'
         , length: 4
         , hits: 0
         , isSunk: false
