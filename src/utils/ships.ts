@@ -118,25 +118,30 @@ export const defaultShips: Ship[] = [
         id: 'destroyer'
         , length: 2
         , hits: 0
+        , isSunk: false
     }
     , {
         id: 'submarine'
         , length: 3
         , hits: 0
+        , isSunk: false
     }
     , {
         id: 'battleship'
         , length: 3
         , hits: 0
+        , isSunk: false
     }
     , {
         id: 'cruiser'
         , length: 4
         , hits: 0
+        , isSunk: false
     }
     , {
         id: 'carrier'
         , length: 5
         , hits: 0
+        , isSunk: false
     }
 ];
