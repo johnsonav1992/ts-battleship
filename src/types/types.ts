@@ -11,6 +11,14 @@ export type ShipConfig = {
     forward: boolean;
 }
 
+export type ShipName = 'destroyer' | 'submarine' | 'battleship' | 'cruiser' | 'carrier';
+
+export type Ship = {
+    id: ShipName;
+    length: 2 | 3 | 4 | 5;
+    hits: 0 | 1 | Ship['length'];
+}
+
 export type BoardCell = {
     shipImg: ShipImg | null;
     cellNum: number;
