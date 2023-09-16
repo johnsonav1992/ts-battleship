@@ -8,10 +8,10 @@ export type Ship = (
 
 export type ShipImg = {
     img: string;
-    label: `ship${ number }${ ShipPortion }`;
+    label: `${ Ship['id'] }-${ ShipPortion }`;
 }
 
-export type ShipPortion = 'Front' | 'MiddleFront' | 'Middle' | 'MiddleBack' | 'Back';
+export type ShipPortion = 'front' | 'middle-front' | 'middle' | 'middle-back' | 'back';
 
 export type ShipCellConfig = {
     shipImgSet: ShipImg[];

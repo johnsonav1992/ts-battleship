@@ -3,10 +3,14 @@ import { ReducerFn } from '../types/types';
 
 export const reducer: ReducerFn = ( state, action ) => {
     const { payload } = action;
-    const { computerCells } = state;
+    const {
+        computerCells
+        , computerShips
+    } = state;
 
     switch ( action.type ) {
         case 'PLAYER_SHOT': {
+
             return {
                 ...state
                 , computerCells: computerCells.map( ( cell ) => {

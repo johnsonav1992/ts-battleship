@@ -31,83 +31,83 @@ import { Ship, ShipImg } from '../types/types';
 export const ship1Imgs: ShipImg[] = [
     {
         img: ship1Back
-        , label: 'ship1Back'
+        , label: 'destroyer-back'
     }
     , {
         img: ship1Front
-        , label: 'ship1Front'
+        , label: 'destroyer-front'
     }
 ];
 
 export const ship2Imgs: ShipImg[] = [
     {
         img: ship2Back
-        , label: 'ship2Back'
+        , label: 'submarine-back'
     }
     , {
         img: ship2Middle
-        , label: 'ship2Middle'
+        , label: 'submarine-middle'
     }
     , {
         img: ship2Front
-        , label: 'ship2Front'
+        , label: 'submarine-front'
     }
 ];
 
 export const ship3Imgs: ShipImg[] = [
     {
         img: ship3Back
-        , label: 'ship3Back'
+        , label: 'cruiser-back'
     }
     , {
         img: ship3Middle
-        , label: 'ship3Middle'
+        , label: 'cruiser-middle'
     }
     , {
         img: ship3Front
-        , label: 'ship3Front'
+        , label: 'cruiser-front'
     }
 ];
 
 export const ship4Imgs: ShipImg[] = [
     {
         img: ship4Back
-        , label: 'ship4Back'
+        , label: 'battleship-back'
     }
     , {
         img: ship4MiddleBack
-        , label: 'ship4MiddleBack'
+        , label: 'battleship-middle-back'
     }
     , {
         img: ship4MiddleFront
-        , label: 'ship4MiddleFront'
+        , label: 'battleship-middle-front'
     }
     , {
         img: ship4Front
-        , label: 'ship4Front'
+        , label: 'battleship-front'
     }
 ];
 
 export const ship5Imgs: ShipImg[] = [
     {
         img: ship5Back
-        , label: 'ship5Back'
+        , label: 'carrier-back'
     }
     , {
         img: ship5MiddleBack
-        , label: 'ship5MiddleBack'
+        , label: 'carrier-middle-back'
     }
     , {
         img: ship5Middle
-        , label: 'ship5Middle'
+        , label: 'carrier-middle'
     }
     , {
         img: ship5MiddleFront
-        , label: 'ship5MiddleFront'
+        , label: 'carrier-middle-front'
     }
     , {
         img: ship5Front
-        , label: 'ship5Front'
+        , label: 'carrier-front'
     }
 ];
 
