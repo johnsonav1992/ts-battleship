@@ -1,5 +1,5 @@
 // Types
-import { ReducerFn, Ship } from '../types/types';
+import { BoardCell, ReducerFn, Ship } from '../types/types';
 
 export const reducer: ReducerFn = ( state, action ) => {
     const { payload } = action;
@@ -10,30 +10,30 @@ export const reducer: ReducerFn = ( state, action ) => {
 
     switch ( action.type ) {
         case 'PLAYER_SHOT': {
-            let updatedComputerShips = state.computerShips;
+            const [ shotCell ] = computerCells.filter( compCell => compCell?.cellNum === payload && compCell.shipImg );
+            const shipLabel = shotCell?.shipImg?.label.split( '-' );
+            const shipId = shipLabel?.[ 0 ] as Ship['id'] | undefined;
 
-            const updatedComputerCells = computerCells.map( ( cell ) => {
+            const updatedComputerCells: BoardCell[] = computerCells.map( ( cell ) => {
                 if ( cell.cellNum === payload ) {
                     if ( cell.shipImg ) {
-                        const [ shipId ] = cell.shipImg.label.split( '-' );
-
-                        updatedComputerShips = computerShips.map( ( ship ) => {
-                            if ( ship.id === shipId && ship.hits !== ship.length ) {
-                                const updatedShip = { ...ship, hits: ( ship.hits + 1 ) as Ship['hits'] };
-
-                                if ( updatedShip.hits === updatedShip.length ) {
-                                    return { ...updatedShip, isSunk: true };
-                                }
-                                return updatedShip;
-                            }
-                            return ship;
-                        } );
-
                         return { ...cell, status: 'hit' };
                     }
                     return { ...cell, status: 'miss' };
                 }
                 return cell;
+            } );
+
+            const updatedComputerShips: Ship[] = computerShips.map( ship => {
+                if ( ship.id === shipId ) {
+                    const updatedShip = { ...ship, hits: ( ship.hits + 1 ) as Ship['hits'] };
+
+                    if ( updatedShip.hits === updatedShip.length ) {
+                        return { ...updatedShip as Ship, isSunk: true };
+                    }
+                    return updatedShip as Ship;
+                }
+                return ship;
             } );
 
             return {
