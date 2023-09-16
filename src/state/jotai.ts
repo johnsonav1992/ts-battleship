@@ -11,10 +11,12 @@ import {
     , GameState
 } from '../types/types';
 import { buildBoardCells } from '../utils/buildBoardCells';
+import { defaultShips } from '../utils/ships';
 
 const initState: GameState = {
     playerCells: buildBoardCells()
     , computerCells: buildBoardCells()
+    , computerShips: defaultShips
 };
 
 const stateAtom = atom( initState );

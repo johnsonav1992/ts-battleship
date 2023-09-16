@@ -1,7 +1,7 @@
 // Types
 import {
     BoardCell
-    , ShipConfig
+    , ShipCellConfig
 } from '../types/types';
 
 // Utils
@@ -10,7 +10,7 @@ import {
     , shipOverlapping
     , pickRandomBoolean
 } from './shipUtils';
-import { ships } from './ships';
+import { shipImgSets } from './ships';
 
 export const buildBoardCells = (): BoardCell[] => {
     const emptyCells: BoardCell[] = Array( 100 ).fill( null ).map( ( _cell, idx ) => {
@@ -25,8 +25,8 @@ export const buildBoardCells = (): BoardCell[] => {
         };
     } );
 
-    const shipConfig: ShipConfig[] = ships.map( ship => ( {
-        ship
+    const shipConfig: ShipCellConfig[] = shipImgSets.map( shipImgSet => ( {
+        shipImgSet
         , horizontal: pickRandomBoolean()
         , forward: pickRandomBoolean()
     } ) );
@@ -35,7 +35,7 @@ export const buildBoardCells = (): BoardCell[] => {
 
     const MAX_ATTEMPTS = 100;
 
-    for ( const { ship, horizontal, forward } of shipConfig ) {
+    for ( const { shipImgSet, horizontal, forward } of shipConfig ) {
         let placed = false;
         let attemptCount = 0;
 
@@ -43,14 +43,14 @@ export const buildBoardCells = (): BoardCell[] => {
             let startingCellIndex: number;
 
             if ( horizontal && !forward ) {
-                startingCellIndex = Math.floor( Math.random() * 10 ) * 10 + ( ship.length - 1 );
+                startingCellIndex = Math.floor( Math.random() * 10 ) * 10 + ( shipImgSet.length - 1 );
             } else {
                 startingCellIndex = Math.floor( Math.random() * 100 );
             }
 
             const sharedCheckingParams = {
                 cellIndex: startingCellIndex
-                , shipLength: ship.length
+                , shipLength: shipImgSet.length
                 , horizontal
                 , forward
             };
@@ -59,7 +59,7 @@ export const buildBoardCells = (): BoardCell[] => {
                 canPlaceShip( { ...sharedCheckingParams, cellsInRow: 10 } )
                 && !shipOverlapping( { ...sharedCheckingParams, updatedCells } )
             ) {
-                for ( let i = 0; i < ship.length; i++ ) {
+                for ( let i = 0; i < shipImgSet.length; i++ ) {
                     const cellIndex = horizontal
                         ? forward
                             ? startingCellIndex + i
@@ -70,7 +70,7 @@ export const buildBoardCells = (): BoardCell[] => {
 
                     const newCell = {
                         ...updatedCells[ cellIndex ]
-                        , shipImg: ship[ i ]
+                        , shipImg: shipImgSet[ i ]
                         , orientation: horizontal ? 'horizontal' : 'vertical'
                         , direction: horizontal
                             ? forward
@@ -88,7 +88,7 @@ export const buildBoardCells = (): BoardCell[] => {
         }
 
         if ( !placed ) {
-            console.error( `Failed to place ship: ${ ship[ 0 ].label }` );
+            console.error( `Failed to place ship: ${ shipImgSet[ 0 ].label }` );
         }
     }
 

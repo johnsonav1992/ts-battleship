@@ -1,3 +1,10 @@
+export type Ship =
+    { id: 'destroyer', length: 2, hits: 0 | 1 | 2 }
+    | { id: 'submarine', length: 3, hits: 0 | 1 | 2 | 3 }
+    | { id: 'battleship', length: 3, hits: 0 | 1 | 2 | 3 }
+    | { id: 'cruiser', length: 4, hits: 0 | 1 | 2 | 3 | 4 }
+    | { id: 'carrier', length: 5, hits: 0 | 1 | 2 | 3 | 4 | 5 }
+
 export type ShipImg = {
     img: string;
     label: `ship${ number }${ ShipPortion }`;
@@ -5,18 +12,10 @@ export type ShipImg = {
 
 export type ShipPortion = 'Front' | 'MiddleFront' | 'Middle' | 'MiddleBack' | 'Back';
 
-export type ShipConfig = {
-    ship: ShipImg[];
+export type ShipCellConfig = {
+    shipImgSet: ShipImg[];
     horizontal: boolean;
     forward: boolean;
-}
-
-export type ShipName = 'destroyer' | 'submarine' | 'battleship' | 'cruiser' | 'carrier';
-
-export type Ship = {
-    id: ShipName;
-    length: 2 | 3 | 4 | 5;
-    hits: 0 | 1 | Ship['length'];
 }
 
 export type BoardCell = {
@@ -47,6 +46,7 @@ export type CheckOverlapParams = Omit<CanPlaceParams, 'cellsInRow'> & { updatedC
 export type GameState = {
     playerCells: BoardCell[];
     computerCells: BoardCell[];
+    computerShips: Ship[];
 }
 
 export type ReducerAction =

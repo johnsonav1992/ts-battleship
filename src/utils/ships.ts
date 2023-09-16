@@ -26,7 +26,7 @@ import ship5MiddleFront from '../assets/ship5/middle-front.png';
 import ship5Back from '../assets/ship5/back.png';
 
 // Types
-import { ShipImg } from '../types/types';
+import { Ship, ShipImg } from '../types/types';
 
 export const ship1: ShipImg[] = [
     {
@@ -111,4 +111,32 @@ export const ship5: ShipImg[] = [
     }
 ];
 
-export const ships = [ ship1, ship2, ship3, ship4, ship5 ];
+export const shipImgSets = [ ship1, ship2, ship3, ship4, ship5 ];
+
+export const defaultShips: Ship[] = [
+    {
+        id: 'destroyer'
+        , length: 2
+        , hits: 0
+    }
+    , {
+        id: 'submarine'
+        , length: 3
+        , hits: 0
+    }
+    , {
+        id: 'battleship'
+        , length: 3
+        , hits: 0
+    }
+    , {
+        id: 'cruiser'
+        , length: 4
+        , hits: 0
+    }
+    , {
+        id: 'carrier'
+        , length: 5
+        , hits: 0
+    }
+];
