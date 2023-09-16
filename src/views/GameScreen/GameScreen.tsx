@@ -3,7 +3,7 @@ import { Card, Grid, Stack } from '@mui/joy';
 import { SxProps } from '@mui/joy/styles/types';
 
 // Components
-import Cell from '../../Components/Cell/Cell';
+import Cell from '../../components/Cell/Cell';
 
 // State
 import { useBattleShipState } from '../../state/jotai';
@@ -35,6 +35,7 @@ const GameScreen = ( {}: Props ) => {
             alignItems='center'
             justifyContent='center'
             height='100%'
+            width='100%'
             gap='1rem'
         >
             <Card sx={ sharedCardStyles }>

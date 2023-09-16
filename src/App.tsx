@@ -1,8 +1,9 @@
 // MUI
-import { Sheet } from '@mui/joy';
+import { Sheet, Stack } from '@mui/joy';
 
 // Components
 import GameScreen from './views/GameScreen/GameScreen';
+import GameTitle from './components/GameTitle/GameTitle';
 
 function App () {
 
@@ -15,7 +16,13 @@ function App () {
                 , p: '1rem'
             } }
         >
-            <GameScreen />
+            <Stack
+                alignItems='center'
+                gap='1rem'
+            >
+                <GameTitle />
+                <GameScreen />
+            </Stack>
         </Sheet>
     );
 }
