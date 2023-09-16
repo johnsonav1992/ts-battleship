@@ -4,6 +4,7 @@ export type Ship =
     | { id: 'battleship', length: 3, hits: 0 | 1 | 2 | 3 }
     | { id: 'cruiser', length: 4, hits: 0 | 1 | 2 | 3 | 4 }
     | { id: 'carrier', length: 5, hits: 0 | 1 | 2 | 3 | 4 | 5 }
+    & { isSunk: boolean };
 
 export type ShipImg = {
     img: string;
