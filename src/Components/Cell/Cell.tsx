@@ -27,7 +27,9 @@ const Cell = (
     }
     , isPlayer
     }: Props ) => {
-    const [ _, dispatch ] = useBattleShipState();
+    const [ { playerAttemptedCells }, dispatch ] = useBattleShipState();
+
+    const cellHasBeenAttempted = playerAttemptedCells.includes( cellNum );
 
     const calcBorderRadius = ( cellNum: number ) => {
         switch ( cellNum ) {
@@ -64,7 +66,11 @@ const Cell = (
                     cursor: isPlayer ? 'none' : 'pointer'
                     , backgroundColor: theme => theme.palette.primary[ 200 ]
                 }
-                , pointerEvents: isPlayer ? 'none' : 'auto'
+                , pointerEvents: isPlayer
+                    ? 'none'
+                    : cellHasBeenAttempted
+                        ? 'none'
+                        : 'auto'
             } }
             onClick={ handleCellClick }
         >

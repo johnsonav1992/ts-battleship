@@ -19,10 +19,7 @@ const GameScreen = ( {}: Props ) => {
     const [ {
         playerCells
         , computerCells
-        , computerShips
     } ] = useBattleShipState();
-
-    console.log( computerShips );
 
     const sharedCardStyles: SxProps = {
         width: pxrem( 500 )

@@ -17,6 +17,7 @@ const initState: GameState = {
     playerCells: buildBoardCells()
     , computerCells: buildBoardCells()
     , computerShips: defaultShips
+    , playerAttemptedCells: []
 };
 
 const stateAtom = atom( initState );
