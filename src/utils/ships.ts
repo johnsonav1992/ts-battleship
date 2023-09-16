@@ -28,7 +28,7 @@ import ship5Back from '../assets/ship5/back.png';
 // Types
 import { Ship, ShipImg } from '../types/types';
 
-export const ship1: ShipImg[] = [
+export const ship1Imgs: ShipImg[] = [
     {
         img: ship1Back
         , label: 'ship1Back'
@@ -39,7 +39,7 @@ export const ship1: ShipImg[] = [
     }
 ];
 
-export const ship2: ShipImg[] = [
+export const ship2Imgs: ShipImg[] = [
     {
         img: ship2Back
         , label: 'ship2Back'
@@ -54,7 +54,7 @@ export const ship2: ShipImg[] = [
     }
 ];
 
-export const ship3: ShipImg[] = [
+export const ship3Imgs: ShipImg[] = [
     {
         img: ship3Back
         , label: 'ship3Back'
@@ -69,7 +69,7 @@ export const ship3: ShipImg[] = [
     }
 ];
 
-export const ship4: ShipImg[] = [
+export const ship4Imgs: ShipImg[] = [
     {
         img: ship4Back
         , label: 'ship4Back'
@@ -88,7 +88,7 @@ export const ship4: ShipImg[] = [
     }
 ];
 
-export const ship5: ShipImg[] = [
+export const ship5Imgs: ShipImg[] = [
     {
         img: ship5Back
         , label: 'ship5Back'
@@ -111,7 +111,7 @@ export const ship5: ShipImg[] = [
     }
 ];
 
-export const shipImgSets = [ ship1, ship2, ship3, ship4, ship5 ];
+export const shipImgSets = [ ship1Imgs, ship2Imgs, ship3Imgs, ship4Imgs, ship5Imgs ];
 
 export const defaultShips: Ship[] = [
     {
