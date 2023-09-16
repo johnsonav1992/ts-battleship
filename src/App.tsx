@@ -1,34 +1,10 @@
 // MUI
-import {
-    Card
-    , Grid
-    , Sheet
-    , Stack
-} from '@mui/joy';
-import { SxProps } from '@mui/joy/styles/types';
+import { Sheet } from '@mui/joy';
 
 // Components
-import Cell from './Components/Cell/Cell';
-
-// Utils
-import { pxrem } from './utils/pxrem';
-
-// Jotai
-import { useBattleShipState } from './state/jotai';
+import GameScreen from './views/GameScreen/GameScreen';
 
 function App () {
-    const [ {
-        playerCells
-        , computerCells
-    } ] = useBattleShipState();
-
-    const sharedCardStyles: SxProps = {
-        width: pxrem( 500 )
-        , aspectRatio: 1
-        , border: theme => `${ pxrem( 8 ) } solid ${ theme.palette.neutral[ 400 ] }`
-        , bgcolor: theme => theme.palette.primary[ 200 ]
-        , p: pxrem( 8 )
-    };
 
     return (
         <Sheet
@@ -39,39 +15,7 @@ function App () {
                 , p: '1rem'
             } }
         >
-            <Stack
-                direction='row'
-                alignItems='center'
-                justifyContent='center'
-                height='100%'
-                gap='1rem'
-            >
-                <Card sx={ sharedCardStyles }>
-                    <Grid container>
-                        {
-                            playerCells.map( cell => (
-                                <Cell
-                                    key={ cell.cellNum }
-                                    cell={ cell }
-                                    isPlayer
-                                />
-                            ) )
-                        }
-                    </Grid>
-                </Card>
-                <Card sx={ sharedCardStyles }>
-                    <Grid container>
-                        {
-                            computerCells.map( cell => (
-                                <Cell
-                                    key={ cell.cellNum }
-                                    cell={ cell }
-                                />
-                            ) )
-                        }
-                    </Grid>
-                </Card>
-            </Stack>
+            <GameScreen />
         </Sheet>
     );
 }
