@@ -4,6 +4,7 @@ import {
     , ReducerFn
     , Ship
 } from '../types/types';
+import { findHit, updateCells, updateCellsWithMissOnly, updateShipsWithHit } from '../utils/gameUtils';
 
 export const reducer: ReducerFn = ( state, action ) => {
     const {
@@ -14,16 +15,12 @@ export const reducer: ReducerFn = ( state, action ) => {
     switch ( action.type ) {
         case 'PLAYER_SHOT': {
             const attemptedCell = action.payload;
-            const shipHit = computerCells.find( compCell => compCell?.cellNum === attemptedCell && compCell.shipImg );
+            const shipHit = findHit( computerCells, attemptedCell );
 
             if ( !shipHit ) {
                 return {
                     ...state
-                    , computerCells: computerCells.map( cell =>
-                        cell.cellNum === attemptedCell
-                            ? { ...cell, status: 'miss' }
-                            : cell
-                    )
+                    , computerCells: updateCellsWithMissOnly( computerCells, attemptedCell )
                     , playerAttemptedCells: [ ...state.playerAttemptedCells, attemptedCell ]
                     , alertText: ''
                     , currentTurn: 'computer'
@@ -33,22 +30,8 @@ export const reducer: ReducerFn = ( state, action ) => {
             const shipLabel = shipHit?.shipImg?.label.split( '-' );
             const shipId = shipLabel?.[ 0 ];
 
-            const updatedComputerCells = computerCells.map( cell => ( {
-                ...cell
-                , status: cell.cellNum === attemptedCell ? ( shipId ? 'hit' : 'miss' ) : cell.status
-            } ) );
-
-            const updatedComputerShips = computerShips.map( ship => {
-                if ( ship.id === shipId ) {
-                    const updatedShip = { ...ship, hits: ship.hits + 1 } as Ship;
-
-                    if ( updatedShip.hits === updatedShip.length ) {
-                        return { ...updatedShip, isSunk: true };
-                    }
-                    return updatedShip;
-                }
-                return ship;
-            } );
+            const updatedComputerCells = updateCells( computerCells, attemptedCell, shipId );
+            const updatedComputerShips = updateShipsWithHit( computerShips, shipId );
 
             const newSunkShip = updatedComputerShips.find( ship => ship.isSunk && ship.id === shipId );
 
