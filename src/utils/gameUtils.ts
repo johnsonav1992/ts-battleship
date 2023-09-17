@@ -1,7 +1,8 @@
 // Types
 import {
     BoardCell
-    , ReducerAction, Ship
+    , ReducerAction
+    , Ship
 } from '../types/types';
 
 export const findHit = ( cells: BoardCell[], attemptedCell: number ): BoardCell | undefined => {

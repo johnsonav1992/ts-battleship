@@ -1,6 +1,16 @@
-import { Box, useTheme } from '@mui/joy';
+// MUI
+import {
+    Box
+    , useTheme
+} from '@mui/joy';
+
+// Components
 import Image from '../Image/Image';
+
+// Assets
 import battleshipTitle from '../../assets/battleship-logo.png';
+
+// Utils
 import { pxrem } from '../../utils/pxrem';
 
 const GameTitle = () => {

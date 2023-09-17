@@ -10,6 +10,8 @@ import { BoardCell } from '../../types/types';
 
 // Utils
 import { pxrem } from '../../utils/pxrem';
+
+// State
 import { useBattleShipState } from '../../state/jotai';
 
 interface Props {

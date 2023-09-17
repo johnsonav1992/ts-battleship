@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 // MUI
 import {
     Card
@@ -8,21 +10,16 @@ import { SxProps } from '@mui/joy/styles/types';
 
 // Components
 import Cell from '../../components/Cell/Cell';
+import SnackAlert from '../../components/SnackAlert/SnackAlert';
 
 // State
 import { useBattleShipState } from '../../state/jotai';
 
 // Utils
 import { pxrem } from '../../utils/pxrem';
-import SnackAlert from '../../components/SnackAlert/SnackAlert';
-import { useEffect } from 'react';
 import { takeComputerShot } from '../../utils/gameUtils';
 
-interface Props {
-
-}
-
-const GameScreen = ( {}: Props ) => {
+const GameScreen = () => {
     const [ {
         playerCells
         , computerCells

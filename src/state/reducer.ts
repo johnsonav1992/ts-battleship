@@ -1,6 +1,13 @@
 // Types
 import { ReducerFn } from '../types/types';
-import { findHit, updateCells, updateCellsWithMissOnly, updateShipsWithHit } from '../utils/gameUtils';
+
+// Utils
+import {
+    findHit
+    , updateCells
+    , updateCellsWithMissOnly
+    , updateShipsWithHit
+} from '../utils/gameUtils';
 
 export const reducer: ReducerFn = ( state, action ) => {
     const {

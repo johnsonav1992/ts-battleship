@@ -1,12 +1,14 @@
 // MUI
-import { Sheet, Stack } from '@mui/joy';
+import {
+    Sheet
+    , Stack
+} from '@mui/joy';
 
 // Components
 import GameScreen from './views/GameScreen/GameScreen';
 import GameTitle from './components/GameTitle/GameTitle';
 
-function App () {
-
+const App = () => {
     return (
         <Sheet
             sx={ {
@@ -25,6 +27,6 @@ function App () {
             </Stack>
         </Sheet>
     );
-}
+};
 
 export default App;

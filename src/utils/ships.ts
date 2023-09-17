@@ -26,7 +26,10 @@ import ship5MiddleFront from '../assets/ship5/middle-front.png';
 import ship5Back from '../assets/ship5/back.png';
 
 // Types
-import { Ship, ShipImg } from '../types/types';
+import {
+    Ship
+    , ShipImg
+} from '../types/types';
 
 export const ship1Imgs: ShipImg[] = [
     {
