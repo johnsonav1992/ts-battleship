@@ -64,7 +64,7 @@ export const reducer: ReducerFn = ( state, action ) => {
         case 'COMPUTER_SHOT': {
             const attemptedCell = action.payload;
             console.log( `computer shot! Cell: ${ attemptedCell }` );
-            return state;
+            return { ...state, currentTurn: 'player' };
         }
         default: return state;
     }
