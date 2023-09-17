@@ -50,10 +50,12 @@ export type GameState = {
     computerShips: Ship[];
     playerAttemptedCells: BoardCell['cellNum'][];
     alertText: string;
+    currentTurn: 'player' | 'computer';
 }
 
 export type ReducerAction =
     { type: 'SET_PLAYER_CELLS', payload: BoardCell[] }
     | { type: 'PLAYER_SHOT', payload: BoardCell['cellNum'] }
+    | { type: 'COMPUTER_SHOT', payload: BoardCell['cellNum'] }
 
 export type ReducerFn = ( v: GameState, a: ReducerAction ) => GameState;

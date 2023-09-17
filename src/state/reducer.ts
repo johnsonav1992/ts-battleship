@@ -26,6 +26,7 @@ export const reducer: ReducerFn = ( state, action ) => {
                     )
                     , playerAttemptedCells: [ ...state.playerAttemptedCells, attemptedCell ]
                     , alertText: ''
+                    , currentTurn: 'computer'
                 };
             }
 
@@ -57,7 +58,13 @@ export const reducer: ReducerFn = ( state, action ) => {
                 , computerShips: updatedComputerShips
                 , playerAttemptedCells: [ ...state.playerAttemptedCells, attemptedCell ]
                 , alertText: newSunkShip ? `You sunk the computer's ${ newSunkShip.id }!` : ''
+                , currentTurn: 'computer'
             };
+        }
+        case 'COMPUTER_SHOT': {
+            const attemptedCell = action.payload;
+            console.log( `computer shot! Cell: ${ attemptedCell }` );
+            return state;
         }
         default: return state;
     }

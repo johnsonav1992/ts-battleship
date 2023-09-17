@@ -21,6 +21,7 @@ const initState: GameState = {
     , computerShips: defaultShips
     , playerAttemptedCells: []
     , alertText: ''
+    , currentTurn: 'player'
 };
 
 const stateAtom = atom( initState );
