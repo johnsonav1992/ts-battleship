@@ -48,7 +48,9 @@ export type GameState = {
     playerCells: BoardCell[];
     computerCells: BoardCell[];
     computerShips: Ship[];
+    playerShips: Ship[];
     playerAttemptedCells: BoardCell['cellNum'][];
+    computerAttemptedCells: BoardCell['cellNum'][];
     alertText: string;
     currentTurn: 'player' | 'computer';
 }

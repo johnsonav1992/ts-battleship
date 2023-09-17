@@ -1,4 +1,8 @@
-import { BoardCell, Ship } from '../types/types';
+// Types
+import {
+    BoardCell
+    , ReducerAction, Ship
+} from '../types/types';
 
 export const findHit = ( cells: BoardCell[], attemptedCell: number ): BoardCell | undefined => {
     return cells.find( compCell => compCell?.cellNum === attemptedCell && compCell.shipImg );
@@ -31,4 +35,17 @@ export const updateShipsWithHit = ( ships: Ship[], shipId: string | undefined ):
         }
         return ship;
     } );
+};
+
+export const takeComputerShot = ( dispatch: ( action: ReducerAction ) => void, computerAttemptedCells: number[] ) => {
+    const randomCell = Math.floor( Math.random() * 100 ) + 1;
+
+    if ( computerAttemptedCells.includes( randomCell ) ) {
+        takeComputerShot( dispatch, computerAttemptedCells );
+    } else {
+        setTimeout( () => dispatch( {
+            type: 'COMPUTER_SHOT'
+            , payload: randomCell
+        } ), 2000 );
+    }
 };

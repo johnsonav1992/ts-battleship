@@ -1,15 +1,13 @@
 // Types
-import {
-    BoardCell
-    , ReducerFn
-    , Ship
-} from '../types/types';
+import { ReducerFn } from '../types/types';
 import { findHit, updateCells, updateCellsWithMissOnly, updateShipsWithHit } from '../utils/gameUtils';
 
 export const reducer: ReducerFn = ( state, action ) => {
     const {
         computerCells
+        , playerCells
         , computerShips
+        , playerShips
     } = state;
 
     switch ( action.type ) {
@@ -46,8 +44,34 @@ export const reducer: ReducerFn = ( state, action ) => {
         }
         case 'COMPUTER_SHOT': {
             const attemptedCell = action.payload;
-            console.log( `computer shot! Cell: ${ attemptedCell }` );
-            return { ...state, currentTurn: 'player' };
+            const shipHit = findHit( playerCells, attemptedCell );
+
+            if ( !shipHit ) {
+                return {
+                    ...state
+                    , playerCells: updateCellsWithMissOnly( playerCells, attemptedCell )
+                    , computerAttemptedCells: [ ...state.computerAttemptedCells, attemptedCell ]
+                    , alertText: ''
+                    , currentTurn: 'player'
+                };
+            }
+
+            const shipLabel = shipHit?.shipImg?.label.split( '-' );
+            const shipId = shipLabel?.[ 0 ];
+
+            const updatedPlayerCells = updateCells( playerCells, attemptedCell, shipId );
+            const updatedPlayerShips = updateShipsWithHit( playerShips, shipId );
+
+            const newSunkShip = updatedPlayerShips.find( ship => ship.isSunk && ship.id === shipId );
+
+            return {
+                ...state
+                , playerCells: updatedPlayerCells
+                , playerShips: updatedPlayerShips
+                , computerAttemptedCells: [ ...state.computerAttemptedCells, attemptedCell ]
+                , alertText: newSunkShip ? `The computer sunk your ${ newSunkShip.id }!` : ''
+                , currentTurn: 'player'
+            };
         }
         default: return state;
     }

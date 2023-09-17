@@ -19,7 +19,9 @@ const initState: GameState = {
     playerCells: buildBoardCells()
     , computerCells: buildBoardCells()
     , computerShips: defaultShips
+    , playerShips: defaultShips
     , playerAttemptedCells: []
+    , computerAttemptedCells: []
     , alertText: ''
     , currentTurn: 'player'
 };

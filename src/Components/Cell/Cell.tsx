@@ -27,7 +27,10 @@ const Cell = (
     }
     , isPlayer
     }: Props ) => {
-    const [ { playerAttemptedCells }, dispatch ] = useBattleShipState();
+    const [ {
+        playerAttemptedCells
+        , currentTurn
+    }, dispatch ] = useBattleShipState();
 
     const cellHasBeenAttempted = playerAttemptedCells.includes( cellNum );
 
@@ -68,7 +71,7 @@ const Cell = (
                 }
                 , pointerEvents: isPlayer
                     ? 'none'
-                    : cellHasBeenAttempted
+                    : cellHasBeenAttempted || currentTurn === 'computer'
                         ? 'none'
                         : 'auto'
             } }

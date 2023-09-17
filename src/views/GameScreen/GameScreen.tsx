@@ -16,6 +16,7 @@ import { useBattleShipState } from '../../state/jotai';
 import { pxrem } from '../../utils/pxrem';
 import SnackAlert from '../../components/SnackAlert/SnackAlert';
 import { useEffect } from 'react';
+import { takeComputerShot } from '../../utils/gameUtils';
 
 interface Props {
 
@@ -27,6 +28,7 @@ const GameScreen = ( {}: Props ) => {
         , computerCells
         , alertText
         , currentTurn
+        , computerAttemptedCells
     }, dispatch ] = useBattleShipState();
 
     const sharedCardStyles: SxProps = {
@@ -39,14 +41,8 @@ const GameScreen = ( {}: Props ) => {
 
     useEffect( () => {
         if ( currentTurn === 'computer' ) {
-            const randomCell = Math.floor( Math.random() * 100 ) + 1;
-
-            setTimeout( () => dispatch( {
-                type: 'COMPUTER_SHOT'
-                , payload: randomCell
-            } ), 2000 );
+            takeComputerShot( dispatch, computerAttemptedCells );
         }
-
     }, [ currentTurn ] );
 
     return (
