@@ -25,6 +25,7 @@ const GameScreen = ( {}: Props ) => {
         playerCells
         , computerCells
         , alertText
+        , playerAttemptedCells
     } ] = useBattleShipState();
 
     const sharedCardStyles: SxProps = {

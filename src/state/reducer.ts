@@ -13,18 +13,18 @@ export const reducer: ReducerFn = ( state, action ) => {
 
     switch ( action.type ) {
         case 'PLAYER_SHOT': {
-            const shipHit = computerCells.find( compCell => compCell?.cellNum === action.payload && compCell.shipImg );
+            const attemptedCell = action.payload;
+            const shipHit = computerCells.find( compCell => compCell?.cellNum === attemptedCell && compCell.shipImg );
 
             if ( !shipHit ) {
                 return {
                     ...state
-                    , computerCells: computerCells.map( ( cell ) => {
-                        if ( cell.cellNum === action.payload ) {
-                            return { ...cell, status: 'miss' };
-                        }
-                        return cell;
-                    } )
-                    , playerAttemptedCells: [ ...state.playerAttemptedCells, action.payload ]
+                    , computerCells: computerCells.map( cell =>
+                        cell.cellNum === attemptedCell
+                            ? { ...cell, status: 'miss' }
+                            : cell
+                    )
+                    , playerAttemptedCells: [ ...state.playerAttemptedCells, attemptedCell ]
                     , alertText: ''
                 };
             }
@@ -32,15 +32,10 @@ export const reducer: ReducerFn = ( state, action ) => {
             const shipLabel = shipHit?.shipImg?.label.split( '-' );
             const shipId = shipLabel?.[ 0 ];
 
-            const updatedComputerCells: BoardCell[] = computerCells.map( ( cell ) => {
-                if ( cell.cellNum === action.payload ) {
-                    if ( cell.shipImg ) {
-                        return { ...cell, status: 'hit' };
-                    }
-                    return { ...cell, status: 'miss' };
-                }
-                return cell;
-            } );
+            const updatedComputerCells = computerCells.map( cell => ( {
+                ...cell
+                , status: cell.cellNum === attemptedCell ? ( shipId ? 'hit' : 'miss' ) : cell.status
+            } ) );
 
             const updatedComputerShips = computerShips.map( ship => {
                 if ( ship.id === shipId ) {
@@ -60,7 +55,7 @@ export const reducer: ReducerFn = ( state, action ) => {
                 ...state
                 , computerCells: updatedComputerCells
                 , computerShips: updatedComputerShips
-                , playerAttemptedCells: [ ...state.playerAttemptedCells, action.payload ]
+                , playerAttemptedCells: [ ...state.playerAttemptedCells, attemptedCell ]
                 , alertText: newSunkShip ? `You sunk the computer's ${ newSunkShip.id }!` : ''
             };
         }
