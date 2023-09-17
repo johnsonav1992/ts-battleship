@@ -1,5 +1,9 @@
 // MUI
-import { Card, Grid, Stack } from '@mui/joy';
+import {
+    Card
+    , Grid
+    , Stack
+} from '@mui/joy';
 import { SxProps } from '@mui/joy/styles/types';
 
 // Components
@@ -10,6 +14,7 @@ import { useBattleShipState } from '../../state/jotai';
 
 // Utils
 import { pxrem } from '../../utils/pxrem';
+import SnackAlert from '../../components/SnackAlert/SnackAlert';
 
 interface Props {
 
@@ -19,6 +24,7 @@ const GameScreen = ( {}: Props ) => {
     const [ {
         playerCells
         , computerCells
+        , alertText
     } ] = useBattleShipState();
 
     const sharedCardStyles: SxProps = {
@@ -63,6 +69,10 @@ const GameScreen = ( {}: Props ) => {
                     }
                 </Grid>
             </Card>
+            {
+                alertText
+                && ( <SnackAlert text={ alertText }/> )
+            }
         </Stack>
     );
 };

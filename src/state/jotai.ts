@@ -10,6 +10,8 @@ import {
     ReducerAction
     , GameState
 } from '../types/types';
+
+// Utils
 import { buildBoardCells } from '../utils/buildBoardCells';
 import { defaultShips } from '../utils/ships';
 
@@ -18,6 +20,7 @@ const initState: GameState = {
     , computerCells: buildBoardCells()
     , computerShips: defaultShips
     , playerAttemptedCells: []
+    , alertText: ''
 };
 
 const stateAtom = atom( initState );

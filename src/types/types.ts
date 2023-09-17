@@ -49,6 +49,7 @@ export type GameState = {
     computerCells: BoardCell[];
     computerShips: Ship[];
     playerAttemptedCells: BoardCell['cellNum'][];
+    alertText: string;
 }
 
 export type ReducerAction =
