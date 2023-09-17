@@ -11,6 +11,9 @@ import { BoardCell } from '../../types/types';
 // Utils
 import { pxrem } from '../../utils/pxrem';
 
+// Assets
+import crosshair from '../../assets/crosshair.png';
+
 // State
 import { useBattleShipState } from '../../state/jotai';
 
@@ -68,7 +71,7 @@ const Cell = (
                 , aspectRatio: 1
                 , ...calcBorderRadius( cellNum )
                 , '&:hover': {
-                    cursor: isPlayer ? 'none' : 'pointer'
+                    cursor: `url('src/assets/crosshair.png'), auto`
                     , backgroundColor: theme => theme.palette.primary[ 200 ]
                 }
                 , pointerEvents: isPlayer
