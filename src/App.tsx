@@ -7,6 +7,7 @@ import {
 // Components
 import GameScreen from './views/GameScreen/GameScreen';
 import GameTitle from './components/GameTitle/GameTitle';
+import StartScreen from './views/StartScreen/StartScreen';
 
 const App = () => {
     return (
@@ -20,10 +21,12 @@ const App = () => {
         >
             <Stack
                 alignItems='center'
+                justifyContent='center'
                 gap='1rem'
             >
                 <GameTitle />
-                <GameScreen />
+                { /* <GameScreen /> */ }
+                <StartScreen />
             </Stack>
         </Sheet>
     );
