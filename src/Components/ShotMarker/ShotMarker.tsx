@@ -3,6 +3,7 @@ import {
     Box
     , useTheme
 } from '@mui/joy';
+import { pxrem } from '../../utils/pxrem';
 
 interface Props {
     type: 'hit' | 'miss';
@@ -26,13 +27,14 @@ const ShotMarker = ( { type }: Props ) => {
                 , '&::before': {
                     content: '""'
                     , position: 'absolute'
-                    , animation: 'flash .2s ease-out forwards'
-                    , border: `.1rem solid ${ pegColor }`
+                    , animation: 'flash .3s ease-out forwards'
+                    , border: `${ pxrem( 2 ) } solid ${ pegColor }`
                     , borderRadius: '100%'
-                    , width: '2rem'
-                    , height: '2rem'
-                    , top: '-80%'
-                    , left: '-80%'
+                    , width: pxrem( 32 )
+                    , height: pxrem( 32 )
+                    , top: '-90%'
+                    , left: '-90%'
+                    , zIndex: 10
                 }
                 , '@keyframes flash': {
                     '0%': {
