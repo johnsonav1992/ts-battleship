@@ -1,15 +1,15 @@
 export type Ship = (
-        { id: 'destroyer', length: 2, hits: 0 | 1 | 2 }
-        | { id: 'submarine', length: 3, hits: 0 | 1 | 2 | 3 }
-        | { id: 'cruiser', length: 3, hits: 0 | 1 | 2 | 3 }
-        | { id: 'battleship', length: 4, hits: 0 | 1 | 2 | 3 | 4 }
-        | { id: 'carrier', length: 5, hits: 0 | 1 | 2 | 3 | 4 | 5 }
+        { id: 'destroyer'; length: 2; hits: 0 | 1 | 2 }
+        | { id: 'submarine'; length: 3; hits: 0 | 1 | 2 | 3 }
+        | { id: 'cruiser'; length: 3; hits: 0 | 1 | 2 | 3 }
+        | { id: 'battleship'; length: 4; hits: 0 | 1 | 2 | 3 | 4 }
+        | { id: 'carrier'; length: 5; hits: 0 | 1 | 2 | 3 | 4 | 5 }
     ) & { isSunk: boolean };
 
 export type ShipImg = {
     img: string;
     label: `${ Ship['id'] }-${ ShipPortion }`;
-}
+};
 
 export type ShipPortion = 'front' | 'middle-front' | 'middle' | 'middle-back' | 'back';
 
@@ -17,7 +17,7 @@ export type ShipCellConfig = {
     shipImgSet: ShipImg[];
     horizontal: boolean;
     forward: boolean;
-}
+};
 
 export type BoardCell = {
     shipImg: ShipImg | null;
@@ -31,7 +31,7 @@ export type BoardCell = {
     orientation: 'horizontal' | 'none';
     direction: 'left' | 'right' | 'none';
     status: 'none' | 'hit' | 'miss';
-}
+};
 
 export type CanPlaceParams = {
     cellIndex: number;
@@ -39,7 +39,7 @@ export type CanPlaceParams = {
     cellsInRow: number;
     horizontal: boolean;
     forward: boolean;
-}
+};
 
 export type CheckOverlapParams = Omit<CanPlaceParams, 'cellsInRow'> & { updatedCells: BoardCell[] };
 
@@ -53,11 +53,11 @@ export type GameState = {
     computerAttemptedCells: BoardCell['cellNum'][];
     alertText: string;
     currentTurn: 'player' | 'computer';
-}
+};
 
 export type ReducerAction =
-    { type: 'SET_PLAYER_CELLS', payload: BoardCell[] }
-    | { type: 'PLAYER_SHOT', payload: BoardCell['cellNum'] }
-    | { type: 'COMPUTER_SHOT', payload: BoardCell['cellNum'] }
+    { type: 'SET_PLAYER_CELLS'; payload: BoardCell[] }
+    | { type: 'PLAYER_SHOT'; payload: BoardCell['cellNum'] }
+    | { type: 'COMPUTER_SHOT'; payload: BoardCell['cellNum'] };
 
 export type ReducerFn = ( v: GameState, a: ReducerAction ) => GameState;

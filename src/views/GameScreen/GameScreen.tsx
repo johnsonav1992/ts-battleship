@@ -78,7 +78,7 @@ const GameScreen = () => {
             </Card>
             {
                 alertText
-                && ( <SnackAlert text={ alertText }/> )
+                && ( <SnackAlert text={ alertText } /> )
             }
         </Stack>
     );

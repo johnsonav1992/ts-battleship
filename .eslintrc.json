@@ -5,6 +5,12 @@
     "plugin:react/jsx-runtime",
     "plugin:@typescript-eslint/recommended"
   ],
+  "plugins": [
+    "import-newlines"
+    , "unused-imports"
+    , "no-autofix"
+    , "newline-destructuring"
+  ],
   "env": {
     "browser": true,
     "node": true
@@ -50,10 +56,7 @@
     ],
     "quotes": [
       "error",
-      "single",
-      {
-        "allowTemplateLiterals": true
-      }
+      "single"
     ],
     "linebreak-style": [
       "warn",
@@ -78,6 +81,10 @@
         "mode": "strict"
       }
     ],
+    "arrow-parens": [
+      "error",
+      "as-needed"
+    ],
     "space-in-parens": [
       "error",
       "always",
@@ -95,6 +102,41 @@
       "error",
       "always"
     ],
+    "object-curly-newline": [
+      "error",
+      {
+        //
+        // Can enable these if we want to enforce multiline objects
+        // 
+        "ObjectExpression": {
+          "multiline": true,
+          "minProperties": 2,
+          "consistent": true
+        },
+        "ObjectPattern": {
+          "multiline": true,
+          "minProperties": 2,
+          "consistent": true
+        },
+        "ImportDeclaration": {
+          "multiline": true,
+          "minProperties": 2
+        },
+        "ExportDeclaration": {
+          "multiline": true,
+          "minProperties": 2
+        }
+      }
+    ],
+    "import-newlines/enforce": [
+      "error",
+      {
+        "items": 1,
+        "semi": false
+      }
+    ],
+    "object-property-newline": "error",
+    "prefer-template": "error",
     "template-curly-spacing": [
       "error",
       "always"
@@ -129,6 +171,10 @@
         "after": true
       }
     ],
+    "semi-style": [
+      "error",
+      "last"
+    ],
     "no-extra-semi": "error",
     "keyword-spacing": [
       "error",
@@ -139,6 +185,8 @@
     "comma-style": [
       "error",
       "first"
+      , { "exceptions": 
+      { "ImportDeclaration": false, "ObjectPattern": false } }
     ],
     "operator-linebreak": [
       "error",
@@ -164,6 +212,11 @@
         "skipComments": true
       }
     ],
+    "jsx-quotes": [
+      "error"
+      , "prefer-single"
+    ],
+    "no-unneeded-ternary": "error",
     // using @typescript-eslint version of no-unused-vars instead
     // "no-unused-vars": "warn",
     "no-case-declarations": "off",
@@ -173,9 +226,10 @@
     "no-empty-pattern": "warn",
     "no-multiple-empty-lines": [ "error", { "max": 1, "maxBOF": 0, "maxEOF": 0 } ],
     "react/prop-types": 0,
+    "react/jsx-tag-spacing": ["error", { "closingSlash": "never", "beforeSelfClosing": "always", "afterOpening": "never", "beforeClosing": "never" }],
     "react/jsx-curly-spacing": ["error", { "when": "always", "children": true }],
     "react/jsx-max-props-per-line": ["error", { "maximum": 1, "when": "always" }],
-    // "react/jsx-first-prop-new-line": ["error", "multiprop"],
+    "react/jsx-first-prop-new-line": ["error", "multiline"],
     "react/self-closing-comp": ["error", { "component": true, "html": true}],
     "react/jsx-wrap-multilines": ["error", {
       "declaration": "parens-new-line",
@@ -187,11 +241,17 @@
       "prop": "parens-new-line"
     }],
     "react/jsx-closing-bracket-location": ["error", "tag-aligned"],
+    "react/jsx-boolean-value": "error",
+    "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }],
+    "@typescript-eslint/semi": "error",
+    "@typescript-eslint/member-delimiter-style": "error",
     "@typescript-eslint/type-annotation-spacing": "error",
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/ban-ts-comment": "warn",
     "@typescript-eslint/ban-types": "warn",
     "@typescript-eslint/no-empty-interface": "warn",
-    "@typescript-eslint/no-empty-function": "warn"
+    "@typescript-eslint/no-empty-function": "warn",
+    "no-autofix/unused-imports/no-unused-imports": "error",
+    "newline-destructuring/newline": ["error", { "items": 1 }]
   }
 }

@@ -35,7 +35,11 @@ export const buildBoardCells = (): BoardCell[] => {
 
     const MAX_ATTEMPTS = 100;
 
-    for ( const { shipImgSet, horizontal, forward } of shipConfig ) {
+    for ( const {
+        shipImgSet
+        , horizontal
+        , forward
+    } of shipConfig ) {
         let placed = false;
         let attemptCount = 0;
 
@@ -56,8 +60,14 @@ export const buildBoardCells = (): BoardCell[] => {
             };
 
             if (
-                canPlaceShip( { ...sharedCheckingParams, cellsInRow: 10 } )
-                && !shipOverlapping( { ...sharedCheckingParams, updatedCells } )
+                canPlaceShip( {
+                    ...sharedCheckingParams
+                    , cellsInRow: 10
+                } )
+                && !shipOverlapping( {
+                    ...sharedCheckingParams
+                    , updatedCells
+                } )
             ) {
                 for ( let i = 0; i < shipImgSet.length; i++ ) {
                     const cellIndex = horizontal

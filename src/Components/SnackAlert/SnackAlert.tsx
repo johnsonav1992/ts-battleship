@@ -11,9 +11,9 @@ interface Props {
 const SnackAlert = ( { text }: Props ) => {
     return (
         <Alert
-            color="neutral"
-            size="md"
-            variant="soft"
+            color='neutral'
+            size='md'
+            variant='soft'
             sx={ {
                 position: 'absolute'
                 , top: pxrem( 10 )

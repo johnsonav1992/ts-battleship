@@ -23,14 +23,15 @@ interface Props {
 }
 
 const Cell = (
-    { cell: {
-        cellNum
-        , status
-        , shipImg
-        , direction
-        , orientation
-    }
-    , isPlayer
+    {
+        cell: {
+            cellNum
+            , status
+            , shipImg
+            , direction
+            , orientation
+        }
+        , isPlayer
     }: Props ) => {
     const [ {
         playerAttemptedCells
@@ -55,7 +56,10 @@ const Cell = (
     };
 
     const handleCellClick = () => {
-        dispatch( { type: 'PLAYER_SHOT', payload: cellNum } );
+        dispatch( {
+            type: 'PLAYER_SHOT'
+            , payload: cellNum
+        } );
     };
 
     return (
@@ -100,7 +104,7 @@ const Cell = (
                     />
                 )
             }
-            { status !== 'none' && <ShotMarker type={ status }/> }
+            { status !== 'none' && <ShotMarker type={ status } /> }
         </Box>
     );
 };

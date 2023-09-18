@@ -19,7 +19,10 @@ export const updateCells = ( cells: BoardCell[], attemptedCell: number, shipId: 
 export const updateCellsWithMissOnly = ( cells: BoardCell[], attemptedCell: number ): BoardCell[] => {
     return cells.map( cell =>
         cell.cellNum === attemptedCell
-            ? { ...cell, status: 'miss' }
+            ? {
+                ...cell
+                , status: 'miss'
+            }
             : cell
     );
 };
@@ -27,10 +30,16 @@ export const updateCellsWithMissOnly = ( cells: BoardCell[], attemptedCell: numb
 export const updateShipsWithHit = ( ships: Ship[], shipId: string | undefined ): Ship[] => {
     return ships.map( ship => {
         if ( ship.id === shipId ) {
-            const updatedShip = { ...ship, hits: ship.hits + 1 } as Ship;
+            const updatedShip = {
+                ...ship
+                , hits: ship.hits + 1
+            } as Ship;
 
             if ( updatedShip.hits === updatedShip.length ) {
-                return { ...updatedShip, isSunk: true };
+                return {
+                    ...updatedShip
+                    , isSunk: true
+                };
             }
             return updatedShip;
         }
