@@ -18,6 +18,10 @@ export const reducer: ReducerFn = ( state, action ) => {
     } = state;
 
     switch ( action.type ) {
+        case 'SET_SCREEN': return {
+            ...state
+            , currentScreen: action.payload
+        };
         case 'PLAYER_SHOT': {
             const attemptedCell = action.payload;
             const shipHit = findHit( computerCells, attemptedCell );

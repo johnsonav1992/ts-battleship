@@ -24,6 +24,7 @@ const initState: GameState = {
     , computerAttemptedCells: []
     , alertText: ''
     , currentTurn: 'player'
+    , currentScreen: 'start'
 };
 
 const stateAtom = atom( initState );

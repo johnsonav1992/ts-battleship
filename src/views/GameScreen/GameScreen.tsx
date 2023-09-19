@@ -11,6 +11,7 @@ import { SxProps } from '@mui/joy/styles/types';
 // Components
 import Cell from '../../components/Cell/Cell';
 import SnackAlert from '../../components/SnackAlert/SnackAlert';
+import GameTitle from '../../components/GameTitle/GameTitle';
 
 // State
 import { useBattleShipState } from '../../state/jotai';
@@ -43,44 +44,47 @@ const GameScreen = () => {
     }, [ currentTurn ] );
 
     return (
-        <Stack
-            direction='row'
-            alignItems='center'
-            justifyContent='center'
-            height='100%'
-            width='100%'
-            gap='1rem'
-        >
-            <Card sx={ sharedCardStyles }>
-                <Grid container>
-                    {
-                        playerCells.map( cell => (
-                            <Cell
-                                key={ cell.cellNum }
-                                cell={ cell }
-                                isPlayer
-                            />
-                        ) )
-                    }
-                </Grid>
-            </Card>
-            <Card sx={ sharedCardStyles }>
-                <Grid container>
-                    {
-                        computerCells.map( cell => (
-                            <Cell
-                                key={ cell.cellNum }
-                                cell={ cell }
-                            />
-                        ) )
-                    }
-                </Grid>
-            </Card>
-            {
-                alertText
+        <>
+            <GameTitle />
+            <Stack
+                direction='row'
+                alignItems='center'
+                justifyContent='center'
+                height='100%'
+                width='100%'
+                gap='1rem'
+            >
+                <Card sx={ sharedCardStyles }>
+                    <Grid container>
+                        {
+                            playerCells.map( cell => (
+                                <Cell
+                                    key={ cell.cellNum }
+                                    cell={ cell }
+                                    isPlayer
+                                />
+                            ) )
+                        }
+                    </Grid>
+                </Card>
+                <Card sx={ sharedCardStyles }>
+                    <Grid container>
+                        {
+                            computerCells.map( cell => (
+                                <Cell
+                                    key={ cell.cellNum }
+                                    cell={ cell }
+                                />
+                            ) )
+                        }
+                    </Grid>
+                </Card>
+                {
+                    alertText
                 && ( <SnackAlert text={ alertText } /> )
-            }
-        </Stack>
+                }
+            </Stack>
+        </>
     );
 };
 

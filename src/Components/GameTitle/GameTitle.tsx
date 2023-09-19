@@ -13,13 +13,17 @@ import battleshipTitle from '../../assets/battleship-logo.png';
 // Utils
 import { pxrem } from '../../utils/pxrem';
 
-const GameTitle = () => {
+interface Props {
+    isTitleScreen?: boolean;
+}
+
+const GameTitle = ( { isTitleScreen }: Props ) => {
     const theme = useTheme();
 
     return (
         <Box
             sx={ {
-                width: '40%'
+                width: isTitleScreen ? '70%' : '40%'
                 , m: 'none'
             } }
         >
@@ -28,7 +32,7 @@ const GameTitle = () => {
                 width='100%'
                 style={ {
                     filter: `drop-shadow(${ pxrem( 5, 5, 5 ) } 
-                            ${ theme.palette.background.tooltip })`
+                            ${ isTitleScreen ? theme.palette.background.tooltip : theme.palette.neutral[ 700 ] })`
                 } }
             />
         </Box>

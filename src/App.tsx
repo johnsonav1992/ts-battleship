@@ -6,27 +6,34 @@ import {
 
 // Components
 import GameScreen from './views/GameScreen/GameScreen';
-import GameTitle from './components/GameTitle/GameTitle';
 import StartScreen from './views/StartScreen/StartScreen';
 
+// State
+import { useBattleShipState } from './state/jotai';
+
 const App = () => {
+    const [ { currentScreen } ] = useBattleShipState();
+
     return (
         <Sheet
             sx={ {
                 width: '100%'
                 , height: '100vh'
-                , bgcolor: theme => theme.palette.background.level3
+                , bgcolor: theme => theme.palette.background.tooltip
                 , p: '1rem'
             } }
         >
             <Stack
                 alignItems='center'
                 justifyContent='center'
+                height='100%'
                 gap='1rem'
             >
-                <GameTitle />
-                { /* <GameScreen /> */ }
-                <StartScreen />
+                {
+                    currentScreen === 'start'
+                        ? <StartScreen />
+                        : <GameScreen />
+                }
             </Stack>
         </Sheet>
     );

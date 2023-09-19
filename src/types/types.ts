@@ -53,11 +53,13 @@ export type GameState = {
     computerAttemptedCells: BoardCell['cellNum'][];
     alertText: string;
     currentTurn: 'player' | 'computer';
+    currentScreen: 'start' | 'game';
 };
 
 export type ReducerAction =
     { type: 'SET_PLAYER_CELLS'; payload: BoardCell[] }
     | { type: 'PLAYER_SHOT'; payload: BoardCell['cellNum'] }
-    | { type: 'COMPUTER_SHOT'; payload: BoardCell['cellNum'] };
+    | { type: 'COMPUTER_SHOT'; payload: BoardCell['cellNum'] }
+    | { type: 'SET_SCREEN'; payload: GameState['currentScreen'] };
 
 export type ReducerFn = ( v: GameState, a: ReducerAction ) => GameState;

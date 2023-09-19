@@ -2,7 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 // MUI
-import { CssBaseline } from '@mui/joy';
+import {
+    CssBaseline
+    , CssVarsProvider
+} from '@mui/joy';
+import { theme } from './theme/theme.ts';
 
 // Components
 import App from './App.tsx';
@@ -10,7 +14,9 @@ import App from './App.tsx';
 ReactDOM.createRoot( document.getElementById( 'root' )! ).render(
     <React.StrictMode>
         <CssBaseline>
-            <App />
+            <CssVarsProvider theme={ theme }>
+                <App />
+            </CssVarsProvider>
         </CssBaseline>
     </React.StrictMode>,
 );
