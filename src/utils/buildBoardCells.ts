@@ -104,3 +104,17 @@ export const buildBoardCells = (): BoardCell[] => {
 
     return updatedCells;
 };
+
+export const buildEmptyCells = (): BoardCell[] => {
+    return Array( 100 ).fill( null ).map( ( _cell, idx ) => {
+        const cellNum = idx + 1;
+
+        return {
+            shipImg: null
+            , cellNum
+            , status: 'none'
+            , orientation: 'none'
+            , direction: 'none'
+        };
+    } );
+};

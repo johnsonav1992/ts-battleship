@@ -54,12 +54,14 @@ export type GameState = {
     alertText: string;
     currentTurn: 'player' | 'computer';
     currentScreen: 'start' | 'game';
+    isModalOpen: boolean;
 };
 
 export type ReducerAction =
     { type: 'SET_PLAYER_CELLS'; payload: BoardCell[] }
     | { type: 'PLAYER_SHOT'; payload: BoardCell['cellNum'] }
     | { type: 'COMPUTER_SHOT'; payload: BoardCell['cellNum'] }
-    | { type: 'SET_SCREEN'; payload: GameState['currentScreen'] };
+    | { type: 'SET_SCREEN'; payload: GameState['currentScreen'] }
+    | { type: 'SET_MODAL_OPEN'; payload: GameState['isModalOpen'] };
 
 export type ReducerFn = ( v: GameState, a: ReducerAction ) => GameState;

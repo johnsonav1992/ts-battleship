@@ -12,11 +12,14 @@ import {
 } from '../types/types';
 
 // Utils
-import { buildBoardCells } from '../utils/buildBoardCells';
+import {
+    buildBoardCells
+    , buildEmptyCells
+} from '../utils/buildBoardCells';
 import { defaultShips } from '../utils/ships';
 
 const initState: GameState = {
-    playerCells: buildBoardCells()
+    playerCells: buildEmptyCells()
     , computerCells: buildBoardCells()
     , computerShips: defaultShips
     , playerShips: defaultShips
@@ -25,6 +28,7 @@ const initState: GameState = {
     , alertText: ''
     , currentTurn: 'player'
     , currentScreen: 'start'
+    , isModalOpen: false
 };
 
 const stateAtom = atom( initState );

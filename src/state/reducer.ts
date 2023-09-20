@@ -22,6 +22,14 @@ export const reducer: ReducerFn = ( state, action ) => {
             ...state
             , currentScreen: action.payload
         };
+        case 'SET_MODAL_OPEN': return {
+            ...state
+            , isModalOpen: action.payload
+        };
+        case 'SET_PLAYER_CELLS': return {
+            ...state
+            , playerCells: action.payload
+        };
         case 'PLAYER_SHOT': {
             const attemptedCell = action.payload;
             const shipHit = findHit( computerCells, attemptedCell );

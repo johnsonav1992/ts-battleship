@@ -26,14 +26,21 @@ const StartScreen = () => {
             type: 'SET_SCREEN'
             , payload: 'game'
         } );
+
+        dispatch( {
+            type: 'SET_MODAL_OPEN'
+            , payload: true
+        } );
     };
+
     return (
         <Card
-            variant='soft'
             sx={ {
-                width: '60%'
-                , height: '70vh'
+                width: '80%'
+                , height: '80vh'
                 , boxShadow: theme => `${ pxrem( 0, 5, 20 ) } ${ theme.palette.neutral[ 800 ] }`
+                , backgroundColor: theme => theme.palette.neutral[ 400 ]
+                , borderColor: theme => theme.palette.neutral[ 800 ]
             } }
         >
             <Stack
@@ -55,6 +62,7 @@ const StartScreen = () => {
                         , left: 0
                         , opacity: 0.85
                         , zIndex: -1
+                        , borderBottomRightRadius: pxrem( 8 )
                     }
                 } }
             >

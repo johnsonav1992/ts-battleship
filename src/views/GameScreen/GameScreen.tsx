@@ -12,6 +12,7 @@ import { SxProps } from '@mui/joy/styles/types';
 import Cell from '../../components/Cell/Cell';
 import SnackAlert from '../../components/SnackAlert/SnackAlert';
 import GameTitle from '../../components/GameTitle/GameTitle';
+import GameModal from '../../components/GameModal/GameModal';
 
 // State
 import { useBattleShipState } from '../../state/jotai';
@@ -84,6 +85,7 @@ const GameScreen = () => {
                 && ( <SnackAlert text={ alertText } /> )
                 }
             </Stack>
+            <GameModal />
         </>
     );
 };
