@@ -28,6 +28,7 @@ const GameScreen = () => {
         , alertText
         , currentTurn
         , computerAttemptedCells
+        , isGameOver
     }, dispatch ] = useBattleShipState();
 
     const sharedCardStyles: SxProps = {
@@ -43,6 +44,17 @@ const GameScreen = () => {
             takeComputerShot( dispatch, computerAttemptedCells );
         }
     }, [ currentTurn ] );
+
+    useEffect( () => {
+        if ( isGameOver ) {
+            setTimeout( () => {
+                dispatch( {
+                    type: 'SET_MODAL_OPEN'
+                    , payload: true
+                } );
+            }, 1500 );
+        }
+    }, [ isGameOver ] );
 
     return (
         <>

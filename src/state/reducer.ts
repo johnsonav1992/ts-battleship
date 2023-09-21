@@ -59,6 +59,7 @@ export const reducer: ReducerFn = ( state, action ) => {
                 , playerAttemptedCells: [ ...state.playerAttemptedCells, attemptedCell ]
                 , alertText: newSunkShip ? `You sunk the computer's ${ newSunkShip.id }!` : ''
                 , currentTurn: 'computer'
+                , isGameOver: updatedComputerShips.every( ship => ship.isSunk )
             };
         }
         case 'COMPUTER_SHOT': {
@@ -90,8 +91,13 @@ export const reducer: ReducerFn = ( state, action ) => {
                 , computerAttemptedCells: [ ...state.computerAttemptedCells, attemptedCell ]
                 , alertText: newSunkShip ? `The computer sunk your ${ newSunkShip.id }!` : ''
                 , currentTurn: 'player'
+                , isGameOver: updatedPlayerShips.every( ship => ship.isSunk )
             };
         }
+        case 'SET_GAME_OVER': return {
+            ...state
+            , isGameOver: action.payload
+        };
         default: return state;
     }
 };

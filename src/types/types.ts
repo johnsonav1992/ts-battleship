@@ -55,6 +55,7 @@ export type GameState = {
     currentTurn: 'player' | 'computer';
     currentScreen: 'start' | 'game';
     isModalOpen: boolean;
+    isGameOver: boolean;
 };
 
 export type ReducerAction =
@@ -62,6 +63,7 @@ export type ReducerAction =
     | { type: 'PLAYER_SHOT'; payload: BoardCell['cellNum'] }
     | { type: 'COMPUTER_SHOT'; payload: BoardCell['cellNum'] }
     | { type: 'SET_SCREEN'; payload: GameState['currentScreen'] }
-    | { type: 'SET_MODAL_OPEN'; payload: GameState['isModalOpen'] };
+    | { type: 'SET_MODAL_OPEN'; payload: GameState['isModalOpen'] }
+    | { type: 'SET_GAME_OVER'; payload: GameState['isGameOver'] };
 
 export type ReducerFn = ( v: GameState, a: ReducerAction ) => GameState;

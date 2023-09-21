@@ -29,6 +29,7 @@ const initState: GameState = {
     , currentTurn: 'player'
     , currentScreen: 'start'
     , isModalOpen: false
+    , isGameOver: false
 };
 
 const stateAtom = atom( initState );

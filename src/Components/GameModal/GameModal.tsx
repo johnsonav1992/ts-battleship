@@ -17,7 +17,10 @@ import { buildBoardCells } from '../../utils/buildBoardCells';
 import { useBattleShipState } from '../../state/jotai';
 
 const GameModal = () => {
-    const [ { isModalOpen }, dispatch ] = useBattleShipState();
+    const [ {
+        isModalOpen
+        , isGameOver
+    }, dispatch ] = useBattleShipState();
 
     const handleSetPlayerCells = () => {
         dispatch( {
@@ -42,37 +45,47 @@ const GameModal = () => {
                     , borderColor: theme => theme.palette.neutral[ 300 ]
                 } }
             >
-                <Stack
-                    justifyContent='space-between'
-                    alignItems='center'
-                    flexGrow={ .5 }
-                >
-                    <Typography level='h3'>How do you want to place your ships?</Typography>
-                    <Stack
-                        direction='row'
-                        gap={ pxrem( 16 ) }
-                    >
-                        <Button
-                            sx={ { minHeight: pxrem( 60 ) } }
-                            onClick={ handleSetPlayerCells }
-                        >
-                            Place For me! (Random)
-                        </Button>
-                        <Tooltip
-                            title='This feature is not ready yet. Stay tuned!'
-                            arrow
-                        >
-                            <Box>
-                                <Button
-                                    disabled
-                                    sx={ { minHeight: pxrem( 60 ) } }
+                {
+                    isGameOver
+                        ? (
+                            <Typography>
+                                Game over!
+                            </Typography>
+                        )
+                        : (
+                            <Stack
+                                justifyContent='space-between'
+                                alignItems='center'
+                                flexGrow={ .5 }
+                            >
+                                <Typography level='h3'>How do you want to place your ships?</Typography>
+                                <Stack
+                                    direction='row'
+                                    gap={ pxrem( 16 ) }
                                 >
-                                    { 'I\'ll place them!' }
-                                </Button>
-                            </Box>
-                        </Tooltip>
-                    </Stack>
-                </Stack>
+                                    <Button
+                                        sx={ { minHeight: pxrem( 60 ) } }
+                                        onClick={ handleSetPlayerCells }
+                                    >
+                                        Place For me! (Random)
+                                    </Button>
+                                    <Tooltip
+                                        title='This feature is not ready yet. Stay tuned!'
+                                        arrow
+                                    >
+                                        <Box>
+                                            <Button
+                                                disabled
+                                                sx={ { minHeight: pxrem( 60 ) } }
+                                            >
+                                                { 'I\'ll place them!' }
+                                            </Button>
+                                        </Box>
+                                    </Tooltip>
+                                </Stack>
+                            </Stack>
+                        )
+                }
             </ModalDialog>
         </Modal>
     );
