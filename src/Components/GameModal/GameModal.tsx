@@ -35,7 +35,8 @@ const GameModal = () => {
         <Modal open={ isModalOpen }>
             <ModalDialog
                 sx={ {
-                    minHeight: '50%'
+                    minHeight: pxrem( 300 )
+                    , maxWidth: pxrem( 400 )
                     , p: pxrem( 32 )
                     , backgroundColor: theme => theme.palette.neutral[ 300 ]
                     , borderColor: theme => theme.palette.neutral[ 300 ]

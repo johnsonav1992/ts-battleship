@@ -8,6 +8,7 @@ import {
 
 // Assets
 import battleshipHeroImage from '../../assets/battleship-hero.png';
+import explosion from '../../assets/explosion.png';
 
 // Components
 import GameTitle from '../../components/GameTitle/GameTitle';
@@ -51,9 +52,13 @@ const StartScreen = () => {
                     , zIndex: 1
                     , '::after': {
                         content: '""'
-                        , backgroundImage: `url(${ battleshipHeroImage })`
-                        , backgroundPosition: `bottom ${ pxrem( -30 ) } right ${ pxrem( -10 ) }`
-                        , backgroundSize: '50%'
+                        , backgroundImage:
+                            `url(${ battleshipHeroImage })
+                            , url(${ explosion })`
+                        , backgroundPosition:
+                            `bottom ${ pxrem( -30 ) } right ${ pxrem( -10 ) }
+                            , bottom ${ pxrem( -100 ) } left ${ pxrem( -280 ) }`
+                        , backgroundSize: '50%, 100%'
                         , backgroundRepeat: 'no-repeat'
                         , position: 'absolute'
                         , top: 0

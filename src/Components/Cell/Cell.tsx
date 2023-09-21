@@ -75,7 +75,7 @@ const Cell = (
                 , aspectRatio: 1
                 , ...calcBorderRadius( cellNum )
                 , '&:hover': {
-                    cursor: `url(${ crosshair }), auto`
+                    cursor: `url(${ crosshair }) 10 10, auto`
                     , backgroundColor: theme => theme.palette.primary[ 200 ]
                 }
                 , pointerEvents: isPlayer
