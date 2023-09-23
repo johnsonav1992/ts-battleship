@@ -11,7 +11,7 @@ import battleshipHeroImage from '../../assets/battleship-hero.png';
 import explosion from '../../assets/explosion.png';
 
 // Components
-import GameTitle from '../../components/GameTitle/GameTitle';
+import GameTitle from '../../Components/GameTitle/GameTitle';
 
 // Utils
 import { pxrem } from '../../utils/pxrem';

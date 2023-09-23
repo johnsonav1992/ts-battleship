@@ -9,10 +9,10 @@ import {
 import { SxProps } from '@mui/joy/styles/types';
 
 // Components
-import Cell from '../../components/Cell/Cell';
-import SnackAlert from '../../components/SnackAlert/SnackAlert';
-import GameTitle from '../../components/GameTitle/GameTitle';
-import GameModal from '../../components/GameModal/GameModal';
+import Cell from '../../Components/Cell/Cell';
+import SnackAlert from '../../Components/SnackAlert/SnackAlert';
+import GameTitle from '../../Components/GameTitle/GameTitle';
+import GameModal from '../../Components/GameModal/GameModal';
 
 // State
 import { useBattleShipState } from '../../state/jotai';
