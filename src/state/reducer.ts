@@ -8,6 +8,7 @@ import {
     , updateCellsWithMissOnly
     , updateShipsWithHit
 } from '../utils/gameUtils';
+import { initState } from './jotai';
 
 export const reducer: ReducerFn = ( state, action ) => {
     const {
@@ -29,6 +30,10 @@ export const reducer: ReducerFn = ( state, action ) => {
         case 'SET_PLAYER_CELLS': return {
             ...state
             , playerCells: action.payload
+        };
+        case 'SET_COMPUTER_CELLS': return {
+            ...state
+            , computerCells: action.payload
         };
         case 'PLAYER_SHOT': {
             const attemptedCell = action.payload;
@@ -101,6 +106,9 @@ export const reducer: ReducerFn = ( state, action ) => {
         case 'SET_GAME_OVER': return {
             ...state
             , isGameOver: action.payload
+        };
+        case 'RESET_GAME': return {
+            ...initState
         };
         default: return state;
     }

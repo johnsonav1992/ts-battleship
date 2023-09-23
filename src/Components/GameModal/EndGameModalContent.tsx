@@ -15,7 +15,11 @@ import explosion from '../../assets/explosion.png';
 import { useBattleShipState } from '../../state/jotai';
 
 const EndGameModalContent = () => {
-    const [ { winner } ] = useBattleShipState();
+    const [ { winner }, dispatch ] = useBattleShipState();
+
+    const handleResetGame = () => {
+        dispatch( { type: 'RESET_GAME' } );
+    };
 
     return (
         <Stack alignItems='center'>
@@ -29,7 +33,7 @@ const EndGameModalContent = () => {
                 src={ explosion }
                 width='100%'
             />
-            <Button>
+            <Button onClick={ handleResetGame }>
                 Play Again!
             </Button>
         </Stack>

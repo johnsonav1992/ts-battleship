@@ -23,6 +23,10 @@ const PlaceShipsModalContent = () => {
             type: 'SET_PLAYER_CELLS'
             , payload: buildBoardCells()
         } );
+        dispatch( {
+            type: 'SET_COMPUTER_CELLS'
+            , payload: buildBoardCells()
+        } );
 
         dispatch( {
             type: 'SET_MODAL_OPEN'

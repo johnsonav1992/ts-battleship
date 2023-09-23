@@ -12,15 +12,12 @@ import {
 } from '../types/types';
 
 // Utils
-import {
-    buildBoardCells
-    , buildEmptyCells
-} from '../utils/buildBoardCells';
+import { buildEmptyCells } from '../utils/buildBoardCells';
 import { defaultShips } from '../utils/ships';
 
-const initState: GameState = {
+export const initState: GameState = {
     playerCells: buildEmptyCells()
-    , computerCells: buildBoardCells()
+    , computerCells: buildEmptyCells()
     , computerShips: defaultShips
     , playerShips: defaultShips
     , playerAttemptedCells: []
