@@ -1,3 +1,4 @@
+// MUI
 import {
     Button
     , Stack
@@ -9,6 +10,8 @@ import Image from '../Image/Image';
 
 // Assets
 import explosion from '../../assets/explosion.png';
+
+// State
 import { useBattleShipState } from '../../state/jotai';
 
 const EndGameModalContent = () => {
