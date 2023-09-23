@@ -88,7 +88,7 @@ const Cell = (
         >
             {
                 shipImg
-                // && isPlayer
+                && isPlayer
                 && (
                     <Image
                         src={ shipImg.img }
