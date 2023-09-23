@@ -20,7 +20,7 @@ import { pxrem } from '../../utils/pxrem';
 import { useBattleShipState } from '../../state/jotai';
 
 const StartScreen = () => {
-    const [ state, dispatch ] = useBattleShipState();
+    const [ _, dispatch ] = useBattleShipState();
 
     const handleStartGame = () => {
         dispatch( {

@@ -217,8 +217,6 @@
       , "prefer-single"
     ],
     "no-unneeded-ternary": "error",
-    // using @typescript-eslint version of no-unused-vars instead
-    // "no-unused-vars": "warn",
     "no-case-declarations": "off",
     "no-unsafe-finally": "off",
     "no-unreachable": "warn",
@@ -246,7 +244,7 @@
     "@typescript-eslint/semi": "error",
     "@typescript-eslint/member-delimiter-style": "error",
     "@typescript-eslint/type-annotation-spacing": "error",
-    "@typescript-eslint/no-unused-vars": "warn",
+    // "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/ban-ts-comment": "warn",
     "@typescript-eslint/ban-types": "warn",
     "@typescript-eslint/no-empty-interface": "warn",
