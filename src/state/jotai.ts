@@ -30,6 +30,7 @@ const initState: GameState = {
     , currentScreen: 'start'
     , isModalOpen: false
     , isGameOver: false
+    , winner: ''
 };
 
 const stateAtom = atom( initState );

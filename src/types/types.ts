@@ -56,6 +56,7 @@ export type GameState = {
     currentScreen: 'start' | 'game';
     isModalOpen: boolean;
     isGameOver: boolean;
+    winner: 'player' | 'computer' | '';
 };
 
 export type ReducerAction =

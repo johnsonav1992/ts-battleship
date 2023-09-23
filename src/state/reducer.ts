@@ -51,6 +51,7 @@ export const reducer: ReducerFn = ( state, action ) => {
             const updatedComputerShips = updateShipsWithHit( computerShips, shipId );
 
             const newSunkShip = updatedComputerShips.find( ship => ship.isSunk && ship.id === shipId );
+            const isGameOver = updatedComputerShips.every( ship => ship.isSunk );
 
             return {
                 ...state
@@ -59,7 +60,8 @@ export const reducer: ReducerFn = ( state, action ) => {
                 , playerAttemptedCells: [ ...state.playerAttemptedCells, attemptedCell ]
                 , alertText: newSunkShip ? `You sunk the computer's ${ newSunkShip.id }!` : ''
                 , currentTurn: 'computer'
-                , isGameOver: updatedComputerShips.every( ship => ship.isSunk )
+                , isGameOver
+                , winner: isGameOver ? 'player' : ''
             };
         }
         case 'COMPUTER_SHOT': {
@@ -83,6 +85,7 @@ export const reducer: ReducerFn = ( state, action ) => {
             const updatedPlayerShips = updateShipsWithHit( playerShips, shipId );
 
             const newSunkShip = updatedPlayerShips.find( ship => ship.isSunk && ship.id === shipId );
+            const isGameOver = updatedPlayerShips.every( ship => ship.isSunk );
 
             return {
                 ...state
@@ -91,7 +94,8 @@ export const reducer: ReducerFn = ( state, action ) => {
                 , computerAttemptedCells: [ ...state.computerAttemptedCells, attemptedCell ]
                 , alertText: newSunkShip ? `The computer sunk your ${ newSunkShip.id }!` : ''
                 , currentTurn: 'player'
-                , isGameOver: updatedPlayerShips.every( ship => ship.isSunk )
+                , isGameOver
+                , winner: isGameOver ? 'computer' : ''
             };
         }
         case 'SET_GAME_OVER': return {
