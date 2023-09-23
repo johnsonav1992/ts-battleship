@@ -16,7 +16,7 @@ import { buildBoardCells } from '../../utils/buildBoardCells';
 
 const PlaceShipsModalContent = () => {
 
-    const [ _, dispatch ] = useBattleShipState();
+    const [ , dispatch ] = useBattleShipState();
 
     const handleSetPlayerCells = () => {
         dispatch( {
