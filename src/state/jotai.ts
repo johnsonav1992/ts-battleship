@@ -25,9 +25,17 @@ export const initState: GameState = {
     , alertText: ''
     , currentTurn: 'player'
     , currentScreen: 'start'
+    , gameMode: 'medium'
     , isModalOpen: false
     , isGameOver: false
     , winner: ''
+    , computerAI: {
+        lastShot: {
+            cellNum: null
+            , wasHit: false
+        }
+        , attemptedCells: []
+    }
 };
 
 const stateAtom = atom( initState );

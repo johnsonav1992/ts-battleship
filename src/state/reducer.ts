@@ -103,6 +103,9 @@ export const reducer: ReducerFn = ( state, action ) => {
                 , winner: isGameOver ? 'computer' : ''
             };
         }
+        case 'COMPUTER_AI_SHOT': {
+            return state;
+        }
         case 'SET_GAME_OVER': return {
             ...state
             , isGameOver: action.payload

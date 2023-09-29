@@ -54,9 +54,19 @@ export type GameState = {
     alertText: string;
     currentTurn: 'player' | 'computer';
     currentScreen: 'start' | 'game';
+    gameMode: 'easy' | 'medium' | 'hard';
     isModalOpen: boolean;
     isGameOver: boolean;
     winner: 'player' | 'computer' | '';
+    computerAI: ComputerAI;
+};
+
+export type ComputerAI = {
+    lastShot: {
+        cellNum: BoardCell['cellNum'][] | null;
+        wasHit: boolean;
+    };
+    attemptedCells: BoardCell['cellNum'][];
 };
 
 export type ReducerAction =
@@ -64,6 +74,7 @@ export type ReducerAction =
     | { type: 'SET_COMPUTER_CELLS'; payload: BoardCell[] }
     | { type: 'PLAYER_SHOT'; payload: BoardCell['cellNum'] }
     | { type: 'COMPUTER_SHOT'; payload: BoardCell['cellNum'] }
+    | { type: 'COMPUTER_AI_SHOT' }
     | { type: 'SET_SCREEN'; payload: GameState['currentScreen'] }
     | { type: 'SET_MODAL_OPEN'; payload: GameState['isModalOpen'] }
     | { type: 'SET_GAME_OVER'; payload: GameState['isGameOver'] }

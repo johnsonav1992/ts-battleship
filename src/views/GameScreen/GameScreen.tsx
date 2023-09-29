@@ -29,6 +29,7 @@ const GameScreen = () => {
         , currentTurn
         , computerAttemptedCells
         , isGameOver
+        , gameMode
     }, dispatch ] = useBattleShipState();
 
     const sharedCardStyles: SxProps = {
@@ -40,10 +41,12 @@ const GameScreen = () => {
     };
 
     useEffect( () => {
-        if ( currentTurn === 'computer' ) {
+        if ( currentTurn === 'computer' && gameMode === 'easy' ) {
             takeComputerShot( dispatch, computerAttemptedCells );
+        } else if ( currentTurn === 'computer' && gameMode === 'medium' ) {
+            dispatch( { type: 'COMPUTER_AI_SHOT' } );
         }
-    }, [ currentTurn ] );
+    }, [ currentTurn, gameMode ] );
 
     useEffect( () => {
         if ( isGameOver ) {
