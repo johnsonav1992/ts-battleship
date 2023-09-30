@@ -147,7 +147,7 @@ export const reducer: ReducerFn = ( state, action ) => {
             const randomIndex = Math.floor( Math.random() * allCellsWithHighestHeatValue.length );
             const randomCell = allCellsWithHighestHeatValue[ randomIndex ];
 
-            const cellToFireOn = state.computerAI.targetingMode ? findNextCellToFireOnAfterHit( state ) : randomCell;
+            const cellToFireOn = state.computerAI.targetingMode && state.computerAI.lastShot.wasHit ? findNextCellToFireOnAfterHit( state ) : randomCell;
             const attemptedCell = cellToFireOn.cellNum;
             const shipHit = findHit( playerCells, attemptedCell );
 
