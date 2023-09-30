@@ -1,6 +1,9 @@
 // Types
 import { ReducerFn } from '../types/types';
-import { updateComputerAI } from '../utils/computerAIUtils';
+import {
+    findNextCellToFireOnAfterHit
+    , updateComputerAI
+} from '../utils/computerAIUtils';
 
 // Utils
 import {
@@ -105,6 +108,8 @@ export const reducer: ReducerFn = ( state, action ) => {
             };
         }
         case 'COMPUTER_AI_SHOT': {
+            const heatMap = state.computerAI.heatMapCells;
+
             if ( state.computerAttemptedCells.length === 0 ) {
                 const attemptedCell = Math.floor( Math.random() * 100 ) + 1;
                 const shipHit = findHit( playerCells, attemptedCell );
@@ -136,11 +141,41 @@ export const reducer: ReducerFn = ( state, action ) => {
                 };
             }
 
-            const cellToFireOn = state.computerAI.heatMapCells.reduce( ( max, current ) => {
-                return current.heatValue > max.heatValue ? current : max;
-            }, state.computerAI.heatMapCells[ 0 ] );
-            console.log( cellToFireOn );
-            return state;
+            const maxHeatValue = Math.max( ...heatMap.map( obj => obj.heatValue ) );
+            const allCellsWithHighestHeatValue = heatMap.filter( cell => cell.heatValue === maxHeatValue );
+
+            const randomIndex = Math.floor( Math.random() * allCellsWithHighestHeatValue.length );
+            const randomCell = allCellsWithHighestHeatValue[ randomIndex ];
+
+            const cellToFireOn = state.computerAI.targetingMode ? findNextCellToFireOnAfterHit( state ) : randomCell;
+            const attemptedCell = cellToFireOn.cellNum;
+            const shipHit = findHit( playerCells, attemptedCell );
+
+            if ( !shipHit ) {
+                return {
+                    ...state
+                    , playerCells: updateCellsWithMissOnly( playerCells, attemptedCell )
+                    , computerAttemptedCells: [ ...state.computerAttemptedCells, attemptedCell ]
+                    , alertText: ''
+                    , currentTurn: 'player'
+                    , computerAI: updateComputerAI( state, attemptedCell, !!shipHit )
+                };
+            }
+
+            const shipLabel = shipHit?.shipImg?.label.split( '-' );
+            const shipId = shipLabel?.[ 0 ];
+
+            const updatedPlayerCells = updateCells( playerCells, attemptedCell, shipId );
+            const updatedPlayerShips = updateShipsWithHit( playerShips, shipId );
+
+            return {
+                ...state
+                , playerCells: updatedPlayerCells
+                , playerShips: updatedPlayerShips
+                , computerAttemptedCells: [ ...state.computerAttemptedCells, attemptedCell ]
+                , currentTurn: 'player'
+                , computerAI: updateComputerAI( state, attemptedCell, !!shipHit )
+            };
         }
         case 'SET_GAME_OVER': return {
             ...state

@@ -14,7 +14,7 @@ import {
 // Utils
 import { buildEmptyCells } from '../utils/buildBoardCells';
 import { defaultShips } from '../utils/ships';
-import { STARTING_PROBABILITY } from '../utils/computerAIUtils';
+import { buildStartingHeatMap } from '../utils/computerAIUtils';
 
 export const initState: GameState = {
     playerCells: buildEmptyCells()
@@ -35,10 +35,8 @@ export const initState: GameState = {
             cellNum: null
             , wasHit: false
         }
-        , heatMapCells: Array( 100 ).fill( null ).map( ( cell, idx ) => ( {
-            cellNum: idx + 1
-            , heatValue: STARTING_PROBABILITY
-        } ) )
+        , heatMapCells: buildStartingHeatMap()
+        , targetingMode: false
     }
 };
 

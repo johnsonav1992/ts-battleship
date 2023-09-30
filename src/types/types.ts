@@ -67,6 +67,7 @@ export type ComputerAI = {
         wasHit: boolean;
     };
     heatMapCells: HeatMapCell[];
+    targetingMode: boolean;
 };
 
 export type HeatMapCell = {
