@@ -63,10 +63,15 @@ export type GameState = {
 
 export type ComputerAI = {
     lastShot: {
-        cellNum: BoardCell['cellNum'][] | null;
+        cellNum: BoardCell['cellNum'] | null;
         wasHit: boolean;
     };
-    attemptedCells: BoardCell['cellNum'][];
+    heatMapCells: HeatMapCell[];
+};
+
+export type HeatMapCell = {
+    cellNum: BoardCell['cellNum'];
+    heatValue: number;
 };
 
 export type ReducerAction =

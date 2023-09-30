@@ -30,6 +30,7 @@ const GameScreen = () => {
         , computerAttemptedCells
         , isGameOver
         , gameMode
+        , computerAI
     }, dispatch ] = useBattleShipState();
 
     const sharedCardStyles: SxProps = {
