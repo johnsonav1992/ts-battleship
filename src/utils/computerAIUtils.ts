@@ -24,12 +24,12 @@ export const updateComputerAI = ( state: GameState, attemptedCell: BoardCell['ce
             if ( cell.cellNum === attemptedCell ) {
                 return {
                     ...cell
-                    , heatValue: wasHit ? SURROUNDING_HIT_PROBABILITY : IS_MISS_PROBABILITY
+                    , heatValue: wasHit ? IS_HIT_PROBABILITY : IS_MISS_PROBABILITY
                 };
             } else if ( isSurroundingHitCell( cell.cellNum, attemptedCell ) && !state.computerAttemptedCells.includes( cell.cellNum ) ) {
                 return {
                     ...cell
-                    , heatValue: wasHit ? cell.heatValue + 1 : cell.heatValue - 1
+                    , heatValue: wasHit ? SURROUNDING_HIT_PROBABILITY : cell.heatValue - 1
                 };
             }
             return cell;
