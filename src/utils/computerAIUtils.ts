@@ -39,10 +39,18 @@ export const updateComputerAI = ( state: GameState, attemptedCell: BoardCell['ce
 };
 
 export const isSurroundingHitCell = ( cellNum: BoardCell['cellNum'], attemptedCell: BoardCell['cellNum'] ) => {
-    return cellNum === attemptedCell + 1
-    || cellNum === attemptedCell - 1
-    || cellNum === attemptedCell + 10
-    || cellNum === attemptedCell - 10;
+    const attemptedRow = Math.ceil( attemptedCell / 10 );
+    const attemptedColumn = ( attemptedCell - 1 ) % 10 + 1;
+
+    const cellRow = Math.ceil( cellNum / 10 );
+    const cellColumn = ( cellNum - 1 ) % 10 + 1;
+
+    const isWithinHorizontal = Math.abs( attemptedColumn - cellColumn ) === 1 && attemptedRow === cellRow;
+    const isWithinVertical = Math.abs( attemptedRow - cellRow ) === 1 && attemptedColumn === cellColumn;
+
+    const isWithinBounds = cellNum >= 1 && cellNum <= 100;
+
+    return isWithinBounds && ( isWithinHorizontal || isWithinVertical );
 };
 
 export const findNextCellToFireOnAfterHit = ( state: GameState ) => {
