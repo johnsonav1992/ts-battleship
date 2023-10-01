@@ -66,8 +66,8 @@ export type ComputerAI = {
         cellNum: BoardCell['cellNum'] | null;
         wasHit: boolean;
     };
-    sunkShip: boolean;
     heatMapCells: HeatMapCell[];
+    targetStack: BoardCell['cellNum'][];
 };
 
 export type HeatMapCell = {

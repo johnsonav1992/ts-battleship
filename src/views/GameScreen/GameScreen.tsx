@@ -5,6 +5,7 @@ import {
     Card
     , Grid
     , Stack
+    , Typography
 } from '@mui/joy';
 import { SxProps } from '@mui/joy/styles/types';
 
@@ -30,8 +31,12 @@ const GameScreen = () => {
         , computerAttemptedCells
         , isGameOver
         , gameMode
-        , computerAI
+        , computerAI: {
+            targetStack
+        }
     }, dispatch ] = useBattleShipState();
+
+    console.log( { targetStack } );
 
     const sharedCardStyles: SxProps = {
         width: pxrem( 500 )
@@ -43,9 +48,9 @@ const GameScreen = () => {
 
     useEffect( () => {
         if ( currentTurn === 'computer' && gameMode === 'easy' ) {
-            takeComputerShot( dispatch, computerAttemptedCells );
+            takeComputerShot( dispatch, 'easy', computerAttemptedCells );
         } else if ( currentTurn === 'computer' && gameMode === 'medium' ) {
-            dispatch( { type: 'COMPUTER_AI_SHOT' } );
+            takeComputerShot( dispatch, 'medium' );
         }
     }, [ currentTurn, gameMode ] );
 
@@ -63,43 +68,51 @@ const GameScreen = () => {
     return (
         <>
             <GameTitle />
-            <Stack
-                direction='row'
-                alignItems='center'
-                justifyContent='center'
-                height='100%'
-                width='100%'
-                gap='1rem'
-            >
-                <Card sx={ sharedCardStyles }>
-                    <Grid container>
-                        {
-                            playerCells.map( cell => (
-                                <Cell
-                                    key={ cell.cellNum }
-                                    cell={ cell }
-                                    isPlayer
-                                />
-                            ) )
-                        }
-                    </Grid>
-                </Card>
-                <Card sx={ sharedCardStyles }>
-                    <Grid container>
-                        {
-                            computerCells.map( cell => (
-                                <Cell
-                                    key={ cell.cellNum }
-                                    cell={ cell }
-                                />
-                            ) )
-                        }
-                    </Grid>
-                </Card>
-                {
-                    alertText
+            <Stack>
+                <Typography
+                    level='body-xs'
+                    sx={ { color: theme => theme.palette.common.black } }
+                >
+                    { currentTurn === 'computer' ? 'Computer Thinking...' : 'Your turn!' }
+                </Typography>
+                <Stack
+                    direction='row'
+                    alignItems='center'
+                    justifyContent='center'
+                    height='100%'
+                    width='100%'
+                    gap='1rem'
+                >
+                    <Card sx={ sharedCardStyles }>
+                        <Grid container>
+                            {
+                                playerCells.map( cell => (
+                                    <Cell
+                                        key={ cell.cellNum }
+                                        cell={ cell }
+                                        isPlayer
+                                    />
+                                ) )
+                            }
+                        </Grid>
+                    </Card>
+                    <Card sx={ sharedCardStyles }>
+                        <Grid container>
+                            {
+                                computerCells.map( cell => (
+                                    <Cell
+                                        key={ cell.cellNum }
+                                        cell={ cell }
+                                    />
+                                ) )
+                            }
+                        </Grid>
+                    </Card>
+                    {
+                        alertText
                 && ( <SnackAlert text={ alertText } /> )
-                }
+                    }
+                </Stack>
             </Stack>
             <GameModal />
         </>

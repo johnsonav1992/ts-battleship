@@ -1,6 +1,7 @@
 // Types
 import {
     BoardCell
+    , GameState
     , ReducerAction
     , Ship
 } from '../types/types';
@@ -47,15 +48,19 @@ export const updateShipsWithHit = ( ships: Ship[], shipId: string | undefined ):
     } );
 };
 
-export const takeComputerShot = ( dispatch: ( action: ReducerAction ) => void, computerAttemptedCells: number[] ) => {
+export const takeComputerShot = ( dispatch: ( action: ReducerAction ) => void, type: GameState['gameMode'], computerAttemptedCells?: number[] ) => {
     const randomCell = Math.floor( Math.random() * 100 ) + 1;
 
-    if ( computerAttemptedCells.includes( randomCell ) ) {
-        takeComputerShot( dispatch, computerAttemptedCells );
+    if ( type === 'easy' ) {
+        if ( computerAttemptedCells?.includes( randomCell ) ) {
+            takeComputerShot( dispatch, 'easy', computerAttemptedCells );
+        } else {
+            setTimeout( () => dispatch( {
+                type: 'COMPUTER_SHOT'
+                , payload: randomCell
+            } ), 2000 );
+        }
     } else {
-        setTimeout( () => dispatch( {
-            type: 'COMPUTER_SHOT'
-            , payload: randomCell
-        } ), 2000 );
+        setTimeout( () => dispatch( { type: 'COMPUTER_AI_SHOT' } ), 1500 );
     }
 };

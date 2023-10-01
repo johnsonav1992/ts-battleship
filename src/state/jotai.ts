@@ -35,8 +35,8 @@ export const initState: GameState = {
             cellNum: null
             , wasHit: false
         }
-        , sunkShip: false
         , heatMapCells: buildStartingHeatMap()
+        , targetStack: []
     }
 };
 

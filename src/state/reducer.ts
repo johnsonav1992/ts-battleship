@@ -1,7 +1,7 @@
 // Types
 import { ReducerFn } from '../types/types';
 import {
-    findNextCellToFireOnAfterHit
+    findNextTargetedCell
     , updateComputerAI
 } from '../utils/computerAIUtils';
 
@@ -109,9 +109,15 @@ export const reducer: ReducerFn = ( state, action ) => {
         }
         case 'COMPUTER_AI_SHOT': {
             const heatMap = state.computerAI.heatMapCells;
+            const allUnattemptedCells = heatMap.filter( cell => !state.computerAttemptedCells.includes( cell.cellNum ) );
+            const maxHeatValueOfRemainingCells = Math.max( ...allUnattemptedCells.map( obj => obj.heatValue ) );
+            const allCellsWithHighestHeatValue = heatMap.filter( cell => cell.heatValue === maxHeatValueOfRemainingCells );
+            const randomIndex = Math.floor( Math.random() * allCellsWithHighestHeatValue.length );
+            const selectedCell = allCellsWithHighestHeatValue[ randomIndex ].cellNum;
 
+            // Very first shot
             if ( state.computerAttemptedCells.length === 0 ) {
-                const attemptedCell = Math.floor( Math.random() * 100 ) + 1;
+                const attemptedCell = selectedCell;
                 const shipHit = findHit( playerCells, attemptedCell );
 
                 if ( !shipHit ) {
@@ -141,14 +147,8 @@ export const reducer: ReducerFn = ( state, action ) => {
                 };
             }
 
-            const maxHeatValue = Math.max( ...heatMap.map( obj => obj.heatValue ) );
-            const allCellsWithHighestHeatValue = heatMap.filter( cell => cell.heatValue === maxHeatValue );
-
-            const randomIndex = Math.floor( Math.random() * allCellsWithHighestHeatValue.length );
-            const randomCell = allCellsWithHighestHeatValue[ randomIndex ];
-
-            const cellToFireOn = state.computerAI.lastShot.wasHit ? findNextCellToFireOnAfterHit( state ) : randomCell;
-            const attemptedCell = cellToFireOn?.cellNum;
+            const isTargeting = state.computerAI.targetStack.length > 0;
+            const attemptedCell = isTargeting ? findNextTargetedCell( state ) : selectedCell;
             const shipHit = findHit( playerCells, attemptedCell );
 
             if ( !shipHit ) {
@@ -169,6 +169,7 @@ export const reducer: ReducerFn = ( state, action ) => {
             const updatedPlayerShips = updateShipsWithHit( playerShips, shipId );
 
             const newSunkShip = updatedPlayerShips.find( ship => ship.isSunk && ship.id === shipId );
+            const isGameOver = updatedPlayerShips.every( ship => ship.isSunk );
 
             return {
                 ...state
@@ -177,7 +178,9 @@ export const reducer: ReducerFn = ( state, action ) => {
                 , computerAttemptedCells: [ ...state.computerAttemptedCells, attemptedCell ]
                 , currentTurn: 'player'
                 , alertText: newSunkShip ? `The computer sunk your ${ newSunkShip.id }!` : ''
-                , computerAI: updateComputerAI( state, attemptedCell, !!shipHit, !!newSunkShip )
+                , computerAI: updateComputerAI( state, attemptedCell, !!shipHit )
+                , isGameOver
+                , winner: isGameOver ? 'computer' : ''
             };
         }
         case 'SET_GAME_OVER': return {
