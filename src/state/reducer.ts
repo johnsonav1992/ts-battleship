@@ -147,8 +147,8 @@ export const reducer: ReducerFn = ( state, action ) => {
             const randomIndex = Math.floor( Math.random() * allCellsWithHighestHeatValue.length );
             const randomCell = allCellsWithHighestHeatValue[ randomIndex ];
 
-            const cellToFireOn = state.computerAI.targetingMode && state.computerAI.lastShot.wasHit ? findNextCellToFireOnAfterHit( state ) : randomCell;
-            const attemptedCell = cellToFireOn.cellNum;
+            const cellToFireOn = state.computerAI.lastShot.wasHit ? findNextCellToFireOnAfterHit( state ) : randomCell;
+            const attemptedCell = cellToFireOn?.cellNum;
             const shipHit = findHit( playerCells, attemptedCell );
 
             if ( !shipHit ) {
@@ -168,13 +168,16 @@ export const reducer: ReducerFn = ( state, action ) => {
             const updatedPlayerCells = updateCells( playerCells, attemptedCell, shipId );
             const updatedPlayerShips = updateShipsWithHit( playerShips, shipId );
 
+            const newSunkShip = updatedPlayerShips.find( ship => ship.isSunk && ship.id === shipId );
+
             return {
                 ...state
                 , playerCells: updatedPlayerCells
                 , playerShips: updatedPlayerShips
                 , computerAttemptedCells: [ ...state.computerAttemptedCells, attemptedCell ]
                 , currentTurn: 'player'
-                , computerAI: updateComputerAI( state, attemptedCell, !!shipHit )
+                , alertText: newSunkShip ? `The computer sunk your ${ newSunkShip.id }!` : ''
+                , computerAI: updateComputerAI( state, attemptedCell, !!shipHit, !!newSunkShip )
             };
         }
         case 'SET_GAME_OVER': return {

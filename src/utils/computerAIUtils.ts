@@ -5,8 +5,8 @@ import {
 } from '../types/types';
 
 export const STARTING_PROBABILITY = 3;
-export const SURROUNDING_HIT_PROBABILITY = 5;
-export const IS_HIT_PROBABILITY = 6;
+export const SURROUNDING_HIT_PROBABILITY = 10;
+export const IS_HIT_PROBABILITY = 5;
 export const IS_MISS_PROBABILITY = 0;
 
 export const buildStartingHeatMap = () => Array( 100 ).fill( null ).map( ( _, idx ) => ( {
@@ -14,12 +14,13 @@ export const buildStartingHeatMap = () => Array( 100 ).fill( null ).map( ( _, id
     , heatValue: STARTING_PROBABILITY
 } ) );
 
-export const updateComputerAI = ( state: GameState, attemptedCell: BoardCell['cellNum'], wasHit: boolean ): ComputerAI => {
+export const updateComputerAI = ( state: GameState, attemptedCell: BoardCell['cellNum'], wasHit: boolean, wasShipJustSunk?: boolean ): ComputerAI => {
     return {
         lastShot: {
             cellNum: attemptedCell
             , wasHit
         }
+        , sunkShip: wasShipJustSunk || false
         , heatMapCells: state.computerAI.heatMapCells.map( cell => {
             if ( cell.cellNum === attemptedCell ) {
                 return {
@@ -34,7 +35,6 @@ export const updateComputerAI = ( state: GameState, attemptedCell: BoardCell['ce
             }
             return cell;
         } )
-        , targetingMode: true
     };
 };
 
