@@ -4,15 +4,20 @@ import {
     , GameState
 } from '../types/types';
 
-export const STARTING_PROBABILITY = 3;
+export const STARTING_HIGH_PROBABILITY = 3;
+export const STARTING_LOW_PROBABILITY = 2;
 export const SURROUNDING_HIT_PROBABILITY = 10;
+export const IS_SUNK_PROBABILITY = -1;
 export const IS_HIT_PROBABILITY = 5;
 export const IS_MISS_PROBABILITY = 0;
 
-export const buildStartingHeatMap = () => Array( 100 ).fill( null ).map( ( _, idx ) => ( {
-    cellNum: idx + 1
-    , heatValue: STARTING_PROBABILITY
-} ) );
+export const buildStartingHeatMap = () => Array( 100 ).fill( null ).map( ( _, idx ) => {
+    const cellNum = idx + 1;
+    return {
+        cellNum
+        , heatValue: cellNum % 2 === 0 ? STARTING_HIGH_PROBABILITY : STARTING_LOW_PROBABILITY
+    };
+} );
 
 export const updateComputerAI = ( state: GameState, attemptedCell: BoardCell['cellNum'], wasHit: boolean, wasShipJustSunk?: boolean ): ComputerAI => {
     return {
@@ -22,10 +27,20 @@ export const updateComputerAI = ( state: GameState, attemptedCell: BoardCell['ce
         }
         , sunkShip: wasShipJustSunk || false
         , heatMapCells: state.computerAI.heatMapCells.map( cell => {
+            if ( wasShipJustSunk ) {
+                const allCellsSurroundingSunkShip = state.computerAI.heatMapCells.filter( cell => {
+                    cell.heatValue;
+                } );
+            }
+
             if ( cell.cellNum === attemptedCell ) {
                 return {
                     ...cell
-                    , heatValue: wasHit ? IS_HIT_PROBABILITY : IS_MISS_PROBABILITY
+                    , heatValue: wasHit
+                        ? wasShipJustSunk
+                            ? IS_SUNK_PROBABILITY
+                            : IS_HIT_PROBABILITY
+                        : IS_MISS_PROBABILITY
                 };
             } else if ( isSurroundingHitCell( cell.cellNum, attemptedCell ) && !state.computerAttemptedCells.includes( cell.cellNum ) ) {
                 return {
@@ -59,6 +74,7 @@ export const findNextCellToFireOnAfterHit = ( state: GameState ) => {
     const cellsAroundHitCell = state.computerAI.heatMapCells.filter(
         cell => isSurroundingHitCell( cell.cellNum, prevHitCell! )
                 && cell.heatValue !== IS_HIT_PROBABILITY
+                && cell.heatValue !== IS_SUNK_PROBABILITY
                 && cell.heatValue !== IS_MISS_PROBABILITY
     );
 
