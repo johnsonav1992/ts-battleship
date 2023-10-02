@@ -64,3 +64,50 @@ export const takeComputerShot = ( dispatch: ( action: ReducerAction ) => void, t
         setTimeout( () => dispatch( { type: 'COMPUTER_AI_SHOT' } ), 1500 );
     }
 };
+
+export const processTurn = (
+    state: GameState
+    , attemptedCell: BoardCell['cellNum']
+    , player: GameState['currentTurn']
+): GameState => {
+    const oppositePlayer = player === 'player' ? 'computer' : 'player';
+
+    const boardToTarget = state[ `${ player }Cells` ];
+    const shipsToTarget = state[ `${ player }Ships` ];
+
+    const shipHit = findHit( boardToTarget, attemptedCell );
+
+    if ( !shipHit ) {
+        return {
+            ...state
+            , [ `${ oppositePlayer }Cells` ]: updateCellsWithMissOnly( boardToTarget, attemptedCell )
+            , [ `${ player }AttemptedCells` ]: [ ...state[ `${ player }AttemptedCells` ], attemptedCell ]
+            , alertText: ''
+            , currentTurn: oppositePlayer
+        };
+    }
+
+    const shipLabel = shipHit?.shipImg?.label.split( '-' );
+    const shipId = shipLabel?.[ 0 ];
+
+    const updatedOppositePlayerCells = updateCells( boardToTarget, attemptedCell, shipId );
+    const updatedOppositePlayerShips = updateShipsWithHit( shipsToTarget, shipId );
+
+    const newSunkShip = updatedOppositePlayerShips.find( ship => ship.isSunk && ship.id === shipId );
+    const isGameOver = updatedOppositePlayerShips.every( ship => ship.isSunk );
+
+    return {
+        ...state
+        , [ `${ oppositePlayer }Cells` ]: updatedOppositePlayerCells
+        , [ `${ oppositePlayer }Ships` ]: updatedOppositePlayerShips
+        , [ `${ player }AttemptedCells` ]: [ ...state.playerAttemptedCells, attemptedCell ]
+        , alertText: newSunkShip
+            ? player === 'player'
+                ? `You sunk the ${ oppositePlayer }'s ${ newSunkShip.id }`
+                : `The ${ oppositePlayer } sunk your ${ newSunkShip.id }`
+            : ''
+        , currentTurn: oppositePlayer
+        , isGameOver
+        , winner: isGameOver ? player : ''
+    };
+};

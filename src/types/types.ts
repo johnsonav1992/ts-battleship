@@ -1,3 +1,4 @@
+////// SHIPS //////
 export type Ship = (
         { id: 'destroyer'; length: 2; hits: 0 | 1 | 2 }
         | { id: 'submarine'; length: 3; hits: 0 | 1 | 2 | 3 }
@@ -19,6 +20,7 @@ export type ShipCellConfig = {
     forward: boolean;
 };
 
+////// BOARD //////
 export type BoardCell = {
     shipImg: ShipImg | null;
     cellNum: number;
@@ -43,7 +45,7 @@ export type CanPlaceParams = {
 
 export type CheckOverlapParams = Omit<CanPlaceParams, 'cellsInRow'> & { updatedCells: BoardCell[] };
 
-// STATE
+////// STATE //////
 export type GameState = {
     playerCells: BoardCell[];
     computerCells: BoardCell[];

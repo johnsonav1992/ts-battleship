@@ -36,7 +36,6 @@ const Cell = (
     const [ {
         playerAttemptedCells
         , currentTurn
-        , computerAI
     }, dispatch ] = useBattleShipState();
 
     const cellHasBeenAttempted = playerAttemptedCells.includes( cellNum );
@@ -106,14 +105,6 @@ const Cell = (
                 )
             }
             { status !== 'none' && <ShotMarker type={ status } /> }
-            { /* { isPlayer && (
-                <div
-                    style={ {
-                        zIndex: 100
-                        , color: 'purple'
-                    } }
-                >{ computerAI.heatMapCells[ cellNum - 1 ].heatValue }</div>
-            ) } */ }
         </Box>
     );
 };
