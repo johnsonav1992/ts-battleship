@@ -72,8 +72,8 @@ export const processTurn = (
 ): GameState => {
     const oppositePlayer = player === 'player' ? 'computer' : 'player';
 
-    const boardToTarget = state[ `${ player }Cells` ];
-    const shipsToTarget = state[ `${ player }Ships` ];
+    const boardToTarget = state[ `${ oppositePlayer }Cells` ];
+    const shipsToTarget = state[ `${ oppositePlayer }Ships` ];
 
     const shipHit = findHit( boardToTarget, attemptedCell );
 
