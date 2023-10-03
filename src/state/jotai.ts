@@ -26,7 +26,7 @@ export const initState: GameState = {
     , alertText: ''
     , currentTurn: 'player'
     , currentScreen: 'start'
-    , gameMode: 'medium'
+    , gameMode: 'easy'
     , isModalOpen: false
     , isGameOver: false
     , winner: ''

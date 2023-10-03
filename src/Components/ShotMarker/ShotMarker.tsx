@@ -3,10 +3,15 @@ import {
     Box
     , useTheme
 } from '@mui/joy';
+
+// Utils
 import { pxrem } from '../../utils/pxrem';
 
+// Types
+import { BoardCell } from '../../types/types';
+
 interface Props {
-    type: 'hit' | 'miss';
+    type: Omit<BoardCell['status'], 'none' | 'sunk'>;
 }
 
 const ShotMarker = ( { type }: Props ) => {

@@ -13,6 +13,7 @@ import { pxrem } from '../../utils/pxrem';
 
 // Assets
 import crosshair from '../../assets/crosshair.png';
+import sunkExplosion from '../../assets/sunk-explosion.png';
 
 // State
 import { useBattleShipState } from '../../state/jotai';
@@ -104,7 +105,17 @@ const Cell = (
                     />
                 )
             }
-            { status !== 'none' && <ShotMarker type={ status } /> }
+            { ( status === 'hit' || status === 'miss' ) && <ShotMarker type={ status } /> }
+            {
+                status === 'sunk'
+                    && (
+                        <Image
+                            src={ sunkExplosion }
+                            width='80%'
+                            height='80%'
+                        />
+                    )
+            }
         </Box>
     );
 };

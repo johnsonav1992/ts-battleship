@@ -4,10 +4,27 @@ import {
     , GameState
     , ReducerAction
     , Ship
+    , ShipImg
 } from '../types/types';
 
 export const findHit = ( cells: BoardCell[], attemptedCell: number ): BoardCell | undefined => {
     return cells.find( compCell => compCell?.cellNum === attemptedCell && compCell.shipImg );
+};
+
+export const getShipIdFromImageLabel = ( shipImgLabel: ShipImg['label'] ) => {
+    const [ extractedId ] = shipImgLabel.split( '-' );
+    return extractedId;
+};
+
+export const updateCellsWithNewSunkenExplosions = ( cells: BoardCell[], ship: Ship | undefined ) => {
+    if ( ship?.isSunk ) {
+        return cells.map( cell => ( {
+            ...cell
+            , status: cell.shipImg && getShipIdFromImageLabel( cell.shipImg?.label ) === ship.id
+                ? 'sunk'
+                : cell.status
+        } ) );
+    }
 };
 
 export const updateCells = ( cells: BoardCell[], attemptedCell: number, shipId: string | undefined ): BoardCell[] => {
@@ -87,18 +104,18 @@ export const processTurn = (
         };
     }
 
-    const shipLabel = shipHit?.shipImg?.label.split( '-' );
-    const shipId = shipLabel?.[ 0 ];
+    const shipId = shipHit?.shipImg?.label && getShipIdFromImageLabel( shipHit?.shipImg?.label );
 
     const updatedOppositePlayerCells = updateCells( boardToTarget, attemptedCell, shipId );
     const updatedOppositePlayerShips = updateShipsWithHit( shipsToTarget, shipId );
 
     const newSunkShip = updatedOppositePlayerShips.find( ship => ship.isSunk && ship.id === shipId );
+    const updatedOppositePlayerCellsWithSunkShip = updateCellsWithNewSunkenExplosions( updatedOppositePlayerCells, newSunkShip );
     const isGameOver = updatedOppositePlayerShips.every( ship => ship.isSunk );
 
     return {
         ...state
-        , [ `${ oppositePlayer }Cells` ]: updatedOppositePlayerCells
+        , [ `${ oppositePlayer }Cells` ]: updatedOppositePlayerCellsWithSunkShip || updatedOppositePlayerCells
         , [ `${ oppositePlayer }Ships` ]: updatedOppositePlayerShips
         , [ `${ player }AttemptedCells` ]: [ ...state.playerAttemptedCells, attemptedCell ]
         , alertText: newSunkShip

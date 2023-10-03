@@ -26,13 +26,13 @@ export type BoardCell = {
     cellNum: number;
     orientation: 'vertical' | 'none';
     direction: 'up' | 'down' | 'none';
-    status: 'none' | 'hit' | 'miss';
+    status: 'none' | 'hit' | 'miss' | 'sunk';
 } | {
     shipImg: ShipImg | null;
     cellNum: number;
     orientation: 'horizontal' | 'none';
     direction: 'left' | 'right' | 'none';
-    status: 'none' | 'hit' | 'miss';
+    status: 'none' | 'hit' | 'miss' | 'sunk';
 };
 
 export type CanPlaceParams = {
