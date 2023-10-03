@@ -1,3 +1,6 @@
+// Libraries
+import { split } from 'string-ts';
+
 // Types
 import {
     BoardCell
@@ -12,7 +15,7 @@ export const findHit = ( cells: BoardCell[], attemptedCell: number ): BoardCell 
 };
 
 export const getShipIdFromImageLabel = ( shipImgLabel: ShipImg['label'] ) => {
-    const [ extractedId ] = shipImgLabel.split( '-' );
+    const [ extractedId ] = split( shipImgLabel, '-' );
     return extractedId;
 };
 
