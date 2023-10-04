@@ -130,12 +130,14 @@ const PlaceShipsModalContent = () => {
                                         , width: '100%'
                                         , gap: 1.5
                                         , p: 2
-                                        , bgcolor: 'primary.500'
+                                        , bgcolor: value === 'Hard' ? 'neutral.400' : 'primary.500'
+
                                     } }
                                 >
                                     <Radio
                                         id={ value }
                                         value={ value }
+                                        disabled={ value === 'Hard' }
                                     />
                                     <FormLabel
                                         htmlFor={ value }
