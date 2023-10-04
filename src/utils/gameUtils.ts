@@ -20,14 +20,12 @@ export const getShipIdFromImageLabel = ( shipImgLabel: ShipImg['label'] ) => {
 };
 
 export const updateCellsWithNewSunkenExplosions = ( cells: BoardCell[], ship: Ship | undefined ) => {
-    if ( ship?.isSunk ) {
-        return cells.map( cell => ( {
-            ...cell
-            , status: cell.shipImg && getShipIdFromImageLabel( cell.shipImg?.label ) === ship.id
-                ? 'sunk'
-                : cell.status
-        } ) );
-    }
+    return cells.map( cell => ( {
+        ...cell
+        , status: cell.shipImg && getShipIdFromImageLabel( cell.shipImg?.label ) === ship?.id
+            ? 'sunk'
+            : cell.status
+    } ) );
 };
 
 export const updateCells = ( cells: BoardCell[], attemptedCell: number, shipId: string | undefined ): BoardCell[] => {
