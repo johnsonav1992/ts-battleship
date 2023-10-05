@@ -84,6 +84,7 @@ export type ReducerAction =
     | { type: 'COMPUTER_SHOT'; payload: BoardCell['cellNum'] }
     | { type: 'COMPUTER_AI_SHOT' }
     | { type: 'SET_SCREEN'; payload: GameState['currentScreen'] }
+    | { type: 'SET_GAME_MODE'; payload: GameState['gameMode'] }
     | { type: 'SET_MODAL_OPEN'; payload: GameState['isModalOpen'] }
     | { type: 'SET_GAME_OVER'; payload: GameState['isGameOver'] }
     | { type: 'RESET_GAME' };

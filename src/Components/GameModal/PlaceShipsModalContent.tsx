@@ -1,3 +1,5 @@
+import { capitalize } from 'string-ts';
+
 // MUI
 import {
     Box
@@ -19,14 +21,15 @@ import { useBattleShipState } from '../../state/jotai';
 // Utils
 import { pxrem } from '../../utils/pxrem';
 import { buildBoardCells } from '../../utils/buildBoardCells';
+import { GameState } from '../../types/types';
 
 const PlaceShipsModalContent = () => {
 
-    const [ , dispatch ] = useBattleShipState();
+    const [ { gameMode }, dispatch ] = useBattleShipState();
 
-    const difficulties = [ 'Easy', 'Medium', 'Hard' ];
+    const difficulties = [ 'easy', 'medium', 'hard' ] as const;
 
-    const handleSetPlayerCells = () => {
+    const handleStartGame = () => {
         dispatch( {
             type: 'SET_PLAYER_CELLS'
             , payload: buildBoardCells()
@@ -60,7 +63,6 @@ const PlaceShipsModalContent = () => {
                 >
                     <Button
                         sx={ { minHeight: pxrem( 60 ) } }
-                        onClick={ handleSetPlayerCells }
                     >
                         Place For me! (Random)
                     </Button>
@@ -94,9 +96,13 @@ const PlaceShipsModalContent = () => {
                     justifyContent='space-between'
                 >
                     <RadioGroup
-                        defaultValue='Medium'
                         overlay
                         name='difficulty'
+                        value={ gameMode }
+                        onChange={ e => dispatch( {
+                            type: 'SET_GAME_MODE'
+                            , payload: e.target.value as GameState['gameMode']
+                        } ) }
                         sx={ {
                             flexDirection: 'row'
                             , gap: 2
@@ -118,76 +124,51 @@ const PlaceShipsModalContent = () => {
                     >
                         {
                             difficulties.map( value => (
-                                <Sheet
+                                <Tooltip
                                     key={ value }
-                                    variant='outlined'
-                                    sx={ {
-                                        borderRadius: 'md'
-                                        , boxShadow: 'sm'
-                                        , display: 'flex'
-                                        , flexDirection: 'column'
-                                        , alignItems: 'center'
-                                        , width: '100%'
-                                        , gap: 1.5
-                                        , p: 2
-                                        , bgcolor: value === 'Hard' ? 'neutral.400' : 'primary.500'
-
-                                    } }
+                                    title={ value === 'hard' ? 'This difficulty is not ready yet. Stay tuned!' : '' }
                                 >
-                                    <Radio
-                                        id={ value }
-                                        value={ value }
-                                        disabled={ value === 'Hard' }
-                                    />
-                                    <FormLabel
-                                        htmlFor={ value }
+                                    <Sheet
+                                        variant='outlined'
                                         sx={ {
-                                            color: 'common.white'
-                                            , fontWeight: 'bold'
+                                            borderRadius: 'md'
+                                            , boxShadow: 'sm'
+                                            , display: 'flex'
+                                            , flexDirection: 'column'
+                                            , alignItems: 'center'
+                                            , width: '100%'
+                                            , gap: 1.5
+                                            , p: 2
+                                            , bgcolor: value === 'hard' ? 'neutral.400' : 'primary.500'
+
                                         } }
                                     >
-                                        { value }
-                                    </FormLabel>
-                                </Sheet>
+                                        <Radio
+                                            id={ value }
+                                            value={ value }
+                                            disabled={ value === 'hard' }
+                                        />
+                                        <FormLabel
+                                            htmlFor={ value }
+                                            sx={ {
+                                                color: 'common.white'
+                                                , fontWeight: 'bold'
+                                            } }
+                                        >
+                                            { capitalize( value ) }
+                                        </FormLabel>
+                                    </Sheet>
+                                </Tooltip>
                             ) )
                         }
                     </RadioGroup>
-                    { /* <Stack
-                        direction='row'
-                        justifyContent='center'
-                        alignItems='center'
-                        sx={ {
-                            border: '1px solid red'
-                            , p: pxrem( 16 )
-                        } }
-                    >
-                        <Radio />
-                        <Typography>
-                            Easy
-                        </Typography>
-                    </Stack>
-                    <Button
-                        sx={ { minHeight: pxrem( 60 ) } }
-                    >
-                        Medium
-                    </Button>
-                    <Tooltip
-                        title='This difficulty is not ready yet. Stay tuned!'
-                        arrow
-                    >
-                        <Box>
-                            <Button
-                                disabled
-                                sx={ { minHeight: pxrem( 60 ) } }
-                            >
-                                Hard
-                            </Button>
-                        </Box>
-                    </Tooltip> */ }
                 </Stack>
             </Stack>
             <Divider />
-            <Button fullWidth>
+            <Button
+                fullWidth
+                onClick={ handleStartGame }
+            >
                 PLAY GAME!
             </Button>
         </Stack>

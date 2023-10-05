@@ -26,6 +26,10 @@ export const reducer: ReducerFn = ( state, action ) => {
             ...state
             , currentScreen: action.payload
         };
+        case 'SET_GAME_MODE': return {
+            ...state
+            , gameMode: action.payload
+        };
         case 'SET_MODAL_OPEN': return {
             ...state
             , isModalOpen: action.payload
