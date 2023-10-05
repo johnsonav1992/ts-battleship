@@ -29,12 +29,14 @@ const PlaceShipsModalContent = () => {
 
     const difficulties = [ 'easy', 'medium', 'hard' ] as const;
 
-    const handleStartGame = () => {
+    const setPlayerCells = () => {
         dispatch( {
             type: 'SET_PLAYER_CELLS'
             , payload: buildBoardCells()
         } );
+    };
 
+    const handleStartGame = () => {
         dispatch( {
             type: 'SET_COMPUTER_CELLS'
             , payload: buildBoardCells()
@@ -63,6 +65,7 @@ const PlaceShipsModalContent = () => {
                 >
                     <Button
                         sx={ { minHeight: pxrem( 60 ) } }
+                        onClick={ setPlayerCells } // Will have better solution for this later
                     >
                         Place For me! (Random)
                     </Button>

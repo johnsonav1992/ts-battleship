@@ -71,7 +71,7 @@ const GameScreen = () => {
             <Stack>
                 <Typography
                     level='body-xs'
-                    sx={ { color: theme => theme.palette.common.black } }
+                    sx={ { color: theme => theme.palette.common.white } }
                 >
                     { currentTurn === 'computer' ? 'Computer Thinking...' : 'Your turn!' }
                 </Typography>
