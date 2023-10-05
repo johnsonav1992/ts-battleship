@@ -31,12 +31,7 @@ const GameScreen = () => {
         , computerAttemptedCells
         , isGameOver
         , gameMode
-        , computerAI: {
-            targetStack
-        }
     }, dispatch ] = useBattleShipState();
-
-    console.log( { targetStack } );
 
     const sharedCardStyles: SxProps = {
         width: pxrem( 500 )
