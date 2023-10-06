@@ -1,3 +1,6 @@
+import { useState } from 'react';
+
+// Libraries
 import { capitalize } from 'string-ts';
 
 // MUI
@@ -10,6 +13,7 @@ import {
     , RadioGroup
     , Sheet
     , Stack
+    , ToggleButtonGroup
     , Tooltip
     , Typography
     , radioClasses
@@ -26,6 +30,7 @@ import { GameState } from '../../types/types';
 const PlaceShipsModalContent = () => {
 
     const [ { gameMode }, dispatch ] = useBattleShipState();
+    const [ playerCellMode, setPlayerCellMode ] = useState<'random' | 'pick' | null>( null );
 
     const difficulties = [ 'easy', 'medium', 'hard' ] as const;
 
@@ -63,25 +68,38 @@ const PlaceShipsModalContent = () => {
                     direction='row'
                     gap={ pxrem( 16 ) }
                 >
-                    <Button
-                        sx={ { minHeight: pxrem( 60 ) } }
-                        onClick={ setPlayerCells } // Will have better solution for this later
+                    <ToggleButtonGroup
+                        variant='solid'
+                        color='primary'
+                        spacing='1rem'
+                        value={ playerCellMode }
+                        onChange={ ( _e, value ) => {
+                            setPlayerCellMode( value );
+                            if ( value === 'random' ) setPlayerCells();
+                        } }
+
                     >
+                        <Button
+                            sx={ { minHeight: pxrem( 60 ) } }
+                            value='random'
+                        >
                         Place For me! (Random)
-                    </Button>
-                    <Tooltip
-                        title='This feature is not ready yet. Stay tuned!'
-                        arrow
-                    >
-                        <Box>
-                            <Button
-                                disabled
-                                sx={ { minHeight: pxrem( 60 ) } }
-                            >
-                                { 'I\'ll place them!' }
-                            </Button>
-                        </Box>
-                    </Tooltip>
+                        </Button>
+                        <Tooltip
+                            title='This feature is not ready yet. Stay tuned!'
+                            arrow
+                        >
+                            <Box>
+                                <Button
+                                    disabled
+                                    sx={ { minHeight: pxrem( 60 ) } }
+                                    value='pick'
+                                >
+                                    { 'I\'ll place them!' }
+                                </Button>
+                            </Box>
+                        </Tooltip>
+                    </ToggleButtonGroup>
                 </Stack>
             </Stack>
             <Divider />
