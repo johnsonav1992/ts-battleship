@@ -72,8 +72,7 @@ const PlaceShipsModalContent = () => {
                         onChange={ e => dispatch( {
                             type: 'SET_PLAYER_SHIP_PLACEMENT'
                             , payload: e.target.value.includes( 'Drag' ) ? 'drag-n-drop' : 'random'
-                        } )
-                        }
+                        } ) }
                         sx={ {
                             flexDirection: 'row'
                             , gap: 2
