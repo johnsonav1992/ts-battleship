@@ -21,6 +21,7 @@ export const initState: GameState = {
     , computerCells: buildEmptyCells()
     , computerShips: defaultShips
     , playerShips: defaultShips
+    , playerShipPlacement: 'random'
     , playerAttemptedCells: []
     , computerAttemptedCells: []
     , alertText: ''

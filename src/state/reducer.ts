@@ -34,13 +34,14 @@ export const reducer: ReducerFn = ( state, action ) => {
             ...state
             , isModalOpen: action.payload
         };
-        case 'SET_PLAYER_CELLS': return {
+        case 'SET_CELLS': return {
             ...state
-            , playerCells: action.payload
+            , playerCells: action.payload.playerCells || state.playerCells
+            , computerCells: action.payload.computerCells
         };
-        case 'SET_COMPUTER_CELLS': return {
+        case 'SET_PLAYER_SHIP_PLACEMENT': return {
             ...state
-            , computerCells: action.payload
+            , playerShipPlacement: action.payload
         };
         case 'PLAYER_SHOT': {
             const attemptedCell = action.payload;

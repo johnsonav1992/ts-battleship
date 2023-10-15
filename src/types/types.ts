@@ -51,6 +51,7 @@ export type GameState = {
     computerCells: BoardCell[];
     computerShips: Ship[];
     playerShips: Ship[];
+    playerShipPlacement: 'random' | 'drag-n-drop' | null;
     playerAttemptedCells: BoardCell['cellNum'][];
     computerAttemptedCells: BoardCell['cellNum'][];
     alertText: string;
@@ -78,8 +79,8 @@ export type HeatMapCell = {
 };
 
 export type ReducerAction =
-    { type: 'SET_PLAYER_CELLS'; payload: BoardCell[] }
-    | { type: 'SET_COMPUTER_CELLS'; payload: BoardCell[] }
+    { type: 'SET_CELLS'; payload: { playerCells?: BoardCell[]; computerCells: BoardCell[] } }
+    | { type: 'SET_PLAYER_SHIP_PLACEMENT'; payload: GameState['playerShipPlacement'] }
     | { type: 'PLAYER_SHOT'; payload: BoardCell['cellNum'] }
     | { type: 'COMPUTER_SHOT'; payload: BoardCell['cellNum'] }
     | { type: 'COMPUTER_AI_SHOT' }

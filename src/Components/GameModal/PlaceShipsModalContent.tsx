@@ -1,19 +1,15 @@
-import { useState } from 'react';
-
 // Libraries
 import { capitalize } from 'string-ts';
 
 // MUI
 import {
-    Box
-    , Button
+    Button
     , Divider
     , FormLabel
     , Radio
     , RadioGroup
     , Sheet
     , Stack
-    , ToggleButtonGroup
     , Tooltip
     , Typography
     , radioClasses
@@ -25,26 +21,27 @@ import { useBattleShipState } from '../../state/jotai';
 // Utils
 import { pxrem } from '../../utils/pxrem';
 import { buildBoardCells } from '../../utils/buildBoardCells';
+
+// Types
 import { GameState } from '../../types/types';
 
 const PlaceShipsModalContent = () => {
 
-    const [ { gameMode }, dispatch ] = useBattleShipState();
-    const [ playerCellMode, setPlayerCellMode ] = useState<'random' | 'pick' | null>( null );
+    const [ {
+        gameMode
+        , playerShipPlacement
+    }, dispatch ] = useBattleShipState();
 
     const difficulties = [ 'easy', 'medium', 'hard' ] as const;
-
-    const setPlayerCells = () => {
-        dispatch( {
-            type: 'SET_PLAYER_CELLS'
-            , payload: buildBoardCells()
-        } );
-    };
+    const shipPlacementOptions = [ 'Place for me! (Random)', 'I\'ll place them!' ] as const;
 
     const handleStartGame = () => {
         dispatch( {
-            type: 'SET_COMPUTER_CELLS'
-            , payload: buildBoardCells()
+            type: 'SET_CELLS'
+            , payload: {
+                playerCells: buildBoardCells()
+                , computerCells: buildBoardCells()
+            }
         } );
 
         dispatch( {
@@ -68,38 +65,74 @@ const PlaceShipsModalContent = () => {
                     direction='row'
                     gap={ pxrem( 16 ) }
                 >
-                    <ToggleButtonGroup
-                        variant='solid'
-                        color='primary'
-                        spacing='1rem'
-                        value={ playerCellMode }
-                        onChange={ ( _e, value ) => {
-                            setPlayerCellMode( value );
-                            if ( value === 'random' ) setPlayerCells();
+                    <RadioGroup
+                        overlay
+                        name='difficulty'
+                        value={ playerShipPlacement }
+                        onChange={ e => dispatch( {
+                            type: 'SET_PLAYER_SHIP_PLACEMENT'
+                            , payload: e.target.value.includes( 'Drag' ) ? 'drag-n-drop' : 'random'
+                        } )
+                        }
+                        sx={ {
+                            flexDirection: 'row'
+                            , gap: 2
+                            , width: '100%'
+                            , [ `& .${ radioClasses.checked }` ]: {
+                                [ `& .${ radioClasses.action }` ]: {
+                                    inset: -3
+                                    , border: `${ pxrem( 3 ) } solid`
+                                    , borderColor: 'common.white'
+                                }
+                            }
+                            , [ `& .${ radioClasses.icon }` ]: {
+                                display: 'none'
+                            }
+                            , [ `& .${ radioClasses.radio }` ]: {
+                                display: 'contents'
+                            }
                         } }
-
                     >
-                        <Button
-                            sx={ { minHeight: pxrem( 60 ) } }
-                            value='random'
-                        >
-                        Place For me! (Random)
-                        </Button>
-                        <Tooltip
-                            title='This feature is not ready yet. Stay tuned!'
-                            arrow
-                        >
-                            <Box>
-                                <Button
-                                    disabled
-                                    sx={ { minHeight: pxrem( 60 ) } }
-                                    value='pick'
+                        {
+                            shipPlacementOptions.map( value => (
+                                <Tooltip
+                                    key={ value }
+                                    title={ value.includes( 'I' ) ? 'This feature is not ready yet. Stay tuned!' : '' }
                                 >
-                                    { 'I\'ll place them!' }
-                                </Button>
-                            </Box>
-                        </Tooltip>
-                    </ToggleButtonGroup>
+                                    <Sheet
+                                        variant='outlined'
+                                        sx={ {
+                                            borderRadius: 'md'
+                                            , boxShadow: 'sm'
+                                            , display: 'flex'
+                                            , flexDirection: 'column'
+                                            , alignItems: 'center'
+                                            , justifyContent: 'center'
+                                            , width: '100%'
+                                            , p: pxrem( 8 )
+                                            , bgcolor: value.includes( 'I' ) ? 'neutral.400' : 'primary.500'
+                                        } }
+                                    >
+                                        <Radio
+                                            id={ value }
+                                            value={ value.includes( 'Place' ) ? 'random' : 'drag-n-drop' }
+                                            disabled={ value.includes( 'I' ) }
+                                        />
+                                        <FormLabel
+                                            htmlFor={ value }
+                                            sx={ {
+                                                color: 'common.white'
+                                                , fontWeight: 'bold'
+                                                , textAlign: 'center'
+                                            } }
+                                        >
+                                            { value }
+                                        </FormLabel>
+                                    </Sheet>
+                                </Tooltip>
+                            ) )
+                        }
+                    </RadioGroup>
                 </Stack>
             </Stack>
             <Divider />
@@ -158,8 +191,7 @@ const PlaceShipsModalContent = () => {
                                             , flexDirection: 'column'
                                             , alignItems: 'center'
                                             , width: '100%'
-                                            , gap: 1.5
-                                            , p: 2
+                                            , p: pxrem( 16 )
                                             , bgcolor: value === 'hard' ? 'neutral.400' : 'primary.500'
 
                                         } }
