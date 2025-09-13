@@ -89,7 +89,7 @@ const Cell = (
         >
             {
                 shipImg
-                && isPlayer
+                && ( isPlayer || status === 'sunk' )
                 && (
                     <Image
                         src={ shipImg.img }
@@ -111,8 +111,16 @@ const Cell = (
                     && (
                         <Image
                             src={ sunkExplosion }
-                            width='80%'
-                            height='80%'
+                            width='60%'
+                            height='60%'
+                            style={ {
+                                position: 'absolute'
+                                , top: '50%'
+                                , left: '50%'
+                                , transform: 'translate(-50%, -50%)'
+                                , zIndex: 10
+                                , filter: 'drop-shadow(0 0 1px white) drop-shadow(0 0 1px white) drop-shadow(0 0 2px white)'
+                            } }
                         />
                     )
             }

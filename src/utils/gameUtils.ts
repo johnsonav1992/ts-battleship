@@ -67,9 +67,9 @@ export const updateShipsWithHit = ( ships: Ship[], shipId: string | undefined ):
 };
 
 export const takeComputerShot = ( dispatch: ( action: ReducerAction ) => void, type: GameState['gameMode'], computerAttemptedCells?: number[] ) => {
-    const randomCell = Math.floor( Math.random() * 100 ) + 1;
-
     if ( type === 'easy' ) {
+        // Easy mode: random shots for backwards compatibility
+        const randomCell = Math.floor( Math.random() * 100 ) + 1;
         if ( computerAttemptedCells?.includes( randomCell ) ) {
             takeComputerShot( dispatch, 'easy', computerAttemptedCells );
         } else {
@@ -79,6 +79,7 @@ export const takeComputerShot = ( dispatch: ( action: ReducerAction ) => void, t
             } ), 2000 );
         }
     } else {
+        // Medium and Hard modes: use advanced AI
         setTimeout( () => dispatch( { type: 'COMPUTER_AI_SHOT' } ), 1500 );
     }
 };

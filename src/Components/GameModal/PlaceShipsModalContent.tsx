@@ -179,7 +179,7 @@ const PlaceShipsModalContent = () => {
                             difficulties.map( value => (
                                 <Tooltip
                                     key={ value }
-                                    title={ value === 'hard' ? 'This difficulty is not ready yet. Stay tuned!' : '' }
+                                    title={ value === 'hard' ? 'Advanced AI with constraint-based reasoning and logical deduction!' : value === 'medium' ? 'Smart AI with probability-based targeting!' : 'Basic AI with simple targeting' }
                                 >
                                     <Sheet
                                         variant='outlined'
@@ -191,14 +191,14 @@ const PlaceShipsModalContent = () => {
                                             , alignItems: 'center'
                                             , width: '100%'
                                             , p: pxrem( 16 )
-                                            , bgcolor: value === 'hard' ? 'neutral.400' : 'primary.500'
+                                            , bgcolor: 'primary.500'
 
                                         } }
                                     >
                                         <Radio
                                             id={ value }
                                             value={ value }
-                                            disabled={ value === 'hard' }
+                                            disabled={ false }
                                         />
                                         <FormLabel
                                             htmlFor={ value }

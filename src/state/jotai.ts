@@ -38,6 +38,15 @@ export const initState: GameState = {
         }
         , heatMapCells: buildStartingHeatMap()
         , targetStack: []
+        , huntingMode: 'hunting'
+        , currentTarget: null
+        , multipleTargets: []
+        , shipConstraints: {
+            remainingShips: { destroyer: 1, submarine: 1, cruiser: 1, battleship: 1, carrier: 1 }
+            , impossibleCells: []
+            , certainCells: []
+        }
+        , difficulty: 'easy'
     }
 };
 

@@ -42,10 +42,8 @@ const GameScreen = () => {
     };
 
     useEffect( () => {
-        if ( currentTurn === 'computer' && gameMode === 'easy' ) {
-            takeComputerShot( dispatch, 'easy', computerAttemptedCells );
-        } else if ( currentTurn === 'computer' && gameMode === 'medium' ) {
-            takeComputerShot( dispatch, 'medium' );
+        if ( currentTurn === 'computer' ) {
+            takeComputerShot( dispatch, gameMode, computerAttemptedCells );
         }
     }, [ currentTurn, gameMode ] );
 

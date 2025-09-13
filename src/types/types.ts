@@ -71,6 +71,26 @@ export type ComputerAI = {
     };
     heatMapCells: HeatMapCell[];
     targetStack: BoardCell['cellNum'][];
+    huntingMode: 'hunting' | 'targeting';
+    currentTarget: {
+        hits: BoardCell['cellNum'][];
+        direction: 'horizontal' | 'vertical' | 'unknown';
+        potentialTargets: BoardCell['cellNum'][];
+        possibleShipLengths: number[];
+        suspectedMultipleShips: boolean;
+    } | null;
+    multipleTargets: Array<{
+        hits: BoardCell['cellNum'][];
+        direction: 'horizontal' | 'vertical' | 'unknown';
+        potentialTargets: BoardCell['cellNum'][];
+        possibleShipLengths: number[];
+    }>;
+    shipConstraints: {
+        remainingShips: { [key: string]: number };
+        impossibleCells: BoardCell['cellNum'][];
+        certainCells: BoardCell['cellNum'][];
+    };
+    difficulty: 'easy' | 'medium' | 'hard';
 };
 
 export type HeatMapCell = {

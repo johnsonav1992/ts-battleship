@@ -12,6 +12,7 @@ import {
     , updateCells
     , updateCellsWithMissOnly
     , updateShipsWithHit
+    , updateCellsWithNewSunkenExplosions
 } from '../utils/gameUtils';
 import { initState } from './jotai';
 
@@ -29,6 +30,10 @@ export const reducer: ReducerFn = ( state, action ) => {
         case 'SET_GAME_MODE': return {
             ...state
             , gameMode: action.payload
+            , computerAI: {
+                ...state.computerAI
+                , difficulty: action.payload
+            }
         };
         case 'SET_MODAL_OPEN': return {
             ...state
@@ -60,47 +65,12 @@ export const reducer: ReducerFn = ( state, action ) => {
             );
         }
         case 'COMPUTER_AI_SHOT': {
-            const heatMap = state.computerAI.heatMapCells;
-            const allUnattemptedCells = heatMap.filter( cell => !state.computerAttemptedCells.includes( cell.cellNum ) );
-            const maxHeatValueOfRemainingCells = Math.max( ...allUnattemptedCells.map( obj => obj.heatValue ) );
-            const allCellsWithHighestHeatValue = heatMap.filter( cell => cell.heatValue === maxHeatValueOfRemainingCells );
-            const randomIndex = Math.floor( Math.random() * allCellsWithHighestHeatValue.length );
-            const selectedCell = allCellsWithHighestHeatValue[ randomIndex ].cellNum;
+            const attemptedCell = findNextTargetedCell( state );
 
-            // Very first shot
-            if ( state.computerAttemptedCells.length === 0 ) {
-                const attemptedCell = selectedCell;
-                const shipHit = findHit( playerCells, attemptedCell );
-
-                if ( !shipHit ) {
-                    return {
-                        ...state
-                        , playerCells: updateCellsWithMissOnly( playerCells, attemptedCell )
-                        , computerAttemptedCells: [ ...state.computerAttemptedCells, attemptedCell ]
-                        , alertText: ''
-                        , currentTurn: 'player'
-                        , computerAI: updateComputerAI( state, attemptedCell, !!shipHit )
-                    };
-                }
-
-                const shipLabel = shipHit?.shipImg?.label.split( '-' );
-                const shipId = shipLabel?.[ 0 ];
-
-                const updatedPlayerCells = updateCells( playerCells, attemptedCell, shipId );
-                const updatedPlayerShips = updateShipsWithHit( playerShips, shipId );
-
-                return {
-                    ...state
-                    , playerCells: updatedPlayerCells
-                    , playerShips: updatedPlayerShips
-                    , computerAttemptedCells: [ ...state.computerAttemptedCells, attemptedCell ]
-                    , currentTurn: 'player'
-                    , computerAI: updateComputerAI( state, attemptedCell, !!shipHit )
-                };
+            if (!attemptedCell) {
+                return state;
             }
 
-            const isTargeting = state.computerAI.targetStack.length > 0;
-            const attemptedCell = isTargeting ? findNextTargetedCell( state ) : selectedCell;
             const shipHit = findHit( playerCells, attemptedCell );
 
             if ( !shipHit ) {
@@ -110,7 +80,7 @@ export const reducer: ReducerFn = ( state, action ) => {
                     , computerAttemptedCells: [ ...state.computerAttemptedCells, attemptedCell ]
                     , alertText: ''
                     , currentTurn: 'player'
-                    , computerAI: updateComputerAI( state, attemptedCell, !!shipHit )
+                    , computerAI: updateComputerAI( state, attemptedCell, false )
                 };
             }
 
@@ -121,16 +91,17 @@ export const reducer: ReducerFn = ( state, action ) => {
             const updatedPlayerShips = updateShipsWithHit( playerShips, shipId );
 
             const newSunkShip = updatedPlayerShips.find( ship => ship.isSunk && ship.id === shipId );
+            const updatedPlayerCellsWithSunkShip = updateCellsWithNewSunkenExplosions( updatedPlayerCells, newSunkShip );
             const isGameOver = updatedPlayerShips.every( ship => ship.isSunk );
 
             return {
                 ...state
-                , playerCells: updatedPlayerCells
+                , playerCells: updatedPlayerCellsWithSunkShip || updatedPlayerCells
                 , playerShips: updatedPlayerShips
                 , computerAttemptedCells: [ ...state.computerAttemptedCells, attemptedCell ]
                 , currentTurn: 'player'
                 , alertText: newSunkShip ? `The computer sunk your ${ newSunkShip.id }!` : ''
-                , computerAI: updateComputerAI( state, attemptedCell, !!shipHit )
+                , computerAI: updateComputerAI( state, attemptedCell, true, !!newSunkShip )
                 , isGameOver
                 , winner: isGameOver ? 'computer' : ''
             };
