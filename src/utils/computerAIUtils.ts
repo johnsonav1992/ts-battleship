@@ -1,8 +1,8 @@
 import {
-    BoardCell
-    , ComputerAI
-    , GameState
-    , HeatMapCell
+    BoardCell,
+    ComputerAI,
+    GameState,
+    HeatMapCell
 } from '../types/types';
 
 export const STARTING_HIGH_PROBABILITY = 3;
@@ -13,85 +13,83 @@ export const IS_SUNK_PROBABILITY = -1;
 export const IS_HIT_PROBABILITY = 5;
 export const IS_MISS_PROBABILITY = 0;
 
-export const isInCenterGridOfBoard = ( cellNum: BoardCell['cellNum'] ) => {
+export const isInCenterGridOfBoard = (cellNum: BoardCell['cellNum']) => {
     const boardSize = 10;
-    const center = Math.floor( boardSize / 2 );
-    const centerStart = center - 3;
-    const centerEnd = center + 2;
+    const centerPoint = Math.floor(boardSize / 2);
+    const centerStart = centerPoint - 3;
+    const centerEnd = centerPoint + 2;
 
-    const row = Math.floor( ( cellNum - 1 ) / boardSize );
-    const col = ( cellNum - 1 ) % boardSize;
+    const row = Math.floor((cellNum - 1) / boardSize);
+    const col = (cellNum - 1) % boardSize;
 
-    return (
-        row >= centerStart
-        && row <= centerEnd
-        && col >= centerStart
-        && col <= centerEnd
-    );
+    return row >= centerStart && row <= centerEnd && col >= centerStart && col <= centerEnd;
 };
 
-export const isEvenCell = ( cellNum: BoardCell['cellNum'] ) => cellNum % 2 === 0;
+export const isEvenCell = (cellNum: BoardCell['cellNum']) => cellNum % 2 === 0;
 
-const canShipFitHorizontally = (cellNum: BoardCell['cellNum'], shipLength: number): boolean => {
+const canShipFitHorizontally = (cellNum: BoardCell['cellNum'], shipLength: number) => {
     const col = ((cellNum - 1) % 10) + 1;
-
-    // Check if ship extends beyond right edge
-    if (col + shipLength - 1 > 10) return false;
-
-    return true;
+    return col + shipLength - 1 <= 10;
 };
 
-const canShipFitVertically = (cellNum: BoardCell['cellNum'], shipLength: number): boolean => {
+const canShipFitVertically = (cellNum: BoardCell['cellNum'], shipLength: number) => {
     const row = Math.ceil(cellNum / 10);
-
-    // Check if ship extends beyond bottom edge
-    if (row + shipLength - 1 > 10) return false;
-
-    return true;
+    return row + shipLength - 1 <= 10;
 };
 
 export const buildStartingHeatMap = () => {
-    const shipLengths = [2, 3, 3, 4, 5]; // destroyer, submarine, cruiser, battleship, carrier
-    const heatMap = Array(100).fill(0);
+    const standardShipLengths = [2, 3, 3, 4, 5];
+    const probabilityMap = Array(100).fill(0);
 
-    // Calculate probability based on how many ships can fit through each cell
     for (let cellNum = 1; cellNum <= 100; cellNum++) {
-        let probability = 0;
+        let shipPlacementCount = 0;
 
-        for (const shipLength of shipLengths) {
-            // Count horizontal placements that would include this cell
-            for (let startPos = Math.max(1, cellNum - shipLength + 1); startPos <= cellNum; startPos++) {
-                if (canShipFitHorizontally(startPos, shipLength) && startPos + shipLength - 1 >= cellNum) {
-                    probability += 1;
-                }
-            }
-
-            // Count vertical placements that would include this cell
-            for (let startPos = Math.max(1, cellNum - (shipLength - 1) * 10); startPos <= cellNum; startPos += 10) {
-                if (canShipFitVertically(startPos, shipLength) && startPos + (shipLength - 1) * 10 >= cellNum) {
-                    probability += 1;
-                }
-            }
+        for (const shipLength of standardShipLengths) {
+            shipPlacementCount += countHorizontalPlacementsIncluding(cellNum, shipLength);
+            shipPlacementCount += countVerticalPlacementsIncluding(cellNum, shipLength);
         }
 
-        // Add slight center bias but much less pronounced
-        const row = Math.ceil(cellNum / 10);
-        const col = ((cellNum - 1) % 10) + 1;
-        const distanceFromCenter = Math.abs(row - 5.5) + Math.abs(col - 5.5);
-        const centerBonus = Math.max(0, 4 - distanceFromCenter) * 0.1;
-
-        heatMap[cellNum - 1] = probability + centerBonus;
+        const centerBias = calculateCenterBias(cellNum);
+        probabilityMap[cellNum - 1] = shipPlacementCount + centerBias;
     }
 
-    // Normalize to a reasonable range
-    const maxHeat = Math.max(...heatMap);
-    const minHeat = Math.min(...heatMap);
-    const range = maxHeat - minHeat;
+    return normalizeHeatMap(probabilityMap);
+};
+
+const countHorizontalPlacementsIncluding = (cellNum: number, shipLength: number) => {
+    const startPositions = Array.from(
+        {length: shipLength},
+        (_, i) => cellNum - i
+    ).filter(pos => pos >= 1 && canShipFitHorizontally(pos, shipLength) && pos + shipLength - 1 >= cellNum);
+
+    return startPositions.length;
+};
+
+const countVerticalPlacementsIncluding = (cellNum: number, shipLength: number) => {
+    const startPositions = Array.from(
+        {length: shipLength},
+        (_, i) => cellNum - (i * 10)
+    ).filter(pos => pos >= 1 && canShipFitVertically(pos, shipLength) && pos + (shipLength - 1) * 10 >= cellNum);
+
+    return startPositions.length;
+};
+
+const calculateCenterBias = (cellNum: number) => {
+    const row = Math.ceil(cellNum / 10);
+    const col = ((cellNum - 1) % 10) + 1;
+    const distanceFromCenter = Math.abs(row - 5.5) + Math.abs(col - 5.5);
+    return Math.max(0, 4 - distanceFromCenter) * 0.1;
+};
+
+const normalizeHeatMap = (probabilityMap: number[]): HeatMapCell[] => {
+    const maxProbability = Math.max(...probabilityMap);
+    const minProbability = Math.min(...probabilityMap);
+    const probabilityRange = maxProbability - minProbability;
 
     return Array(100).fill(null).map((_, idx) => {
         const cellNum = idx + 1;
-        const normalizedHeat = range > 0
-            ? 1 + ((heatMap[idx] - minHeat) / range) * 2 // Range from 1-3
+        const normalizedHeat = probabilityRange > 0
+            ? 1 + ((probabilityMap[idx] - minProbability) / probabilityRange) * 2
             : 2;
 
         return {
@@ -101,111 +99,131 @@ export const buildStartingHeatMap = () => {
     });
 };
 
-export const updateComputerAI = ( state: GameState, attemptedCell: BoardCell['cellNum'], wasHit: boolean, shipSunk?: boolean ): ComputerAI => {
+export const updateComputerAI = (state: GameState, attemptedCell: BoardCell['cellNum'], wasHit: boolean, shipSunk?: boolean): ComputerAI => {
     const currentAI = state.computerAI;
 
     if (!wasHit) {
-        // If we missed but we're still targeting a ship, stay in targeting mode
-        if (currentAI.currentTarget && currentAI.currentTarget.hits.length > 0) {
-            const updatedTargets = currentAI.currentTarget.potentialTargets.filter(
-                target => target !== attemptedCell && !state.computerAttemptedCells.includes(target)
-            );
-
-            return {
-                ...currentAI,
-                lastShot: { cellNum: attemptedCell, wasHit: false },
-                currentTarget: {
-                    ...currentAI.currentTarget,
-                    potentialTargets: updatedTargets
-                },
-                targetStack: updatedTargets,
-                heatMapCells: currentAI.heatMapCells.map(cell =>
-                    cell.cellNum === attemptedCell
-                        ? { ...cell, heatValue: IS_MISS_PROBABILITY }
-                        : cell
-                )
-            };
-        }
-
-        return {
-            ...currentAI,
-            lastShot: { cellNum: attemptedCell, wasHit: false },
-            heatMapCells: currentAI.heatMapCells.map(cell =>
-                cell.cellNum === attemptedCell
-                    ? { ...cell, heatValue: IS_MISS_PROBABILITY }
-                    : cell
-            )
-        };
+        return handleMissedShot(currentAI, attemptedCell, state.computerAttemptedCells);
     }
 
-    const newHits = currentAI.currentTarget
+    const allHits = currentAI.currentTarget
         ? [...currentAI.currentTarget.hits, attemptedCell]
         : [attemptedCell];
 
     if (shipSunk) {
-        // Get the sunk ship type from the player's ships
-        const sunkShip = state.playerShips.find(ship => ship.isSunk &&
-            state.playerCells.some(cell =>
-                cell.cellNum === attemptedCell &&
-                cell.shipImg?.label.startsWith(ship.id)
-            )
-        );
+        return handleSunkShip(currentAI, attemptedCell, allHits, state);
+    }
 
-        const updatedShipConstraints = sunkShip ? {
-            ...currentAI.shipConstraints,
-            remainingShips: {
-                ...currentAI.shipConstraints.remainingShips,
-                [sunkShip.id]: Math.max(0, currentAI.shipConstraints.remainingShips[sunkShip.id] - 1)
-            }
-        } : currentAI.shipConstraints;
+    return handleSuccessfulHit(currentAI, attemptedCell, allHits, state);
+};
+
+const handleMissedShot = (currentAI: ComputerAI, attemptedCell: number, computerAttemptedCells: number[]): ComputerAI => {
+    const updatedHeatMap = updateHeatMapForMiss(currentAI.heatMapCells, attemptedCell);
+
+    if (currentAI.currentTarget && currentAI.currentTarget.hits.length > 0) {
+        const remainingTargets = currentAI.currentTarget.potentialTargets.filter(
+            target => target !== attemptedCell && !computerAttemptedCells.includes(target)
+        );
 
         return {
             ...currentAI,
-            lastShot: { cellNum: attemptedCell, wasHit: true },
-            huntingMode: 'hunting',
-            currentTarget: null,
-            targetStack: [],
-            shipConstraints: updatedShipConstraints,
-            heatMapCells: updateHeatMapAfterSink(currentAI.heatMapCells, newHits, attemptedCell)
+            lastShot: { cellNum: attemptedCell, wasHit: false },
+            currentTarget: { ...currentAI.currentTarget, potentialTargets: remainingTargets },
+            targetStack: remainingTargets,
+            heatMapCells: updatedHeatMap
         };
     }
 
-    const direction = determineShipDirection(newHits);
-    const potentialTargets = generateSmartTargets(newHits, direction, [...state.computerAttemptedCells, attemptedCell]);
+    return {
+        ...currentAI,
+        lastShot: { cellNum: attemptedCell, wasHit: false },
+        heatMapCells: updatedHeatMap
+    };
+};
+
+const handleSunkShip = (currentAI: ComputerAI, attemptedCell: number, allHits: number[], state: GameState): ComputerAI => {
+    const sunkShip = findSunkShip(state, attemptedCell);
+    const updatedConstraints = updateShipConstraints(currentAI.shipConstraints, sunkShip);
 
     return {
         ...currentAI,
         lastShot: { cellNum: attemptedCell, wasHit: true },
-        huntingMode: 'targeting',
-        currentTarget: {
-            hits: newHits,
-            direction,
-            potentialTargets,
-            possibleShipLengths: calculatePossibleShipLengths(newHits, state),
-            suspectedMultipleShips: detectMultipleShips(newHits, direction)
-        },
-        targetStack: potentialTargets,
-        heatMapCells: currentAI.heatMapCells.map(cell =>
-            cell.cellNum === attemptedCell
-                ? { ...cell, heatValue: IS_HIT_PROBABILITY }
-                : cell
-        )
+        huntingMode: 'hunting' as const,
+        currentTarget: null,
+        targetStack: [],
+        shipConstraints: updatedConstraints,
+        heatMapCells: updateHeatMapAfterSink(currentAI.heatMapCells, allHits, attemptedCell)
     };
 };
 
-export const isSurroundingHitCell = ( cellNum: BoardCell['cellNum'], attemptedCell: BoardCell['cellNum'] ) => {
-    const attemptedRow = Math.ceil( attemptedCell / 10 );
-    const attemptedColumn = ( attemptedCell - 1 ) % 10 + 1;
+const handleSuccessfulHit = (currentAI: ComputerAI, attemptedCell: number, allHits: number[], state: GameState): ComputerAI => {
+    const shipDirection = determineShipDirection(allHits);
+    const nextTargets = generateSmartTargets(allHits, shipDirection, [...state.computerAttemptedCells, attemptedCell]);
 
-    const cellRow = Math.ceil( cellNum / 10 );
-    const cellColumn = ( cellNum - 1 ) % 10 + 1;
+    return {
+        ...currentAI,
+        lastShot: { cellNum: attemptedCell, wasHit: true },
+        huntingMode: 'targeting' as const,
+        currentTarget: {
+            hits: allHits,
+            direction: shipDirection,
+            potentialTargets: nextTargets,
+            possibleShipLengths: calculatePossibleShipLengths(allHits, state),
+            suspectedMultipleShips: detectMultipleShips(allHits, shipDirection)
+        },
+        targetStack: nextTargets,
+        heatMapCells: updateHeatMapForHit(currentAI.heatMapCells, attemptedCell)
+    };
+};
 
-    const isWithinHorizontal = Math.abs( attemptedColumn - cellColumn ) === 1 && attemptedRow === cellRow;
-    const isWithinVertical = Math.abs( attemptedRow - cellRow ) === 1 && attemptedColumn === cellColumn;
+const findSunkShip = (state: GameState, attemptedCell: number) => {
+    return state.playerShips.find(ship =>
+        ship.isSunk && state.playerCells.some(cell =>
+            cell.cellNum === attemptedCell && cell.shipImg?.label.startsWith(ship.id)
+        )
+    );
+};
 
+const updateShipConstraints = (constraints: ComputerAI['shipConstraints'], sunkShip: any) => {
+    if (!sunkShip) return constraints;
+
+    return {
+        ...constraints,
+        remainingShips: {
+            ...constraints.remainingShips,
+            [sunkShip.id]: Math.max(0, constraints.remainingShips[sunkShip.id] - 1)
+        }
+    };
+};
+
+const updateHeatMapForMiss = (heatMapCells: HeatMapCell[], attemptedCell: number) => {
+    return heatMapCells.map(cell =>
+        cell.cellNum === attemptedCell
+            ? { ...cell, heatValue: IS_MISS_PROBABILITY }
+            : cell
+    );
+};
+
+const updateHeatMapForHit = (heatMapCells: HeatMapCell[], attemptedCell: number) => {
+    return heatMapCells.map(cell =>
+        cell.cellNum === attemptedCell
+            ? { ...cell, heatValue: IS_HIT_PROBABILITY }
+            : cell
+    );
+};
+
+export const isSurroundingHitCell = (cellNum: BoardCell['cellNum'], attemptedCell: BoardCell['cellNum']) => {
+    const attemptedRow = Math.ceil(attemptedCell / 10);
+    const attemptedColumn = (attemptedCell - 1) % 10 + 1;
+
+    const cellRow = Math.ceil(cellNum / 10);
+    const cellColumn = (cellNum - 1) % 10 + 1;
+
+    const isHorizontallyAdjacent = Math.abs(attemptedColumn - cellColumn) === 1 && attemptedRow === cellRow;
+    const isVerticallyAdjacent = Math.abs(attemptedRow - cellRow) === 1 && attemptedColumn === cellColumn;
     const isWithinBounds = cellNum >= 1 && cellNum <= 100;
 
-    return isWithinBounds && ( isWithinHorizontal || isWithinVertical );
+    return isWithinBounds && (isHorizontallyAdjacent || isVerticallyAdjacent);
 };
 
 export const findNextTargetedCell = ( state: GameState ): BoardCell['cellNum'] | null => {
