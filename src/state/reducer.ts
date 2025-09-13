@@ -1,9 +1,7 @@
 // Types
 import { ReducerFn } from '../types/types';
-import {
-    findNextTargetedCell
-    , updateComputerAI
-} from '../utils/computerAIUtils';
+import { findNextTargetedCell } from '../utils/ai/aiController';
+import { updateComputerAI } from '../utils/ai/generalAIUtils';
 
 // Utils
 import {

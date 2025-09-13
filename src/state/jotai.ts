@@ -14,7 +14,7 @@ import {
 // Utils
 import { buildEmptyCells } from '../utils/buildBoardCells';
 import { defaultShips } from '../utils/ships';
-import { buildStartingHeatMap } from '../utils/computerAIUtils';
+import { buildStartingHeatMap } from '../utils/ai/generalAIUtils';
 
 export const initState: GameState = {
     playerCells: buildEmptyCells()
