@@ -50,7 +50,8 @@ const countShipPlacementsIncluding = (
     hitCells: BoardCell['cellNum'][]
 ): number => {
     let count = 0;
-    const HIT_BONUS_MULTIPLIER = 50;
+    const BASE_HIT_BONUS = 50;
+    const CONSECUTIVE_BONUS = 100;
 
     for ( let startOffset = 0; startOffset < shipLength; startOffset++ ) {
         const horizontalStart = cellNum - startOffset;
@@ -61,7 +62,8 @@ const countShipPlacementsIncluding = (
             const hitIntersections = shipCells.filter( cell => hitCells.includes( cell ) );
 
             if ( hitIntersections.length > 0 ) {
-                count += HIT_BONUS_MULTIPLIER;
+                const consecutiveScore = calculateConsecutiveBonus( hitIntersections, 'horizontal' );
+                count += BASE_HIT_BONUS * hitIntersections.length + consecutiveScore * CONSECUTIVE_BONUS;
             } else {
                 count += 1;
             }
@@ -72,7 +74,8 @@ const countShipPlacementsIncluding = (
             const hitIntersections = shipCells.filter( cell => hitCells.includes( cell ) );
 
             if ( hitIntersections.length > 0 ) {
-                count += HIT_BONUS_MULTIPLIER;
+                const consecutiveScore = calculateConsecutiveBonus( hitIntersections, 'vertical' );
+                count += BASE_HIT_BONUS * hitIntersections.length + consecutiveScore * CONSECUTIVE_BONUS;
             } else {
                 count += 1;
             }
@@ -80,6 +83,29 @@ const countShipPlacementsIncluding = (
     }
 
     return count;
+};
+
+const calculateConsecutiveBonus = ( hitCells: BoardCell['cellNum'][], direction: 'horizontal' | 'vertical' ): number => {
+    if ( hitCells.length < 2 ) return 0;
+
+    const sortedHits = [ ...hitCells ].sort( ( a, b ) => a - b );
+    let maxConsecutive = 0;
+    let currentConsecutive = 1;
+
+    for ( let i = 1; i < sortedHits.length; i++ ) {
+        const expectedDiff = direction === 'horizontal' ? 1 : 10;
+        const actualDiff = sortedHits[ i ] - sortedHits[ i - 1 ];
+
+        if ( actualDiff === expectedDiff ) {
+            currentConsecutive++;
+        } else {
+            maxConsecutive = Math.max( maxConsecutive, currentConsecutive );
+            currentConsecutive = 1;
+        }
+    }
+
+    maxConsecutive = Math.max( maxConsecutive, currentConsecutive );
+    return maxConsecutive >= 2 ? Math.pow( maxConsecutive, 2 ) : 0;
 };
 
 const canPlaceShipHorizontally = (

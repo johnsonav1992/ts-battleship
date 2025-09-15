@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 
 // MUI
 import {
-    Button
-    , Card
+    Card
     , Grid
     , Stack
+    , Switch
     , Typography
 } from '@mui/joy';
 import { SxProps } from '@mui/joy/styles/types';
@@ -64,18 +64,35 @@ const GameScreen = () => {
     return (
         <>
             <GameTitle />
-            <Button
-                size='sm'
-                variant={ showHeatMap ? 'solid' : 'outlined' }
-                sx={ {
-                    mb: 2
-                    , alignSelf: 'center'
-                    , opacity: 0.8
-                } }
-                onClick={ () => dispatch( { type: 'TOGGLE_HEAT_MAP' } ) }
-            >
-                { showHeatMap ? 'Hide' : 'Show' } AI Heatmap
-            </Button>
+            {
+                ( gameMode === 'medium' || gameMode === 'hard' ) && (
+                    <Stack
+                        direction='row'
+                        alignItems='center'
+                        spacing={ 1 }
+                        sx={ {
+                            position: 'fixed',
+                            bottom: 20,
+                            right: 20,
+                            backgroundColor: 'rgba(0,0,0,0.7)',
+                            padding: 1,
+                            borderRadius: 'sm',
+                            zIndex: 1000
+                        } }
+                    >
+                        <Typography 
+                            level='body-sm' 
+                            sx={ { color: 'white' } }
+                        >
+                            Show Heatmap
+                        </Typography>
+                        <Switch
+                            checked={ showHeatMap }
+                            onChange={ () => dispatch( { type: 'TOGGLE_HEAT_MAP' } ) }
+                        />
+                    </Stack>
+                )
+            }
             <Stack>
                 <Typography
                     level='body-xs'

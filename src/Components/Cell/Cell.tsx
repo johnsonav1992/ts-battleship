@@ -18,6 +18,7 @@ import sunkExplosion from '../../assets/sunk-explosion.png';
 // State
 import { useBattleShipState } from '../../state/jotai';
 import { buildPlayerHeatMap } from '../../utils/ai/playerHeatMap';
+import { Theme } from '@mui/system';
 
 interface Props {
     cell: BoardCell;
@@ -63,6 +64,37 @@ const Cell = (
         };
     };
 
+    const getHoverStyle = ( cellNum: number ) => {
+        if ( !showHeatMap || isPlayer ) {
+            // Normal hover when heatmap is off
+            return {
+                '&:hover': {
+                    cursor: `url(${ crosshair }) 10 10, auto`
+                    , backgroundColor: ( theme: Theme ) => theme.palette.primary[ 200 ]
+                }
+            };
+        }
+
+        const playerHeatMap = buildPlayerHeatMap( computerCells, computerShips, playerAttemptedCells );
+        const heatCell = playerHeatMap.find( cell => cell.cellNum === cellNum );
+        const heatValue = heatCell ? heatCell.heatValue : 0;
+
+        const maxHeat = Math.max( ...playerHeatMap.map( c => c.heatValue ) );
+        const normalizedHeat = maxHeat > 0 ? heatValue / maxHeat : 0;
+
+        const intensity = Math.min( normalizedHeat * 0.7, 0.7 );
+        const hue = 120 - ( normalizedHeat * 120 );
+
+        const hoverIntensity = Math.min( intensity + 0.35, 1.0 );
+
+        return {
+            '&:hover': {
+                cursor: `url(${ crosshair }) 10 10, auto`
+                , backgroundColor: `hsla(${ hue }, 100%, 70%, ${ hoverIntensity })`
+            }
+        };
+    };
+
     const calcBorderRadius = ( cellNum: number ) => {
         switch ( cellNum ) {
             case 1:
@@ -98,15 +130,13 @@ const Cell = (
                 , aspectRatio: 1
                 , ...calcBorderRadius( cellNum )
                 , ...getPlayerHeatMapStyle( cellNum )
-                , '&:hover': {
-                    cursor: `url(${ crosshair }) 10 10, auto`
-                    , backgroundColor: theme => theme.palette.primary[ 200 ]
-                }
+                , ...getHoverStyle( cellNum )
                 , pointerEvents: isPlayer
                     ? 'none'
                     : cellHasBeenAttempted || currentTurn === 'computer'
                         ? 'none'
                         : 'auto'
+                , overflow: 'hidden'
             } }
             onClick={ handleCellClick }
         >
@@ -124,6 +154,9 @@ const Cell = (
                                 : orientation === 'horizontal'
                                     ? `rotate(${ direction === 'left' ? -180 : 0 }deg)`
                                     : 'none'
+                            , position: 'relative'
+                            , zIndex: 5
+                            , filter: 'drop-shadow(0 0 0 rgba(0,0,0,0.8)) drop-shadow(0 1px 3px rgba(0,0,0,0.4))'
                         } }
                     />
                 )
