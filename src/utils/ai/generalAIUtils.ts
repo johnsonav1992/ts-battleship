@@ -5,27 +5,7 @@ import {
     , HeatMapCell
 } from '../../types/types';
 
-export const STARTING_HIGH_PROBABILITY = 3;
-export const STARTING_MID_PROBABILITY = 2;
-export const STARTING_LOW_PROBABILITY = 1;
-export const SURROUNDING_HIT_PROBABILITY = 10;
-export const IS_SUNK_PROBABILITY = -1;
-export const IS_HIT_PROBABILITY = 5;
 export const IS_MISS_PROBABILITY = 0;
-
-export const isInCenterGridOfBoard = ( cellNum: BoardCell['cellNum'] ) => {
-    const boardSize = 10;
-    const centerPoint = Math.floor( boardSize / 2 );
-    const centerStart = centerPoint - 3;
-    const centerEnd = centerPoint + 2;
-
-    const row = Math.floor( ( cellNum - 1 ) / boardSize );
-    const col = ( cellNum - 1 ) % boardSize;
-
-    return row >= centerStart && row <= centerEnd && col >= centerStart && col <= centerEnd;
-};
-
-export const isEvenCell = ( cellNum: BoardCell['cellNum'] ) => cellNum % 2 === 0;
 
 export const canShipFitHorizontally = ( cellNum: BoardCell['cellNum'], shipLength: number ) => {
     const col = ( ( cellNum - 1 ) % 10 ) + 1;
@@ -35,6 +15,134 @@ export const canShipFitHorizontally = ( cellNum: BoardCell['cellNum'], shipLengt
 export const canShipFitVertically = ( cellNum: BoardCell['cellNum'], shipLength: number ) => {
     const row = Math.ceil( cellNum / 10 );
     return row + shipLength - 1 <= 10;
+};
+
+export const buildDynamicHeatMap = (
+    attemptedCells: BoardCell['cellNum'][],
+    hitCells: BoardCell['cellNum'][],
+    remainingShips: { [key: string]: number }
+) => {
+    const shipLengths = Object.entries( remainingShips )
+        .filter( ( [ , count ] ) => count > 0 )
+        .flatMap( ( [ ship, count ] ) => Array( count ).fill( getShipLength( ship ) ) );
+
+    if ( shipLengths.length === 0 ) {
+        return Array( 100 ).fill( 0 ).map( ( _, idx ) => ( {
+            cellNum: idx + 1
+            , heatValue: 0
+        } ) );
+    }
+
+    const probabilityMap = Array( 100 ).fill( 0 );
+
+    for ( const shipLength of shipLengths ) {
+        for ( let cellNum = 1; cellNum <= 100; cellNum++ ) {
+            if ( attemptedCells.includes( cellNum ) ) continue;
+
+            probabilityMap[ cellNum - 1 ] += countShipPlacementsIncluding(
+                cellNum,
+                shipLength,
+                attemptedCells,
+                hitCells
+            );
+        }
+    }
+
+    return probabilityMap.map( ( heatValue, idx ) => ( {
+        cellNum: idx + 1
+        , heatValue: Math.max( heatValue, 0.1 )
+    } ) );
+};
+
+const countShipPlacementsIncluding = (
+    cellNum: BoardCell['cellNum'],
+    shipLength: number,
+    attemptedCells: BoardCell['cellNum'][],
+    hitCells: BoardCell['cellNum'][]
+): number => {
+    let count = 0;
+    const HIT_BONUS_MULTIPLIER = 50;
+
+    for ( let startOffset = 0; startOffset < shipLength; startOffset++ ) {
+        const horizontalStart = cellNum - startOffset;
+        const verticalStart = cellNum - ( startOffset * 10 );
+
+        if ( canPlaceShipHorizontally( horizontalStart, shipLength, attemptedCells, hitCells ) ) {
+            const shipCells = Array.from( { length: shipLength }, ( _, i ) => horizontalStart + i );
+            const hitIntersections = shipCells.filter( cell => hitCells.includes( cell ) );
+
+            if ( hitIntersections.length > 0 ) {
+                count += HIT_BONUS_MULTIPLIER;
+            } else {
+                count += 1;
+            }
+        }
+
+        if ( canPlaceShipVertically( verticalStart, shipLength, attemptedCells, hitCells ) ) {
+            const shipCells = Array.from( { length: shipLength }, ( _, i ) => verticalStart + ( i * 10 ) );
+            const hitIntersections = shipCells.filter( cell => hitCells.includes( cell ) );
+
+            if ( hitIntersections.length > 0 ) {
+                count += HIT_BONUS_MULTIPLIER;
+            } else {
+                count += 1;
+            }
+        }
+    }
+
+    return count;
+};
+
+const canPlaceShipHorizontally = (
+    startCell: BoardCell['cellNum'],
+    shipLength: number,
+    attemptedCells: BoardCell['cellNum'][],
+    hitCells: BoardCell['cellNum'][]
+): boolean => {
+    if ( startCell < 1 ) return false;
+
+    const startRow = Math.ceil( startCell / 10 );
+    const startCol = ( ( startCell - 1 ) % 10 ) + 1;
+
+    if ( startCol + shipLength - 1 > 10 ) return false;
+
+    const shipCells = Array.from( { length: shipLength }, ( _, i ) => startCell + i );
+
+    return shipCells.every( cell => {
+        const cellRow = Math.ceil( cell / 10 );
+        if ( cellRow !== startRow ) return false;
+
+        if ( attemptedCells.includes( cell ) && !hitCells.includes( cell ) ) return false;
+
+        return true;
+    } );
+};
+
+const canPlaceShipVertically = (
+    startCell: BoardCell['cellNum'],
+    shipLength: number,
+    attemptedCells: BoardCell['cellNum'][],
+    hitCells: BoardCell['cellNum'][]
+): boolean => {
+    if ( startCell < 1 ) return false;
+
+    const startRow = Math.ceil( startCell / 10 );
+    const startCol = ( ( startCell - 1 ) % 10 ) + 1;
+
+    if ( startRow + shipLength - 1 > 10 ) return false;
+
+    const shipCells = Array.from( { length: shipLength }, ( _, i ) => startCell + ( i * 10 ) );
+
+    return shipCells.every( cell => {
+        if ( cell > 100 ) return false;
+
+        const cellCol = ( ( cell - 1 ) % 10 ) + 1;
+        if ( cellCol !== startCol ) return false;
+
+        if ( attemptedCells.includes( cell ) && !hitCells.includes( cell ) ) return false;
+
+        return true;
+    } );
 };
 
 export const buildStartingHeatMap = () => {
@@ -59,8 +167,23 @@ export const buildStartingHeatMap = () => {
 export const updateComputerAI = ( state: GameState, attemptedCell: BoardCell['cellNum'], wasHit: boolean, shipSunk?: boolean ): ComputerAI => {
     const currentAI = state.computerAI;
 
+    const hitCells = state.playerCells
+        .filter( cell => cell.status === 'hit' )
+        .map( cell => cell.cellNum );
+
+    const allHitCells = wasHit ? [ ...hitCells, attemptedCell ] : hitCells;
+
+    const updatedHeatMap = buildDynamicHeatMap(
+        [ ...state.computerAttemptedCells, attemptedCell ],
+        allHitCells,
+        currentAI.shipConstraints.remainingShips
+    );
+
     if ( !wasHit ) {
-        return handleMissedShot( currentAI, attemptedCell, state.computerAttemptedCells );
+        return {
+            ...handleMissedShot( currentAI, attemptedCell, state.computerAttemptedCells )
+            , heatMapCells: updatedHeatMap
+        };
     }
 
     const allHits = currentAI.currentTarget
@@ -68,10 +191,16 @@ export const updateComputerAI = ( state: GameState, attemptedCell: BoardCell['ce
         : [ attemptedCell ];
 
     if ( shipSunk ) {
-        return handleSunkShip( currentAI, attemptedCell, allHits, state );
+        return {
+            ...handleSunkShip( currentAI, attemptedCell, allHits, state )
+            , heatMapCells: updatedHeatMap
+        };
     }
 
-    return handleSuccessfulHit( currentAI, attemptedCell, allHits, state );
+    return {
+        ...handleSuccessfulHit( currentAI, attemptedCell, allHits, state )
+        , heatMapCells: updatedHeatMap
+    };
 };
 
 export const isSurroundingHitCell = ( cellNum: BoardCell['cellNum'], attemptedCell: BoardCell['cellNum'] ) => {
@@ -163,7 +292,7 @@ export const findBestHuntingTarget = (
         return fallbackCells[ Math.floor( Math.random() * fallbackCells.length ) ].cellNum;
     }
 
-    const hasAnyHits = heatMapCells.some( cell => cell.heatValue === IS_HIT_PROBABILITY );
+    const hasAnyHits = heatMapCells.some( cell => cell.heatValue > 50 );
     if ( !hasAnyHits ) {
         const parityFiltered = availableCells.filter( cell => {
             const row = Math.ceil( cell.cellNum / 10 );
@@ -172,30 +301,15 @@ export const findBestHuntingTarget = (
         } );
 
         if ( parityFiltered.length > 0 ) {
-            const totalWeight = parityFiltered.reduce( ( sum, cell ) => sum + Math.max( cell.heatValue, 0.1 ), 0 );
-            let randomWeight = Math.random() * totalWeight;
-
-            for ( const cell of parityFiltered ) {
-                randomWeight -= Math.max( cell.heatValue, 0.1 );
-                if ( randomWeight <= 0 ) {
-                    return cell.cellNum;
-                }
-            }
-            return parityFiltered[ 0 ].cellNum;
+            const maxHeatValue = Math.max( ...parityFiltered.map( cell => cell.heatValue ) );
+            const bestCells = parityFiltered.filter( cell => cell.heatValue === maxHeatValue );
+            return bestCells[ Math.floor( Math.random() * bestCells.length ) ].cellNum;
         }
     }
 
-    const totalWeight = availableCells.reduce( ( sum, cell ) => sum + Math.max( cell.heatValue, 0.1 ), 0 );
-    let randomWeight = Math.random() * totalWeight;
-
-    for ( const cell of availableCells ) {
-        randomWeight -= Math.max( cell.heatValue, 0.1 );
-        if ( randomWeight <= 0 ) {
-            return cell.cellNum;
-        }
-    }
-
-    return availableCells[ 0 ].cellNum;
+    const maxHeatValue = Math.max( ...availableCells.map( cell => cell.heatValue ) );
+    const bestCells = availableCells.filter( cell => cell.heatValue === maxHeatValue );
+    return bestCells[ Math.floor( Math.random() * bestCells.length ) ].cellNum;
 };
 
 export const findBestDirectionalTarget = (
@@ -266,12 +380,65 @@ const normalizeHeatMap = ( probabilityMap: number[] ): HeatMapCell[] => {
 };
 
 const handleMissedShot = ( currentAI: ComputerAI, attemptedCell: number, computerAttemptedCells: number[] ): ComputerAI => {
-    const updatedHeatMap = updateHeatMapForMiss( currentAI.heatMapCells, attemptedCell );
 
     if ( currentAI.currentTarget && currentAI.currentTarget.hits.length > 0 ) {
         const remainingTargets = currentAI.currentTarget.potentialTargets.filter(
             target => target !== attemptedCell && !computerAttemptedCells.includes( target )
         );
+
+        if ( currentAI.currentTarget.direction !== 'unknown' && currentAI.currentTarget.hits.length >= 2 ) {
+            const separation = detectShipSeparation(
+                currentAI.currentTarget.hits,
+                attemptedCell,
+                currentAI.currentTarget.direction
+            );
+
+            if ( separation ) {
+                const segment1Targets = generateSmartTargets(
+                    separation.segment1,
+                    currentAI.currentTarget.direction,
+                    [ ...computerAttemptedCells, attemptedCell ]
+                );
+                const segment2Targets = generateSmartTargets(
+                    separation.segment2,
+                    currentAI.currentTarget.direction,
+                    [ ...computerAttemptedCells, attemptedCell ]
+                );
+
+                const primarySegment = separation.segment1.length >= separation.segment2.length ? separation.segment1 : separation.segment2;
+                const secondarySegment = separation.segment1.length >= separation.segment2.length ? separation.segment2 : separation.segment1;
+                const primaryTargets = separation.segment1.length >= separation.segment2.length ? segment1Targets : segment2Targets;
+                const secondaryTargets = separation.segment1.length >= separation.segment2.length ? segment2Targets : segment1Targets;
+
+                return {
+                    ...currentAI
+                    , lastShot: {
+                        cellNum: attemptedCell
+                        , wasHit: false
+                    }
+                    , currentTarget: {
+                        hits: primarySegment
+                        , direction: currentAI.currentTarget.direction
+                        , potentialTargets: primaryTargets
+                        , possibleShipLengths: calculatePossibleShipLengths( primarySegment, {
+                            computerAttemptedCells: [ ...computerAttemptedCells, attemptedCell ]
+                        } as GameState )
+                        , suspectedMultipleShips: true
+                    }
+                    , multipleTargets: [
+                        ...currentAI.multipleTargets
+                        , {
+                            hits: secondarySegment
+                            , direction: currentAI.currentTarget.direction
+                            , potentialTargets: secondaryTargets
+                            , possibleShipLengths: calculatePossibleShipLengths( secondarySegment, {
+                                computerAttemptedCells: [ ...computerAttemptedCells, attemptedCell ]
+                            } as GameState )
+                        }
+                    ]
+                };
+            }
+        }
 
         return {
             ...currentAI
@@ -284,7 +451,6 @@ const handleMissedShot = ( currentAI: ComputerAI, attemptedCell: number, compute
                 , potentialTargets: remainingTargets
             }
             , targetStack: remainingTargets
-            , heatMapCells: updatedHeatMap
         };
     }
 
@@ -294,11 +460,13 @@ const handleMissedShot = ( currentAI: ComputerAI, attemptedCell: number, compute
             cellNum: attemptedCell
             , wasHit: false
         }
-        , heatMapCells: updatedHeatMap
+        , huntingMode: 'hunting' as const
+        , currentTarget: null
+        , targetStack: []
     };
 };
 
-const handleSunkShip = ( currentAI: ComputerAI, attemptedCell: number, allHits: number[], state: GameState ): ComputerAI => {
+const handleSunkShip = ( currentAI: ComputerAI, attemptedCell: number, _allHits: number[], state: GameState ): ComputerAI => {
     const sunkShip = findSunkShip( state, attemptedCell );
     const updatedConstraints = updateShipConstraints( currentAI.shipConstraints, sunkShip );
 
@@ -312,7 +480,6 @@ const handleSunkShip = ( currentAI: ComputerAI, attemptedCell: number, allHits: 
         , currentTarget: null
         , targetStack: []
         , shipConstraints: updatedConstraints
-        , heatMapCells: updateHeatMapAfterSink( currentAI.heatMapCells, allHits, attemptedCell )
     };
 };
 
@@ -335,7 +502,6 @@ const handleSuccessfulHit = ( currentAI: ComputerAI, attemptedCell: number, allH
             , suspectedMultipleShips: detectMultipleShips( allHits, shipDirection )
         }
         , targetStack: nextTargets
-        , heatMapCells: updateHeatMapForHit( currentAI.heatMapCells, attemptedCell )
     };
 };
 
@@ -359,61 +525,44 @@ const updateShipConstraints = ( constraints: ComputerAI['shipConstraints'], sunk
     };
 };
 
-const updateHeatMapForMiss = ( heatMapCells: HeatMapCell[], attemptedCell: number ) => {
-    return heatMapCells.map( cell =>
-        cell.cellNum === attemptedCell
-            ? {
-                ...cell
-                , heatValue: IS_MISS_PROBABILITY
-            }
-            : cell
-    );
-};
+export const detectShipSeparation = (
+    hits: BoardCell['cellNum'][],
+    missedCell: BoardCell['cellNum'],
+    direction: 'horizontal' | 'vertical'
+): { segment1: BoardCell['cellNum'][]; segment2: BoardCell['cellNum'][] } | null => {
+    const sortedHits = [ ...hits ].sort( ( a, b ) => a - b );
 
-const updateHeatMapForHit = ( heatMapCells: HeatMapCell[], attemptedCell: number ) => {
-    return heatMapCells.map( cell =>
-        cell.cellNum === attemptedCell
-            ? {
-                ...cell
-                , heatValue: IS_HIT_PROBABILITY
-            }
-            : cell
-    );
-};
+    if ( direction === 'horizontal' ) {
+        const missRow = Math.ceil( missedCell / 10 );
+        const hitRow = Math.ceil( sortedHits[ 0 ] / 10 );
+        if ( missRow !== hitRow ) return null;
 
-const updateHeatMapAfterSink = (
-    heatMapCells: HeatMapCell[],
-    sunkShipCells: BoardCell['cellNum'][],
-    lastHit: BoardCell['cellNum']
-): HeatMapCell[] => {
-    return heatMapCells.map( cell => {
-        if ( cell.cellNum === lastHit ) {
+        const segment1 = sortedHits.filter( hit => hit < missedCell );
+        const segment2 = sortedHits.filter( hit => hit > missedCell );
+
+        if ( segment1.length > 0 && segment2.length > 0 ) {
             return {
-                ...cell
-                , heatValue: IS_SUNK_PROBABILITY
+                segment1
+                , segment2
             };
         }
+    } else if ( direction === 'vertical' ) {
+        const missCol = ( ( missedCell - 1 ) % 10 ) + 1;
+        const hitCol = ( ( sortedHits[ 0 ] - 1 ) % 10 ) + 1;
+        if ( missCol !== hitCol ) return null;
 
-        if ( sunkShipCells.includes( cell.cellNum ) ) {
+        const segment1 = sortedHits.filter( hit => hit < missedCell );
+        const segment2 = sortedHits.filter( hit => hit > missedCell );
+
+        if ( segment1.length > 0 && segment2.length > 0 ) {
             return {
-                ...cell
-                , heatValue: IS_SUNK_PROBABILITY
+                segment1
+                , segment2
             };
         }
+    }
 
-        const isAdjacentToSunkShip = sunkShipCells.some( sunkCell =>
-            isSurroundingHitCell( cell.cellNum, sunkCell )
-        );
-
-        if ( isAdjacentToSunkShip ) {
-            return {
-                ...cell
-                , heatValue: Math.max( 0, cell.heatValue - 2 )
-            };
-        }
-
-        return cell;
-    } );
+    return null;
 };
 
 const getAdjacentCells = ( cellNum: BoardCell['cellNum'] ): BoardCell['cellNum'][] => {
@@ -456,13 +605,13 @@ const detectMultipleShips = ( hits: BoardCell['cellNum'][], direction: 'horizont
 
 const calculatePossibleShipLengths = ( hits: BoardCell['cellNum'][], state: GameState ): number[] => {
     const remainingShips = Object.entries( state.computerAI.shipConstraints.remainingShips )
-        .filter( ( [ _, count ] ) => count > 0 )
-        .map( ( [ ship, _ ] ) => getShipLength( ship ) );
+        .filter( ( [ , count ] ) => count > 0 )
+        .map( ( [ ship ] ) => getShipLength( ship ) );
 
     return remainingShips.filter( length => length >= hits.length );
 };
 
-const getShipLength = ( shipType: string ): number => {
+export const getShipLength = ( shipType: string ): number => {
     const lengths: { [key: string]: number } = {
         destroyer: 2
         , submarine: 3

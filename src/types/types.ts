@@ -59,6 +59,7 @@ export type GameState = {
     currentScreen: 'start' | 'game';
     gameMode: 'easy' | 'medium' | 'hard';
     isModalOpen: boolean;
+    showHeatMap: boolean;
     isGameOver: boolean;
     winner: 'player' | 'computer' | '';
     computerAI: ComputerAI;
@@ -107,6 +108,7 @@ export type ReducerAction =
     | { type: 'SET_SCREEN'; payload: GameState['currentScreen'] }
     | { type: 'SET_GAME_MODE'; payload: GameState['gameMode'] }
     | { type: 'SET_MODAL_OPEN'; payload: GameState['isModalOpen'] }
+    | { type: 'TOGGLE_HEAT_MAP' }
     | { type: 'SET_GAME_OVER'; payload: GameState['isGameOver'] }
     | { type: 'RESET_GAME' };
 

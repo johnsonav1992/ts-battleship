@@ -4,6 +4,7 @@ import {
     , HeatMapCell
 } from '../../types/types';
 import { findProbabilityBasedTarget } from './mediumAIUtils';
+import { getShipLength } from './generalAIUtils';
 
 export const findConstraintBasedTarget = ( state: GameState ): BoardCell['cellNum'] | null => {
     if ( state.computerAI.huntingMode === 'targeting' && state.computerAI.currentTarget ) {
@@ -69,7 +70,7 @@ export const adjustHeatMapForEndgame = (
 const findCertainCellByElimination = ( state: GameState ): BoardCell['cellNum'] | null => {
     const ai = state.computerAI;
     const remainingShips = Object.entries( ai.shipConstraints.remainingShips )
-        .filter( ( [ _, count ] ) => count > 0 );
+        .filter( ( [ , count ] ) => count > 0 );
 
     for ( const [ shipType, count ] of remainingShips ) {
         if ( count !== 1 ) continue;
@@ -93,8 +94,8 @@ const findCertainCellByElimination = ( state: GameState ): BoardCell['cellNum'] 
 const findOverlappingSquareTarget = ( state: GameState ): BoardCell['cellNum'] | null => {
     const ai = state.computerAI;
     const remainingShips = Object.entries( ai.shipConstraints.remainingShips )
-        .filter( ( [ _, count ] ) => count > 0 )
-        .map( ( [ ship, _ ] ) => ship );
+        .filter( ( [ , count ] ) => count > 0 )
+        .map( ( [ ship ] ) => ship );
 
     if ( remainingShips.length === 0 ) return null;
 
@@ -169,20 +170,8 @@ const isValidShipPlacement = (
     attemptedCells: BoardCell['cellNum'][],
     hitCells: BoardCell['cellNum'][]
 ): boolean => {
-    const hasOverlapWithMisses = shipCells.some( cell =>
+    return !shipCells.some( cell =>
         attemptedCells.includes( cell ) && !hitCells.includes( cell )
     );
 
-    return !hasOverlapWithMisses;
-};
-
-const getShipLength = ( shipType: string ): number => {
-    const lengths: { [key: string]: number } = {
-        destroyer: 2
-        , submarine: 3
-        , cruiser: 3
-        , battleship: 4
-        , carrier: 5
-    };
-    return lengths[ shipType ] || 2;
 };

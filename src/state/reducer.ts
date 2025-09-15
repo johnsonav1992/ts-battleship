@@ -37,6 +37,10 @@ export const reducer: ReducerFn = ( state, action ) => {
             ...state
             , isModalOpen: action.payload
         };
+        case 'TOGGLE_HEAT_MAP': return {
+            ...state
+            , showHeatMap: !state.showHeatMap
+        };
         case 'SET_CELLS': return {
             ...state
             , playerCells: action.payload.playerCells || state.playerCells
@@ -97,7 +101,7 @@ export const reducer: ReducerFn = ( state, action ) => {
                 , playerCells: updatedPlayerCellsWithSunkShip || updatedPlayerCells
                 , playerShips: updatedPlayerShips
                 , computerAttemptedCells: [ ...state.computerAttemptedCells, attemptedCell ]
-                , currentTurn: 'player'
+                , currentTurn: isGameOver ? 'computer' : 'player'
                 , alertText: newSunkShip ? `The computer sunk your ${ newSunkShip.id }!` : ''
                 , computerAI: updateComputerAI( state, attemptedCell, true, !!newSunkShip )
                 , isGameOver

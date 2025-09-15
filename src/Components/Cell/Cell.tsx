@@ -17,6 +17,7 @@ import sunkExplosion from '../../assets/sunk-explosion.png';
 
 // State
 import { useBattleShipState } from '../../state/jotai';
+import { buildPlayerHeatMap } from '../../utils/ai/playerHeatMap';
 
 interface Props {
     cell: BoardCell;
@@ -37,9 +38,30 @@ const Cell = (
     const [ {
         playerAttemptedCells
         , currentTurn
+        , showHeatMap
+        , computerCells
+        , computerShips
     }, dispatch ] = useBattleShipState();
 
     const cellHasBeenAttempted = playerAttemptedCells.includes( cellNum );
+
+    const getPlayerHeatMapStyle = ( cellNum: number ) => {
+        if ( !showHeatMap || isPlayer ) return {};
+
+        const playerHeatMap = buildPlayerHeatMap( computerCells, computerShips, playerAttemptedCells );
+        const heatCell = playerHeatMap.find( cell => cell.cellNum === cellNum );
+        const heatValue = heatCell ? heatCell.heatValue : 0;
+
+        const maxHeat = Math.max( ...playerHeatMap.map( c => c.heatValue ) );
+        const normalizedHeat = maxHeat > 0 ? heatValue / maxHeat : 0;
+
+        const intensity = Math.min( normalizedHeat * 0.7, 0.7 );
+        const hue = 120 - ( normalizedHeat * 120 );
+
+        return {
+            backgroundColor: `hsla(${ hue }, 100%, 50%, ${ intensity })`
+        };
+    };
 
     const calcBorderRadius = ( cellNum: number ) => {
         switch ( cellNum ) {
@@ -75,6 +97,7 @@ const Cell = (
                 , position: 'relative'
                 , aspectRatio: 1
                 , ...calcBorderRadius( cellNum )
+                , ...getPlayerHeatMapStyle( cellNum )
                 , '&:hover': {
                     cursor: `url(${ crosshair }) 10 10, auto`
                     , backgroundColor: theme => theme.palette.primary[ 200 ]

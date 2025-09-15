@@ -29,6 +29,7 @@ export const initState: GameState = {
     , currentScreen: 'start'
     , gameMode: 'easy'
     , isModalOpen: false
+    , showHeatMap: false
     , isGameOver: false
     , winner: ''
     , computerAI: {
@@ -42,7 +43,13 @@ export const initState: GameState = {
         , currentTarget: null
         , multipleTargets: []
         , shipConstraints: {
-            remainingShips: { destroyer: 1, submarine: 1, cruiser: 1, battleship: 1, carrier: 1 }
+            remainingShips: {
+                destroyer: 1
+                , submarine: 1
+                , cruiser: 1
+                , battleship: 1
+                , carrier: 1
+            }
             , impossibleCells: []
             , certainCells: []
         }

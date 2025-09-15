@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 
 // MUI
 import {
-    Card
+    Button
+    , Card
     , Grid
     , Stack
     , Typography
@@ -31,6 +32,7 @@ const GameScreen = () => {
         , computerAttemptedCells
         , isGameOver
         , gameMode
+        , showHeatMap
     }, dispatch ] = useBattleShipState();
 
     const sharedCardStyles: SxProps = {
@@ -42,13 +44,14 @@ const GameScreen = () => {
     };
 
     useEffect( () => {
-        if ( currentTurn === 'computer' ) {
+        if ( currentTurn === 'computer' && !isGameOver ) {
             takeComputerShot( dispatch, gameMode, computerAttemptedCells );
         }
-    }, [ currentTurn, gameMode ] );
+    }, [ currentTurn, gameMode, isGameOver ] );
 
     useEffect( () => {
         if ( isGameOver ) {
+            console.log( 'Game is over, opening modal in 1.5s' );
             setTimeout( () => {
                 dispatch( {
                     type: 'SET_MODAL_OPEN'
@@ -56,11 +59,23 @@ const GameScreen = () => {
                 } );
             }, 1500 );
         }
-    }, [ isGameOver ] );
+    }, [ isGameOver, dispatch ] );
 
     return (
         <>
             <GameTitle />
+            <Button
+                size='sm'
+                variant={ showHeatMap ? 'solid' : 'outlined' }
+                sx={ {
+                    mb: 2
+                    , alignSelf: 'center'
+                    , opacity: 0.8
+                } }
+                onClick={ () => dispatch( { type: 'TOGGLE_HEAT_MAP' } ) }
+            >
+                { showHeatMap ? 'Hide' : 'Show' } AI Heatmap
+            </Button>
             <Stack>
                 <Typography
                     level='body-xs'
