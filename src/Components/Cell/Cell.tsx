@@ -154,9 +154,6 @@ const Cell = (
                                 : orientation === 'horizontal'
                                     ? `rotate(${ direction === 'left' ? -180 : 0 }deg)`
                                     : 'none'
-                            , position: 'relative'
-                            , zIndex: 5
-                            , filter: 'drop-shadow(0 0 0 rgba(0,0,0,0.8)) drop-shadow(0 1px 3px rgba(0,0,0,0.4))'
                         } }
                     />
                 )
